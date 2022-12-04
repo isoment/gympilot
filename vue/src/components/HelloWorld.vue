@@ -1,5 +1,8 @@
 <template>
   <div class="hello">
+    <div class="flex items-center justify-center mb-12">
+      <img alt="Vue logo" src="../assets/logo.png" />
+    </div>
     <h1 class="text-3xl font-bold mb-4 underline">{{ msg }}</h1>
     <p>
       For a guide and recipes on how to configure / customize this project,<br />
@@ -8,101 +11,72 @@
         >vue-cli documentation</a
       >.
     </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript"
-          target="_blank"
-          rel="noopener"
-          >typescript</a
-        >
-      </li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li>
-        <a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a>
-      </li>
-      <li>
-        <a href="https://forum.vuejs.org" target="_blank" rel="noopener"
-          >Forum</a
-        >
-      </li>
-      <li>
-        <a href="https://chat.vuejs.org" target="_blank" rel="noopener"
-          >Community Chat</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/vuejs" target="_blank" rel="noopener"
-          >Twitter</a
-        >
-      </li>
-      <li>
-        <a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a>
-      </li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li>
-        <a href="https://router.vuejs.org" target="_blank" rel="noopener"
-          >vue-router</a
-        >
-      </li>
-      <li>
-        <a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-devtools#vue-devtools"
-          target="_blank"
-          rel="noopener"
-          >vue-devtools</a
-        >
-      </li>
-      <li>
-        <a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener"
-          >vue-loader</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-          rel="noopener"
-          >awesome-vue</a
-        >
-      </li>
-    </ul>
+    <div class="mt-8">
+      <div v-if="result">
+        <h3 class="font-bold text-xl my-2">The API says:</h3>
+        <h6 class="text-green-300">{{ result.title }}</h6>
+      </div>
+      <div v-if="apiError">
+        <h3 class="font-bold text-xl my-2">The API says:</h3>
+        <h6 class="text-red-300">{{ apiErrorMessage }}</h6>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
+import axios from "axios";
+
+interface TestResult {
+  title: string;
+  junk: string;
+}
 
 export default defineComponent({
   name: "HelloWorld",
+
   props: {
-    msg: String,
+    msg: {
+      type: String,
+      default() {
+        return "Default Text";
+      },
+    },
+  },
+
+  setup() {
+    // The result from the API
+    let result = ref<TestResult>();
+    let apiError = ref(false);
+    let apiErrorMessage = ref("");
+
+    // Make a call to the API test endpoint
+    const callApi = async () => {
+      try {
+        let response = await axios.get<TestResult>(
+          `http://localhost/api/testX`
+        );
+        result.value = response.data;
+        console.log(response.data);
+      } catch (err) {
+        if (axios.isAxiosError(err) && err.response && err.message) {
+          apiError.value = true;
+          // apiErrorMessage.value = err.response.statusText;
+          apiErrorMessage.value = err.message;
+          console.log(err);
+          console.log(err.response);
+        }
+      }
+    };
+
+    // When the component is mounted load data from the API
+    onMounted(() => {
+      callApi();
+    });
+
+    // The properties available to the template
+    return { result, apiError, apiErrorMessage };
   },
 });
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
