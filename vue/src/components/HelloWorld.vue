@@ -54,9 +54,7 @@ export default defineComponent({
     // Make a call to the API test endpoint
     const callApi = async () => {
       try {
-        let response = await axios.get<TestResult>(
-          `http://localhost/api/testX`
-        );
+        let response = await axios.get<TestResult>(`http://localhost/api/test`);
         result.value = response.data;
         console.log(response.data);
       } catch (err) {
