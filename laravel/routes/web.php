@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// We want to modify this fortify route to return a token for resetting a users password.
-// Laravel expects this route name to exist during the password reset process.
-Route::get('/api/reset-password/{token}', function($token) {
-    return $token;
+// This is the fortify route that will display the password reset form
+Route::get('/reset-password/{token}', function($token) {
+    return view('auth.password-reset', [
+      'token' => $token
+    ]);
 })->middleware(['guest:'.config('fortify.guard')])
   ->name('password.reset');
