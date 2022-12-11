@@ -14,10 +14,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+/**************************************************
+ *  Routes protected by 'auth:sanctum' middleware *
+ **************************************************/
+Route::middleware('auth:sanctum')->group(function() {
+    // Get the authenticated users information
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 });
 
+/**************** *
+ *  Public routes *
+ *****************/
 Route::get('/test', function() {
     return [
         'title' => 'Fake Title',
