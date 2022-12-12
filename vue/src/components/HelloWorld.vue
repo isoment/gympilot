@@ -68,35 +68,9 @@ export default defineComponent({
       }
     };
 
-    // Get the CSRF token from sanctum
-    const sanctumToken = async () => {
-      try {
-        let response = await axios.get(`http://localhost/sanctum/csrf-cookie`);
-        console.log(response);
-        login();
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    // Login the default user to the application
-    const login = async () => {
-      const formData = {
-        email: "newuser@test.com",
-        password: "password",
-      };
-      try {
-        let response = await axios.post(`http://localhost/api/login`, formData);
-        console.log(response);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     // When the component is mounted load data from the API
     onMounted(() => {
       callApi();
-      sanctumToken();
     });
 
     // The properties available to the template
