@@ -3,19 +3,25 @@
     <form
       class="w-full md:w-1/2 max-w-xl bg-white lg:border border-cool-gray-300 rounded-lg"
     >
-      <!-- <div class="flex font-bold justify-center mb-3 lg:mb-4 lg:mt-12">
-        <router-link :to="{ name: 'main-page' }">
-          <i class="fas fa-car text-7xl text-emerald-400"></i>
-        </router-link>
-      </div> -->
+      <div class="flex font-bold justify-center mb-3 lg:mb-4 lg:mt-12">
+        <a href="#">
+          <font-awesome-icon
+            :icon="['fa', 'door-open']"
+            class="text-6xl text-emerald-400"
+          >
+          </font-awesome-icon>
+        </a>
+      </div>
       <div class="px-12 pb-10">
         <h2 class="font-bold text-lg mb-5 text-gray-600 mt-4">Sign In</h2>
         <!-- Email -->
         <div class="w-full mb-4">
           <div class="flex items-center">
-            <i
-              class="ml-3 fill-current text-emerald-400 text-xs z-10 fas fa-user"
-            ></i>
+            <font-awesome-icon
+              :icon="['fa', 'user']"
+              class="input-icons fill-current text-emerald-400 text-xs z-10"
+            >
+            </font-awesome-icon>
             <input
               v-model="loginForm.email"
               type="email"
@@ -28,9 +34,10 @@
         <!-- Password -->
         <div class="w-full mb-4">
           <div class="flex items-center">
-            <i
-              class="ml-3 fill-current text-emerald-400 text-xs z-10 fas fa-lock"
-            ></i>
+            <font-awesome-icon
+              :icon="['fa', 'lock']"
+              class="input-icons fill-current text-emerald-400 text-xs z-10"
+            ></font-awesome-icon>
             <input
               v-model="loginForm.password"
               name="password"
@@ -51,21 +58,19 @@
         </div>
         <!-- Button -->
         <div class="mt-4">
-          <!-- <button
+          <button
             class="text-white font-bold bg-emerald-500 hover:bg-emerald-400 transition-all duration-200 focus:outline-none py-2 px-4 w-full"
             :disabled="loading"
-            @click.prevent="login"
+            @click.prevent="login()"
           >
             <span v-if="!loading">Login</span>
             <span v-if="loading"
-              ><i class="fas fa-spinner fa-spin"></i> Login...
+              ><font-awesome-icon
+                :icon="['fa', 'spinner']"
+                class="animate-spin mr-1"
+              ></font-awesome-icon>
+              Login...
             </span>
-          </button> -->
-          <button
-            class="text-white font-bold bg-emerald-500 hover:bg-emerald-400 transition-all duration-200 focus:outline-none py-2 px-4 w-full"
-            @click.prevent="login()"
-          >
-            Login
           </button>
         </div>
         <!-- Register -->
@@ -96,6 +101,7 @@ export default defineComponent({
       email: "",
       password: "",
     });
+    let loading = ref(false);
 
     // Get the CSRF token from sanctum
     const sanctumToken = async () => {
@@ -108,6 +114,7 @@ export default defineComponent({
 
     // Login to the application
     const login = async () => {
+      loading.value = true;
       try {
         let response = await axios.post(
           `http://localhost/api/login`,
@@ -117,13 +124,20 @@ export default defineComponent({
       } catch (err) {
         console.log(err);
       }
+      loading.value = false;
     };
 
     onMounted(() => {
       sanctumToken();
     });
 
-    return { loginForm, login };
+    return { loginForm, login, loading };
   },
 });
 </script>
+
+<style scoped>
+.input-icons {
+  margin-left: 0.85rem;
+}
+</style>
