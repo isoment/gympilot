@@ -4,7 +4,7 @@
       class="w-full md:w-1/2 max-w-xl bg-white lg:border border-cool-gray-300 rounded-lg"
     >
       <div class="flex font-bold justify-center mb-3 lg:mb-4 lg:mt-12">
-        <a href="#">
+        <a href="#" class="focus:outline-emerald-400">
           <font-awesome-icon
             :icon="['fa', 'door-open']"
             class="text-6xl text-emerald-400"
@@ -27,12 +27,18 @@
               type="email"
               name="email"
               placeholder="Email"
-              class="-mx-6 px-8 w-full border rounded py-2 text-gray-700 focus:outline-none"
+              class="-mx-6 px-8 w-full border rounded py-2 text-gray-700 focus:outline-emerald-400"
             />
+          </div>
+          <div
+            v-if="loginValidationError"
+            class="text-xs text-red-400 mt-1 text-left ml-1"
+          >
+            {{ loginValidationError }}
           </div>
         </div>
         <!-- Password -->
-        <div class="w-full mb-4">
+        <div class="w-full mb-4 mt-5">
           <div class="flex items-center">
             <font-awesome-icon
               :icon="['fa', 'lock']"
@@ -43,7 +49,7 @@
               name="password"
               type="password"
               placeholder="Password"
-              class="-mx-6 px-8 w-full border rounded py-2 text-gray-700 focus:outline-none"
+              class="-mx-6 px-8 w-full border rounded py-2 text-gray-700 focus:outline-emerald-400"
             />
           </div>
         </div>
@@ -51,7 +57,7 @@
         <div>
           <a
             href="#"
-            class="text-emerald-500 hover:text-emerald-400 transition-all duration-200 font-light"
+            class="text-emerald-500 hover:text-emerald-400 transition-all duration-200 font-light focus:outline-emerald-400"
           >
             Forgot Your Password?
           </a>
@@ -59,12 +65,12 @@
         <!-- Button -->
         <div class="mt-4">
           <button
-            class="text-white font-bold bg-emerald-500 hover:bg-emerald-400 transition-all duration-200 focus:outline-none py-2 px-4 w-full"
-            :disabled="loading"
+            class="text-white font-bold bg-emerald-500 hover:bg-emerald-400 transition-all duration-200 focus:outline-emerald-400 py-2 px-4 w-full"
+            :disabled="loadingLoginAPI"
             @click.prevent="login()"
           >
-            <span v-if="!loading">Login</span>
-            <span v-if="loading"
+            <span v-if="!loadingLoginAPI">Login</span>
+            <span v-if="loadingLoginAPI"
               ><font-awesome-icon
                 :icon="['fa', 'spinner']"
                 class="animate-spin mr-1"
@@ -76,12 +82,11 @@
         <!-- Register -->
         <div class="text-gray-500 mt-6 text-center">
           Don't have an account?
-          <a
-            href="#"
-            class="text-emerald-500 hover:text-emerald-400 transition-all duration-200 font-bold"
+          <router-link
+            :to="{ name: 'register' }"
+            class="text-emerald-500 hover:text-emerald-400 transition-all duration-200 font-bold focus:outline-emerald-400"
+            >Register</router-link
           >
-            Register
-          </a>
         </div>
       </div>
     </form>
@@ -89,19 +94,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
 import axios from "axios";
 
 export default defineComponent({
   name: "LoginView",
 
   setup() {
+    const router = useRouter();
+
     // The login form state
-    let loginForm = ref({
+    const loginForm = ref({
       email: "",
       password: "",
     });
-    let loading = ref(false);
 
     // Get the CSRF token from sanctum
     const sanctumToken = async () => {
@@ -112,26 +119,37 @@ export default defineComponent({
       }
     };
 
-    // Login to the application
+    /********************
+     *  Logic for login *
+     *******************/
+    const loadingLoginAPI = ref(false);
+    const loginValidationError = ref("");
+
     const login = async () => {
-      loading.value = true;
+      loadingLoginAPI.value = true;
+      loginValidationError.value = "";
+      await sanctumToken();
       try {
         let response = await axios.post(
           `http://localhost/api/login`,
           loginForm.value
         );
         console.log(response);
+        if (response.status === 200) {
+          router.push({ name: "home" });
+        }
       } catch (err) {
-        console.log(err);
+        if (axios.isAxiosError(err) && err.response) {
+          if (err.response.status === 422) {
+            loginValidationError.value =
+              "These credentials do not match our records";
+          }
+        }
       }
-      loading.value = false;
+      loadingLoginAPI.value = false;
     };
 
-    onMounted(() => {
-      sanctumToken();
-    });
-
-    return { loginForm, login, loading };
+    return { loginForm, login, loadingLoginAPI, loginValidationError };
   },
 });
 </script>
