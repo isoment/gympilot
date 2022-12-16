@@ -110,7 +110,7 @@ export default defineComponent({
       password: "",
     });
 
-    // Get the CSRF token from sanctum
+    // Get the CSRF token that sanctum generates
     const sanctumToken = async () => {
       try {
         await axios.get(`http://localhost/sanctum/csrf-cookie`);

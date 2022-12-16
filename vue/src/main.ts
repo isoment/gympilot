@@ -1,7 +1,6 @@
 import { createApp } from "vue";
 import App from "@/App.vue";
 import "./assets/tailwind.css";
-
 import router from "./router";
 import store from "./store";
 
@@ -21,6 +20,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faDoorOpen,
+  faEnvelopeSquare,
   faLock,
   faSpinner,
   faUser,
@@ -29,7 +29,12 @@ library.add(faUser);
 library.add(faLock);
 library.add(faDoorOpen);
 library.add(faSpinner);
+library.add(faEnvelopeSquare);
 
+/*********************************************************************
+ *  Create the Vue application instance, creating global components, *
+ *  use necessary libraries and mount the root element.              *
+ *********************************************************************/
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
   .use(store)
