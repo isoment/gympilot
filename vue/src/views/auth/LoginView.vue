@@ -13,9 +13,9 @@
         </a>
       </div>
       <div class="px-12 pb-10">
-        <h2 class="font-bold text-lg mb-5 text-gray-600 mt-4">Sign In</h2>
+        <h2 class="font-bold text-lg mb-5 text-gray-600 mt-4">Login</h2>
         <!-- Email -->
-        <div class="w-full mb-4">
+        <div class="w-full mb-6">
           <div class="flex items-center">
             <font-awesome-icon
               :icon="['fa', 'user']"
@@ -38,7 +38,7 @@
           </div>
         </div>
         <!-- Password -->
-        <div class="w-full mb-4 mt-5">
+        <div class="w-full mb-8 mt-5">
           <div class="flex items-center">
             <font-awesome-icon
               :icon="['fa', 'lock']"
@@ -69,13 +69,13 @@
             :disabled="loadingLoginAPI"
             @click.prevent="login()"
           >
-            <span v-if="!loadingLoginAPI">Login</span>
+            <span v-if="!loadingLoginAPI">Sign in</span>
             <span v-if="loadingLoginAPI"
               ><font-awesome-icon
                 :icon="['fa', 'spinner']"
                 class="animate-spin mr-1"
               ></font-awesome-icon>
-              Login...
+              Sign in...
             </span>
           </button>
         </div>
