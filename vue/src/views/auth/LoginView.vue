@@ -67,7 +67,7 @@
           <button
             class="text-white font-bold bg-emerald-500 hover:bg-emerald-400 transition-all duration-200 focus:outline-emerald-400 py-2 px-4 w-full"
             :disabled="loadingLoginAPI"
-            @click.prevent="login()"
+            @click.prevent="attemptLogin()"
           >
             <span v-if="!loadingLoginAPI">Sign in</span>
             <span v-if="loadingLoginAPI"
@@ -97,6 +97,7 @@
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { login, sanctumCsrf } from "@/api/auth";
 
 export default defineComponent({
   name: "LoginView",
@@ -111,11 +112,11 @@ export default defineComponent({
     });
 
     // Get the CSRF token that sanctum generates
-    const sanctumToken = async () => {
+    const getSanctumCsrf = async () => {
       try {
-        await axios.get(`http://localhost/sanctum/csrf-cookie`);
-      } catch (err) {
-        console.log(err);
+        await sanctumCsrf();
+      } catch (error) {
+        console.log(error);
       }
     };
 
@@ -125,31 +126,31 @@ export default defineComponent({
     const loadingLoginAPI = ref(false);
     const loginValidationError = ref("");
 
-    const login = async () => {
+    const attemptLogin = async () => {
       loadingLoginAPI.value = true;
       loginValidationError.value = "";
-      await sanctumToken();
-      try {
-        let response = await axios.post(
-          `http://localhost/api/login`,
-          loginForm.value
-        );
-        console.log(response);
-        if (response.status === 200) {
-          router.push({ name: "home" });
-        }
-      } catch (err) {
-        if (axios.isAxiosError(err) && err.response) {
-          if (err.response.status === 422) {
-            loginValidationError.value =
-              "These credentials do not match our records";
+      await getSanctumCsrf();
+
+      // Make a call to the login api endpoint
+      login(loginForm.value)
+        .then((response) => {
+          if (response.status === 200) {
+            router.push({ name: "home" });
           }
-        }
-      }
+        })
+        .catch((error) => {
+          if (axios.isAxiosError(error) && error.response) {
+            if (error.response.status === 422) {
+              loginValidationError.value =
+                "These credentials do not match our records";
+            }
+          }
+        });
+
       loadingLoginAPI.value = false;
     };
 
-    return { loginForm, login, loadingLoginAPI, loginValidationError };
+    return { loginForm, attemptLogin, loadingLoginAPI, loginValidationError };
   },
 });
 </script>

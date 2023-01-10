@@ -101,7 +101,7 @@
           <button
             class="text-white font-bold bg-emerald-500 hover:bg-emerald-400 transition-all duration-200 focus:outline-emerald-400 py-2 px-4 w-full"
             :disabled="loadingRegisterApi"
-            @click="register()"
+            @click="attemptRegister()"
           >
             <span v-if="!loadingRegisterApi">Sign up</span>
             <span v-if="loadingRegisterApi"
@@ -133,6 +133,7 @@ import { defineComponent, ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+import { register, sanctumCsrf } from "@/api/auth";
 
 interface ApiValidationErrors {
   name?: string[];
@@ -158,32 +159,42 @@ export default defineComponent({
       password_confirmation: "",
     });
 
+    // Get the CSRF token that sanctum generates
+    const getSanctumCsrf = async () => {
+      try {
+        await sanctumCsrf();
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     /***********************
      *  Logic for register *
      **********************/
     const loadingRegisterApi = ref(false);
     const registerValidationErrors = ref<ApiValidationErrors>({});
 
-    const register = async () => {
+    const attemptRegister = async () => {
       loadingRegisterApi.value = true;
       registerValidationErrors.value = {};
-      try {
-        let response = await axios.post(
-          "http://localhost/api/register",
-          registerForm.value
-        );
-        console.log(response);
-        if (response.status === 201) {
-          router.push({ name: "home" });
-        }
-      } catch (err) {
-        if (axios.isAxiosError(err) && err.response) {
-          console.log(err.response);
-          if (err.response.status === 422) {
-            registerValidationErrors.value = err.response.data.errors;
+      await getSanctumCsrf();
+
+      // Make a call to the register api endpoint
+      register(registerForm.value)
+        .then((response) => {
+          if (response.status === 201) {
+            router.push({ name: "home" });
           }
-        }
-      }
+        })
+        .catch((error) => {
+          if (axios.isAxiosError(error) && error.response) {
+            console.log(error.response);
+            if (error.response.status === 422) {
+              registerValidationErrors.value = error.response.data.errors;
+            }
+          }
+        });
+
       loadingRegisterApi.value = false;
     };
 
@@ -197,8 +208,7 @@ export default defineComponent({
     return {
       registerForm,
       loadingRegisterApi,
-      register,
-      registerValidationErrors,
+      attemptRegister,
       errorFor,
     };
   },
