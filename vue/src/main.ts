@@ -1,3 +1,5 @@
+import { LOAD_STORED_STATE } from "./store/constants";
+
 import { createApp } from "vue";
 import App from "@/App.vue";
 import "./assets/tailwind.css";
@@ -35,7 +37,12 @@ library.add(faEnvelopeSquare);
  *  Create the Vue application instance, creating global components, *
  *  use necessary libraries and mount the root element.              *
  *********************************************************************/
-createApp(App)
+createApp({
+  extends: App,
+  beforeCreate() {
+    this.$store.dispatch(LOAD_STORED_STATE);
+  },
+})
   .component("font-awesome-icon", FontAwesomeIcon)
   .use(store)
   .use(router)

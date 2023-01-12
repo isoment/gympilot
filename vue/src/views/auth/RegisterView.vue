@@ -133,7 +133,7 @@ import { defineComponent, ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
-import { register, sanctumCsrf } from "@/api/auth";
+import { APIAuthRegister, APIAuthCsrf } from "@/api/auth";
 
 interface ApiValidationErrors {
   name?: string[];
@@ -162,7 +162,7 @@ export default defineComponent({
     // Get the CSRF token that sanctum generates
     const getSanctumCsrf = async () => {
       try {
-        await sanctumCsrf();
+        await APIAuthCsrf();
       } catch (error) {
         console.log(error);
       }
@@ -180,7 +180,7 @@ export default defineComponent({
       await getSanctumCsrf();
 
       // Make a call to the register api endpoint
-      register(registerForm.value)
+      APIAuthRegister(registerForm.value)
         .then((response) => {
           if (response.status === 201) {
             router.push({ name: "home" });

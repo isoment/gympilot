@@ -97,7 +97,7 @@
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
-import { login, sanctumCsrf } from "@/api/auth";
+import { APIAuthLogin, APIAuthCsrf } from "@/api/auth";
 
 export default defineComponent({
   name: "LoginView",
@@ -114,7 +114,7 @@ export default defineComponent({
     // Get the CSRF token that sanctum generates
     const getSanctumCsrf = async () => {
       try {
-        await sanctumCsrf();
+        await APIAuthCsrf();
       } catch (error) {
         console.log(error);
       }
@@ -132,7 +132,7 @@ export default defineComponent({
       await getSanctumCsrf();
 
       // Make a call to the login api endpoint
-      login(loginForm.value)
+      APIAuthLogin(loginForm.value)
         .then((response) => {
           if (response.status === 200) {
             router.push({ name: "home" });
