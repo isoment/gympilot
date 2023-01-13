@@ -9,6 +9,10 @@ export const APIAuthCsrf = (): AxiosPromise => {
   return axios.get(`http://localhost/sanctum/csrf-cookie`);
 };
 
+export const APILoadUser = (): AxiosPromise => {
+  return axios.get(`http://localhost/api/user`);
+};
+
 export const APIAuthLogin = (params: {
   [key: string]: string;
 }): AxiosPromise => {

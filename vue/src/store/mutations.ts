@@ -1,10 +1,13 @@
-import { LOGIN_USER } from "./constants";
-
+import { SET_LOGGED_IN, SET_USER } from "./constants";
 import { GlobalState } from "./types";
 
 const mutations = {
-  [LOGIN_USER](state: GlobalState) {
-    state.isLoggedIn = true;
+  [SET_LOGGED_IN](state: GlobalState, isLoggedIn: boolean) {
+    state.isLoggedIn = isLoggedIn;
+  },
+
+  [SET_USER](state: GlobalState, user: {}) {
+    state.user = user;
   },
 };
 
