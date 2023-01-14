@@ -9,7 +9,9 @@ import {
 } from "./constants";
 import {
   storageGetIsLoggedIn,
+  storageGetUser,
   storageSetLogin,
+  storageSetUser,
 } from "../utils/localStorageHelpers";
 import { APILoadUser } from "../api/auth";
 
@@ -20,12 +22,15 @@ interface Context {
 
 const actions = {
   /**
-   *  Check the local storage to see if a user is logged in.
+   *  Check the local storage to see if a user is logged in. Also set
+   *  the user if there is a user object in local storage.
    *  @param {Context} context
    */
   [LOAD_STORED_STATE](context: Context): void {
     const userIsLoggedIn = storageGetIsLoggedIn();
     context.commit(SET_LOGGED_IN, userIsLoggedIn);
+    const userDetails = storageGetUser();
+    context.commit(SET_USER, userDetails);
   },
 
   /**
@@ -47,6 +52,7 @@ const actions = {
     APILoadUser()
       .then((response) => {
         const user = response.data;
+        storageSetUser(user);
         context.commit(SET_USER, user);
       })
       .catch((error) => {
