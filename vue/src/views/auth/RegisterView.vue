@@ -130,10 +130,13 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import axios from "axios";
 import { useRouter } from "vue-router";
-import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+import { useStore } from "vuex";
+import { key } from "@/store";
+import axios from "axios";
 import { APIAuthRegister, APIAuthCsrf } from "@/api/auth";
+import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+import { LOGIN_USER } from "@/store/constants";
 
 interface ApiValidationErrors {
   name?: string[];
@@ -151,6 +154,7 @@ export default defineComponent({
 
   setup() {
     const router = useRouter();
+    const store = useStore(key);
 
     const registerForm = ref({
       name: "",
@@ -183,6 +187,7 @@ export default defineComponent({
       APIAuthRegister(registerForm.value)
         .then((response) => {
           if (response.status === 201) {
+            store.dispatch(LOGIN_USER);
             router.push({ name: "home" });
           }
         })
