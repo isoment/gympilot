@@ -1,3 +1,4 @@
+import { LoadUser } from "@/api/types";
 import { SET_LOGGED_IN, SET_USER } from "./constants";
 import { GlobalState } from "./types";
 
@@ -6,7 +7,7 @@ const mutations = {
     state.isLoggedIn = isLoggedIn;
   },
 
-  [SET_USER](state: GlobalState, user: {}) {
+  [SET_USER](state: GlobalState, user: LoadUser) {
     state.user = user;
   },
 };

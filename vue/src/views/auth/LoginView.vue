@@ -98,12 +98,15 @@ import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { APIAuthLogin, APIAuthCsrf } from "@/api/auth";
+import { LOGIN_USER } from "@/store/constants";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "LoginView",
 
   setup() {
     const router = useRouter();
+    const store = useStore();
 
     // The login form state
     const loginForm = ref({
@@ -131,10 +134,12 @@ export default defineComponent({
       loginValidationError.value = "";
       await getSanctumCsrf();
 
-      // Make a call to the login api endpoint
+      // Make a call to the login api endpoint, if the response is successful
+      // call the vuex store to set the local storage and global state.
       APIAuthLogin(loginForm.value)
         .then((response) => {
           if (response.status === 200) {
+            store.dispatch(LOGIN_USER);
             router.push({ name: "home" });
           }
         })

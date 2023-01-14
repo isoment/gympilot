@@ -1,4 +1,6 @@
+import { LoadUser } from "@/api/types";
+
 export interface GlobalState {
   isLoggedIn: boolean;
-  user: {};
+  user: Partial<LoadUser>;
 }
