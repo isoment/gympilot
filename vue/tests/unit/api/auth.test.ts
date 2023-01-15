@@ -8,16 +8,15 @@ import {
   APIAuthRegister,
 } from "@/api/auth";
 const getMock = axios.get as jest.Mock;
-// const postMock = axios.post as jest.Mock;
+
+const baseURL = process.env.VUE_APP_API_URL;
 
 describe("auth", () => {
   // Test the axios request for the csrf token
   describe("APIAuthCsrf", () => {
     it("makes a csrf token request to the correct endpoint", async () => {
       await APIAuthCsrf();
-      expect(axios.get).toHaveBeenCalledWith(
-        `http://localhost/sanctum/csrf-cookie`
-      );
+      expect(axios.get).toHaveBeenCalledWith(`${baseURL}/sanctum/csrf-cookie`);
     });
   });
 
@@ -25,7 +24,7 @@ describe("auth", () => {
   describe("APIAuthLoadUser", () => {
     it("fetches the user details from the correct endpoint", async () => {
       await APIAuthLoadUser();
-      expect(axios.get).toHaveBeenCalledWith(`http://localhost/api/user`);
+      expect(axios.get).toHaveBeenCalledWith(`${baseURL}/api/user`);
     });
 
     it("gets the user details from the response", async () => {
@@ -44,31 +43,25 @@ describe("auth", () => {
   // Test the axios request for user login
   describe("APIAuthLogin", () => {
     it("makes a post request to the correct login endpoint", async () => {
-      const formBody = {
+      const data = {
         email: "test@test.com",
         password: "password",
       };
-      await APIAuthLogin(formBody);
-      expect(axios.post).toHaveBeenCalledWith(
-        `http://localhost/api/login`,
-        formBody
-      );
+      await APIAuthLogin(data);
+      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/login`, data);
     });
   });
 
   // Test the axios request for user registration
   describe("APIAuthRegister", () => {
     it("makes a post request to the correct register endpoint", async () => {
-      const formBody = {
+      const data = {
         name: "Test User",
         email: "test@test.com",
         password: "password",
       };
-      await APIAuthRegister(formBody);
-      expect(axios.post).toHaveBeenCalledWith(
-        `http://localhost/api/register`,
-        formBody
-      );
+      await APIAuthRegister(data);
+      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/register`, data);
     });
   });
 
@@ -76,7 +69,7 @@ describe("auth", () => {
   describe("APIAuthLogout", () => {
     it("makes a post request to the correct logout endpoint", async () => {
       await APIAuthLogout();
-      expect(axios.post).toHaveBeenCalledWith(`http://localhost/api/logout`);
+      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/logout`);
     });
   });
 });

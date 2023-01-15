@@ -1,9 +1,9 @@
 <template>
-  <div class="w-full flex items-center justify-center navbar-offset mt-8">
+  <div class="flex items-center justify-center w-full mt-8 navbar-offset">
     <form
-      class="w-full md:w-1/2 max-w-xl bg-white lg:border border-cool-gray-300 rounded-lg"
+      class="w-full max-w-xl bg-white rounded-lg md:w-1/2 lg:border border-cool-gray-300"
     >
-      <div class="flex font-bold justify-center mb-3 lg:mb-4 lg:mt-12">
+      <div class="flex justify-center mb-3 font-bold lg:mb-4 lg:mt-12">
         <router-link :to="{ name: 'home' }" class="focus:outline-emerald-400">
           <font-awesome-icon
             :icon="['fa', 'user']"
@@ -13,13 +13,13 @@
         </router-link>
       </div>
       <div class="px-12 pb-10">
-        <h2 class="font-bold text-lg mb-5 text-gray-600">Register</h2>
+        <h2 class="mb-5 text-lg font-bold text-gray-600">Register</h2>
         <!-- Name -->
         <div class="w-full mb-6">
           <div class="flex items-center">
             <font-awesome-icon
               :icon="['fa', 'user']"
-              class="input-icons fill-current text-emerald-400 text-xs z-10"
+              class="z-10 text-xs fill-current input-icons text-emerald-400"
             >
             </font-awesome-icon>
             <input
@@ -28,17 +28,17 @@
               name="name"
               placeholder="Name"
               required
-              class="-mx-6 px-8 w-full border rounded py-2 text-gray-700 focus:outline-emerald-400"
+              class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
             />
           </div>
-          <ValidationErrors :errors="errorFor('name')" class="text-left mt-2" />
+          <ValidationErrors :errors="errorFor('name')" class="mt-2 text-left" />
         </div>
         <!-- Email -->
         <div class="w-full mb-6">
           <div class="flex items-center">
             <font-awesome-icon
               :icon="['fa', 'envelope-square']"
-              class="input-icons fill-current text-emerald-400 text-xs z-10"
+              class="z-10 text-xs fill-current input-icons text-emerald-400"
             >
             </font-awesome-icon>
             <input
@@ -46,12 +46,12 @@
               name="email"
               placeholder="Email"
               required
-              class="-mx-6 px-8 w-full border rounded py-2 text-gray-700 focus:outline-emerald-400"
+              class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
             />
           </div>
           <ValidationErrors
             :errors="errorFor('email')"
-            class="text-left mt-2"
+            class="mt-2 text-left"
           />
         </div>
         <!-- Password -->
@@ -59,7 +59,7 @@
           <div class="flex items-center">
             <font-awesome-icon
               :icon="['fa', 'lock']"
-              class="input-icons fill-current text-emerald-400 text-xs z-10"
+              class="z-10 text-xs fill-current input-icons text-emerald-400"
             >
             </font-awesome-icon>
             <input
@@ -67,12 +67,12 @@
               name="password"
               type="password"
               placeholder="Password"
-              class="-mx-6 px-8 w-full border rounded py-2 text-gray-700 focus:outline-emerald-400"
+              class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
             />
           </div>
           <ValidationErrors
             :errors="errorFor('password')"
-            class="text-left mt-2"
+            class="mt-2 text-left"
           />
         </div>
         <!-- Confirm Password -->
@@ -80,7 +80,7 @@
           <div class="flex items-center">
             <font-awesome-icon
               :icon="['fa', 'lock']"
-              class="input-icons fill-current text-emerald-400 text-xs z-10"
+              class="z-10 text-xs fill-current input-icons text-emerald-400"
             >
             </font-awesome-icon>
             <input
@@ -88,18 +88,18 @@
               name="password_confirmation"
               type="password"
               placeholder="Re-type password"
-              class="-mx-6 px-8 w-full border rounded py-2 text-gray-700 focus:outline-emerald-400"
+              class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
             />
           </div>
           <ValidationErrors
             :errors="errorFor('password_confirmation')"
-            class="text-left mt-2"
+            class="mt-2 text-left"
           />
         </div>
         <!-- Button -->
         <div class="mt-4">
           <button
-            class="text-white font-bold bg-emerald-500 hover:bg-emerald-400 transition-all duration-200 focus:outline-emerald-400 py-2 px-4 w-full"
+            class="w-full px-4 py-2 font-bold text-white transition-all duration-200 bg-emerald-500 hover:bg-emerald-400 focus:outline-emerald-400"
             :disabled="loadingRegisterApi"
             @click="attemptRegister()"
           >
@@ -107,18 +107,18 @@
             <span v-if="loadingRegisterApi"
               ><font-awesome-icon
                 :icon="['fa', 'spinner']"
-                class="animate-spin mr-1"
+                class="mr-1 animate-spin"
               ></font-awesome-icon>
               Sign up...
             </span>
           </button>
         </div>
         <!-- Register -->
-        <div class="text-gray-500 mt-6 text-center">
+        <div class="mt-6 text-center text-gray-500">
           Already have an account?
           <router-link
             :to="{ name: 'login' }"
-            class="text-emerald-500 hover:text-emerald-400 transition-all duration-200 font-bold focus:outline-emerald-400"
+            class="font-bold transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
           >
             Login
           </router-link>

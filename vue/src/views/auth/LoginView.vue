@@ -1,9 +1,9 @@
 <template>
-  <div class="w-full flex items-center justify-center navbar-offset mt-8">
+  <div class="flex items-center justify-center w-full mt-8 navbar-offset">
     <form
-      class="w-full md:w-1/2 max-w-xl bg-white lg:border border-cool-gray-300 rounded-lg"
+      class="w-full max-w-xl bg-white rounded-lg md:w-1/2 lg:border border-cool-gray-300"
     >
-      <div class="flex font-bold justify-center mb-3 lg:mb-4 lg:mt-12">
+      <div class="flex justify-center mb-3 font-bold lg:mb-4 lg:mt-12">
         <a href="#" class="focus:outline-emerald-400">
           <font-awesome-icon
             :icon="['fa', 'door-open']"
@@ -13,13 +13,13 @@
         </a>
       </div>
       <div class="px-12 pb-10">
-        <h2 class="font-bold text-lg mb-5 text-gray-600 mt-4">Login</h2>
+        <h2 class="mt-4 mb-5 text-lg font-bold text-gray-600">Login</h2>
         <!-- Email -->
         <div class="w-full mb-6">
           <div class="flex items-center">
             <font-awesome-icon
               :icon="['fa', 'user']"
-              class="input-icons fill-current text-emerald-400 text-xs z-10"
+              class="z-10 text-xs fill-current input-icons text-emerald-400"
             >
             </font-awesome-icon>
             <input
@@ -27,29 +27,29 @@
               type="email"
               name="email"
               placeholder="Email"
-              class="-mx-6 px-8 w-full border rounded py-2 text-gray-700 focus:outline-emerald-400"
+              class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
             />
           </div>
           <div
             v-if="loginValidationError"
-            class="text-xs text-red-400 mt-2 text-left ml-1"
+            class="mt-2 ml-1 text-xs text-left text-red-400"
           >
             {{ loginValidationError }}
           </div>
         </div>
         <!-- Password -->
-        <div class="w-full mb-8 mt-5">
+        <div class="w-full mt-5 mb-8">
           <div class="flex items-center">
             <font-awesome-icon
               :icon="['fa', 'lock']"
-              class="input-icons fill-current text-emerald-400 text-xs z-10"
+              class="z-10 text-xs fill-current input-icons text-emerald-400"
             ></font-awesome-icon>
             <input
               v-model="loginForm.password"
               name="password"
               type="password"
               placeholder="Password"
-              class="-mx-6 px-8 w-full border rounded py-2 text-gray-700 focus:outline-emerald-400"
+              class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
             />
           </div>
         </div>
@@ -57,7 +57,7 @@
         <div>
           <a
             href="#"
-            class="text-emerald-500 hover:text-emerald-400 transition-all duration-200 font-light focus:outline-emerald-400"
+            class="font-light transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
           >
             Forgot Your Password?
           </a>
@@ -65,7 +65,7 @@
         <!-- Button -->
         <div class="mt-4">
           <button
-            class="text-white font-bold bg-emerald-500 hover:bg-emerald-400 transition-all duration-200 focus:outline-emerald-400 py-2 px-4 w-full"
+            class="w-full px-4 py-2 font-bold text-white transition-all duration-200 bg-emerald-500 hover:bg-emerald-400 focus:outline-emerald-400"
             :disabled="loadingLoginAPI"
             @click.prevent="attemptLogin()"
           >
@@ -73,18 +73,18 @@
             <span v-if="loadingLoginAPI"
               ><font-awesome-icon
                 :icon="['fa', 'spinner']"
-                class="animate-spin mr-1"
+                class="mr-1 animate-spin"
               ></font-awesome-icon>
               Sign in...
             </span>
           </button>
         </div>
         <!-- Register -->
-        <div class="text-gray-500 mt-6 text-center">
+        <div class="mt-6 text-center text-gray-500">
           Don't have an account?
           <router-link
             :to="{ name: 'register' }"
-            class="text-emerald-500 hover:text-emerald-400 transition-all duration-200 font-bold focus:outline-emerald-400"
+            class="font-bold transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
             >Register</router-link
           >
         </div>
