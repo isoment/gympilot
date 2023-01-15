@@ -32,7 +32,7 @@
           </div>
           <div
             v-if="loginValidationError"
-            class="text-xs text-red-400 mt-1 text-left ml-1"
+            class="text-xs text-red-400 mt-2 text-left ml-1"
           >
             {{ loginValidationError }}
           </div>
