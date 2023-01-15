@@ -13,7 +13,7 @@ import {
   storageSetLogin,
   storageSetUser,
 } from "../utils/localStorageHelpers";
-import { APILoadUser } from "../api/auth";
+import { APIAuthLogout, APIAuthLoadUser } from "../api/auth";
 
 interface Context {
   commit: Commit;
@@ -24,7 +24,6 @@ const actions = {
   /**
    *  Check the local storage to see if a user is logged in. Also set
    *  the user if there is a user object in local storage.
-   *  @param {Context} context
    */
   [LOAD_STORED_STATE](context: Context): void {
     const userIsLoggedIn = storageGetIsLoggedIn();
@@ -36,20 +35,18 @@ const actions = {
   /**
    *  Login the user by setting the local storage and loading the user
    *  details from the API.
-   *  @param {Context} context
    */
   [LOGIN_USER](context: Context): void {
-    storageSetLogin();
+    storageSetLogin("true");
     context.dispatch(LOAD_USER);
     context.commit(SET_LOGGED_IN, true);
   },
 
   /**
    *  Load the user details from the API and save to state.
-   *  @param {Context} context
    */
   [LOAD_USER](context: Context): void {
-    APILoadUser()
+    APIAuthLoadUser()
       .then((response) => {
         const user = response.data;
         storageSetUser(user);
@@ -62,9 +59,19 @@ const actions = {
 
   /**
    *  Logout a user.
-   *  @param {Context} context
    */
-  [LOGOUT_USER](context: Context) {},
+  [LOGOUT_USER](context: Context): void {
+    APIAuthLogout()
+      .then((response) => {
+        context.commit(SET_LOGGED_IN, false);
+        context.commit(SET_USER, {});
+        storageSetLogin("false");
+        storageSetUser({});
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
 };
 
 export default actions;

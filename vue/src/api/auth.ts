@@ -9,7 +9,7 @@ export const APIAuthCsrf = (): AxiosPromise => {
   return axios.get(`http://localhost/sanctum/csrf-cookie`);
 };
 
-export const APILoadUser = (): AxiosPromise => {
+export const APIAuthLoadUser = (): AxiosPromise => {
   return axios.get(`http://localhost/api/user`);
 };
 
@@ -23,4 +23,8 @@ export const APIAuthRegister = (params: {
   [key: string]: string;
 }): AxiosPromise => {
   return axios.post(`http://localhost/api/register`, params);
+};
+
+export const APIAuthLogout = (): AxiosPromise => {
+  return axios.post(`http://localhost/api/logout`);
 };

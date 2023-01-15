@@ -10,10 +10,11 @@ export const storageGetIsLoggedIn = (): boolean => {
 
 /**
  *  Set isLoggedIn value to true
+ *  @param {boolean} isLoggedIn
  *  @returns {void}
  */
-export const storageSetLogin = (): void => {
-  localStorage.setItem("isLoggedIn", "true");
+export const storageSetLogin = (isLoggedIn: string): void => {
+  localStorage.setItem("isLoggedIn", isLoggedIn);
 };
 
 /**
@@ -31,6 +32,6 @@ export const storageGetUser = (): Partial<LoadUser> => {
  *  @param {LoadUser} user
  *  @returns {void}
  */
-export const storageSetUser = (user: LoadUser): void => {
+export const storageSetUser = (user: Partial<LoadUser>): void => {
   localStorage.setItem("user", JSON.stringify(user));
 };

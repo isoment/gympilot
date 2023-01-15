@@ -1,11 +1,16 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/login">Login</router-link> |
-    <router-link to="/register">Register</router-link>
-  </nav>
+  <SimpleNav />
   <router-view />
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import SimpleNav from "./components/navigation/SimpleNav.vue";
+
+export default defineComponent({
+  components: { SimpleNav },
+});
+</script>
 
 <style>
 #app {
@@ -14,18 +19,5 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>
