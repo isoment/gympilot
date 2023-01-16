@@ -1,21 +1,19 @@
 /**
- *  There are third party packages to mock out local storage for testing but
- *  we can implement a simple class to do it as well. We define the class with
- *  the same methods and then replace the real local storage on the window object
+ *  A simple mock implementation of the local storage.
  */
 
 export class MockLocalStorage {
-  private store: { [key: string]: unknown } = {};
+  private store: { [key: string]: string } = {};
 
   clear(): void {
     this.store = {};
   }
 
-  getItem(key: string): unknown {
-    return this.store[key];
+  getItem(key: string): string | null {
+    return this.store[key] ? this.store[key] : null;
   }
 
-  setItem(key: string, value: unknown): void {
+  setItem(key: string, value: string): void {
     this.store[key] = value;
   }
 

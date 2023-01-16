@@ -7,10 +7,16 @@ import {
 import { MockLocalStorage } from "@/test-utils/MockLocalStorage";
 
 describe("localStorageHelpers", () => {
+  // Use the mock local store
   beforeEach(() => {
     Object.defineProperty(window, "localStorage", {
       value: new MockLocalStorage(),
     });
+  });
+
+  // Ensure the local store is clear after each test
+  afterEach(() => {
+    localStorage.clear();
   });
 
   describe("storageGetIsLoggedIn", () => {
