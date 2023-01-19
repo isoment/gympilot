@@ -1,4 +1,7 @@
 import actions from "@/store/actions";
+import axios from "axios";
+jest.mock("axios");
+const postMock = axios.post as jest.Mock;
 
 describe("actions", () => {
   describe("LOAD_STORED_STATE", () => {
@@ -66,4 +69,41 @@ describe("actions", () => {
       expect(commit).toHaveBeenCalledWith("SET_LOGGED_IN", true);
     });
   });
+
+  describe("LOGOUT_USER", () => {
+    it("calls the SET_LOGGED_IN and SET_USER mutation when the axios call resolves successfully", async () => {
+      postMock.mockResolvedValue({});
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+      await actions.LOGOUT_USER(context);
+      expect(commit).toHaveBeenCalledWith("SET_LOGGED_IN", false);
+      expect(commit).toHaveBeenCalledWith("SET_USER", {});
+    });
+
+    it("sets the user to logged out in the store", async () => {
+      const actual = jest.requireActual("@/utils/localStorageHelpers");
+      const storageSetLoginSpy = jest.spyOn(actual, "storageSetLogin");
+      // Mock the post axios request to the logout endpoint as resolved.
+      postMock.mockResolvedValue({});
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+      await actions.LOGOUT_USER(context);
+      expect(storageSetLoginSpy).toHaveBeenCalledWith("false");
+    });
+
+    it("sets the user object to empty in the store", async () => {
+      const actual = jest.requireActual("@/utils/localStorageHelpers");
+      const storageSetUserSpy = jest.spyOn(actual, "storageSetUser");
+      postMock.mockResolvedValue({});
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+      await actions.LOGOUT_USER(context);
+      expect(storageSetUserSpy).toHaveBeenCalledWith({});
+    });
+  });
+
+  describe("LOAD_USER", () => {});
 });
