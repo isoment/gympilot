@@ -2,8 +2,13 @@ import actions from "@/store/actions";
 import axios from "axios";
 jest.mock("axios");
 const postMock = axios.post as jest.Mock;
+const getMock = axios.get as jest.Mock;
 
 describe("actions", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("LOAD_STORED_STATE", () => {
     it("calls the storageGetIsLoggedIn function to get the value from local storage", () => {
       const actual = jest.requireActual("@/utils/localStorageHelpers");
@@ -11,6 +16,7 @@ describe("actions", () => {
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
+
       actions.LOAD_STORED_STATE(context);
       expect(spy).toHaveBeenCalled();
     });
@@ -19,6 +25,7 @@ describe("actions", () => {
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
+
       actions.LOAD_STORED_STATE(context);
       expect(commit).toHaveBeenCalledWith("SET_LOGGED_IN", false);
     });
@@ -29,6 +36,7 @@ describe("actions", () => {
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
+
       actions.LOAD_STORED_STATE(context);
       expect(spy).toHaveBeenCalled();
     });
@@ -37,6 +45,7 @@ describe("actions", () => {
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
+
       actions.LOAD_STORED_STATE(context);
       expect(commit).toHaveBeenCalledWith("SET_USER", {});
     });
@@ -49,6 +58,7 @@ describe("actions", () => {
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
+
       actions.LOGIN_USER(context);
       expect(storageSetLoginSpy).toHaveBeenCalledWith("true");
     });
@@ -57,6 +67,7 @@ describe("actions", () => {
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
+
       actions.LOGIN_USER(context);
       expect(dispatch).toHaveBeenCalledWith("LOAD_USER");
     });
@@ -65,17 +76,19 @@ describe("actions", () => {
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
+
       actions.LOGIN_USER(context);
       expect(commit).toHaveBeenCalledWith("SET_LOGGED_IN", true);
     });
   });
 
   describe("LOGOUT_USER", () => {
-    it("calls the SET_LOGGED_IN and SET_USER mutation when the axios call resolves successfully", async () => {
+    it("calls the SET_LOGGED_IN and SET_USER mutation when the axios promise resolves successfully", async () => {
       postMock.mockResolvedValue({});
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
+
       await actions.LOGOUT_USER(context);
       expect(commit).toHaveBeenCalledWith("SET_LOGGED_IN", false);
       expect(commit).toHaveBeenCalledWith("SET_USER", {});
@@ -84,11 +97,13 @@ describe("actions", () => {
     it("sets the user to logged out in the store", async () => {
       const actual = jest.requireActual("@/utils/localStorageHelpers");
       const storageSetLoginSpy = jest.spyOn(actual, "storageSetLogin");
-      // Mock the post axios request to the logout endpoint as resolved.
-      postMock.mockResolvedValue({});
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
+
+      // Mock the post axios request to the logout endpoint as resolved.
+      postMock.mockResolvedValue({});
+
       await actions.LOGOUT_USER(context);
       expect(storageSetLoginSpy).toHaveBeenCalledWith("false");
     });
@@ -96,14 +111,56 @@ describe("actions", () => {
     it("sets the user object to empty in the store", async () => {
       const actual = jest.requireActual("@/utils/localStorageHelpers");
       const storageSetUserSpy = jest.spyOn(actual, "storageSetUser");
-      postMock.mockResolvedValue({});
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
+
+      postMock.mockResolvedValue({});
+
       await actions.LOGOUT_USER(context);
       expect(storageSetUserSpy).toHaveBeenCalledWith({});
     });
   });
 
-  describe("LOAD_USER", () => {});
+  describe("LOAD_USER", () => {
+    it("sets the user in local storage when the axios promise resolves successfully", async () => {
+      const actual = jest.requireActual("@/utils/localStorageHelpers");
+      const storageSetUserSpy = jest.spyOn(actual, "storageSetUser");
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      // Mock out the axios response from the APIAuthLoadUser endpoint
+      const response = { data: { id: 1, name: "Test User" } };
+      getMock.mockResolvedValue(response);
+
+      await actions.LOAD_USER(context);
+      expect(storageSetUserSpy).toHaveBeenCalledWith(response.data);
+    });
+
+    it("calls the SET_USER mutation when the axios promise resolves successfully", async () => {
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      // Mock out the axios response from the APIAuthLoadUser endpoint
+      const response = { data: { id: 1, name: "Test User" } };
+      getMock.mockResolvedValue(response);
+
+      await actions.LOAD_USER(context);
+      expect(commit).toHaveBeenCalledWith("SET_USER", response.data);
+    });
+
+    it("calls the LOGOUT_USER action if the axios promise is rejected", async () => {
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      const error = "Error logging out";
+      getMock.mockRejectedValue(error);
+
+      await actions.LOAD_USER(context);
+      expect(dispatch).toHaveBeenCalledWith(error);
+    });
+  });
 });

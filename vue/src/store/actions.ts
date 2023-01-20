@@ -53,6 +53,7 @@ const actions = {
         context.commit(SET_USER, user);
       })
       .catch((error) => {
+        console.log(error);
         context.dispatch(LOGOUT_USER);
       });
   },
