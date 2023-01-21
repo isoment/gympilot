@@ -154,13 +154,11 @@ describe("actions", () => {
     it("calls the LOGOUT_USER action if the axios promise is rejected", async () => {
       const commit = jest.fn();
       const dispatch = jest.fn();
-      const context = { commit, dispatch };
 
-      const error = "Error logging out";
-      getMock.mockRejectedValue(error);
-
-      await actions.LOAD_USER(context);
-      expect(dispatch).toHaveBeenCalledWith(error);
+      // Mock the axios promise being rejected
+      getMock.mockRejectedValue(new Error());
+      await actions.LOAD_USER({ commit, dispatch });
+      expect(dispatch).toHaveBeenCalledWith("LOGOUT_USER");
     });
   });
 });

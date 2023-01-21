@@ -45,15 +45,14 @@ const actions = {
   /**
    *  Load the user details from the API and save to state.
    */
-  [LOAD_USER](context: Context): void {
-    APIAuthLoadUser()
+  [LOAD_USER]: async (context: Context) => {
+    await APIAuthLoadUser()
       .then((response) => {
         const user = response.data;
         storageSetUser(user);
         context.commit(SET_USER, user);
       })
       .catch((error) => {
-        console.log(error);
         context.dispatch(LOGOUT_USER);
       });
   },
@@ -61,8 +60,8 @@ const actions = {
   /**
    *  Logout a user.
    */
-  [LOGOUT_USER](context: Context): void {
-    APIAuthLogout()
+  [LOGOUT_USER]: async (context: Context) => {
+    await APIAuthLogout()
       .then((response) => {
         context.commit(SET_LOGGED_IN, false);
         context.commit(SET_USER, {});
