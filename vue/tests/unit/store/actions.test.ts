@@ -83,8 +83,18 @@ describe("actions", () => {
   });
 
   describe("LOGOUT_USER", () => {
-    it("calls the SET_LOGGED_IN and SET_USER mutation when the axios promise resolves successfully", async () => {
-      postMock.mockResolvedValue({});
+    it("makes an api call to logout the user", async () => {
+      const actual = jest.requireActual("@/api/auth");
+      const APIAuthLogoutSpy = jest.spyOn(actual, "APIAuthLogout");
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      await actions.LOGOUT_USER(context);
+      expect(APIAuthLogoutSpy).toHaveBeenCalled();
+    });
+
+    it("calls the SET_LOGGED_IN and SET_USER mutation when the axios promise resolves", async () => {
       const commit = jest.fn();
       const dispatch = jest.fn();
       const context = { commit, dispatch };
@@ -101,9 +111,6 @@ describe("actions", () => {
       const dispatch = jest.fn();
       const context = { commit, dispatch };
 
-      // Mock the post axios request to the logout endpoint as resolved.
-      postMock.mockResolvedValue({});
-
       await actions.LOGOUT_USER(context);
       expect(storageSetLoginSpy).toHaveBeenCalledWith("false");
     });
@@ -115,14 +122,22 @@ describe("actions", () => {
       const dispatch = jest.fn();
       const context = { commit, dispatch };
 
-      postMock.mockResolvedValue({});
-
       await actions.LOGOUT_USER(context);
       expect(storageSetUserSpy).toHaveBeenCalledWith({});
     });
   });
 
   describe("LOAD_USER", () => {
+    it("makes an api call to load the user information", async () => {
+      const actual = jest.requireActual("@/api/auth");
+      const APIAuthLoadUserSpy = jest.spyOn(actual, "APIAuthLoadUser");
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+      await actions.LOAD_USER(context);
+      expect(APIAuthLoadUserSpy).toHaveBeenCalled();
+    });
+
     it("sets the user in local storage when the axios promise resolves successfully", async () => {
       const actual = jest.requireActual("@/utils/localStorageHelpers");
       const storageSetUserSpy = jest.spyOn(actual, "storageSetUser");
