@@ -31,7 +31,11 @@
               class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
             />
           </div>
-          <ValidationErrors :errors="errorFor('name')" class="mt-2 text-left" />
+          <ValidationErrors
+            :errors="registerValidationErrors"
+            field="name"
+            class="mt-2 text-left"
+          />
         </div>
         <!-- Email -->
         <div class="w-full mb-6">
@@ -50,7 +54,8 @@
             />
           </div>
           <ValidationErrors
-            :errors="errorFor('email')"
+            :errors="registerValidationErrors"
+            field="email"
             class="mt-2 text-left"
           />
         </div>
@@ -71,7 +76,8 @@
             />
           </div>
           <ValidationErrors
-            :errors="errorFor('password')"
+            :errors="registerValidationErrors"
+            field="password"
             class="mt-2 text-left"
           />
         </div>
@@ -92,7 +98,8 @@
             />
           </div>
           <ValidationErrors
-            :errors="errorFor('password_confirmation')"
+            :errors="registerValidationErrors"
+            field="password-confirmation"
             class="mt-2 text-left"
           />
         </div>
@@ -191,18 +198,11 @@ export default defineComponent({
       loadingRegisterApi.value = false;
     };
 
-    const errorFor = (field: string) => {
-      const valuesOfErrors = registerValidationErrors.value;
-      return valuesOfErrors[field as keyof ApiValidationErrors]
-        ? valuesOfErrors[field as keyof ApiValidationErrors]
-        : [];
-    };
-
     return {
       registerForm,
       loadingRegisterApi,
       attemptRegister,
-      errorFor,
+      registerValidationErrors,
     };
   },
 });
