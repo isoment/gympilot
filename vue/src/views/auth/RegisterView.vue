@@ -133,7 +133,7 @@ import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { key } from "@/store";
-import axios from "axios";
+import { AxiosError } from "axios";
 import { APIAuthRegister, APIAuthCsrf } from "@/api/auth";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import { LOGIN_USER } from "@/store/constants";
@@ -163,15 +163,6 @@ export default defineComponent({
       password_confirmation: "",
     });
 
-    // Get the CSRF token that sanctum generates
-    const getSanctumCsrf = async () => {
-      try {
-        await APIAuthCsrf();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     /***********************
      *  Logic for register *
      **********************/
@@ -181,7 +172,7 @@ export default defineComponent({
     const attemptRegister = async () => {
       loadingRegisterApi.value = true;
       registerValidationErrors.value = {};
-      await getSanctumCsrf();
+      await APIAuthCsrf();
 
       // Make a call to the register api endpoint
       APIAuthRegister(registerForm.value)
@@ -192,11 +183,8 @@ export default defineComponent({
           }
         })
         .catch((error) => {
-          if (axios.isAxiosError(error) && error.response) {
-            console.log(error.response);
-            if (error.response.status === 422) {
-              registerValidationErrors.value = error.response.data.errors;
-            }
+          if ((error as AxiosError)?.response?.status === 422) {
+            registerValidationErrors.value = error.response.data.errors;
           }
         });
 
