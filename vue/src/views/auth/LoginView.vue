@@ -28,11 +28,13 @@
               name="email"
               placeholder="Email"
               class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
+              data-test="email-input"
             />
           </div>
           <div
             v-if="loginValidationError"
             class="mt-2 ml-1 text-xs text-left text-red-400"
+            data-test="validation-error"
           >
             {{ loginValidationError }}
           </div>
@@ -50,6 +52,7 @@
               type="password"
               placeholder="Password"
               class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
+              data-test="password-input"
             />
           </div>
         </div>
@@ -58,6 +61,7 @@
           <a
             href="#"
             class="font-light transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
+            data-test="forgot-password-link"
           >
             Forgot Your Password?
           </a>
@@ -67,6 +71,7 @@
           <button
             class="w-full px-4 py-2 font-bold text-white transition-all duration-200 bg-emerald-500 hover:bg-emerald-400 focus:outline-emerald-400"
             :disabled="loadingLoginAPI"
+            data-test="submit-button"
             @click.prevent="attemptLogin()"
           >
             <span v-if="!loadingLoginAPI">Sign in</span>
@@ -98,7 +103,7 @@ import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { key } from "@/store";
-import axios from "axios";
+import { AxiosError } from "axios";
 import { APIAuthLogin, APIAuthCsrf } from "@/api/auth";
 import { LOGIN_USER } from "@/store/constants";
 
@@ -115,44 +120,33 @@ export default defineComponent({
       password: "",
     });
 
-    // Get the CSRF token that sanctum generates
-    const getSanctumCsrf = async () => {
-      try {
-        await APIAuthCsrf();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    /********************
-     *  Logic for login *
-     *******************/
+    // State related to login
     const loadingLoginAPI = ref(false);
     const loginValidationError = ref("");
+
+    // Make a call to the login api endpoint, if the response is successful
+    // call the vuex store to set the local storage and global state.
+    const login = async () => {
+      try {
+        // Get the CSRF token that sanctum generates
+        await APIAuthCsrf();
+        const response = await APIAuthLogin(loginForm.value);
+        if (response.status === 200) {
+          store.dispatch(LOGIN_USER);
+          router.push({ name: "home" });
+        }
+      } catch (error) {
+        if ((error as AxiosError)?.response?.status === 422) {
+          loginValidationError.value =
+            "These credentials do not match our records";
+        }
+      }
+    };
 
     const attemptLogin = async () => {
       loadingLoginAPI.value = true;
       loginValidationError.value = "";
-      await getSanctumCsrf();
-
-      // Make a call to the login api endpoint, if the response is successful
-      // call the vuex store to set the local storage and global state.
-      APIAuthLogin(loginForm.value)
-        .then((response) => {
-          if (response.status === 200) {
-            store.dispatch(LOGIN_USER);
-            router.push({ name: "home" });
-          }
-        })
-        .catch((error) => {
-          if (axios.isAxiosError(error) && error.response) {
-            if (error.response.status === 422) {
-              loginValidationError.value =
-                "These credentials do not match our records";
-            }
-          }
-        });
-
+      await login();
       loadingLoginAPI.value = false;
     };
 

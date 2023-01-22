@@ -1,7 +1,6 @@
 import actions from "@/store/actions";
 import axios from "axios";
 jest.mock("axios");
-const postMock = axios.post as jest.Mock;
 const getMock = axios.get as jest.Mock;
 
 describe("actions", () => {
