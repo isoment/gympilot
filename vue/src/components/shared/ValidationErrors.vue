@@ -1,6 +1,10 @@
 <template>
-  <div v-if="errorFor()" class="my-1 text-xs italic text-red-400">
-    {{ errorFor() }}
+  <div
+    v-if="renderError()"
+    class="my-1 text-xs italic text-red-400"
+    data-test="error-display"
+  >
+    {{ renderError() }}
   </div>
 </template>
 
@@ -15,7 +19,7 @@ export default defineComponent({
     // key in the object represents the validation field and the value is an
     // array of all the validation errors.
     errors: {
-      type: Object as PropType<{}>,
+      type: Object as PropType<{ [key: string]: string[] }>,
       required: true,
     },
     // We want to see if a given field has a validation error in the api response.
@@ -30,14 +34,14 @@ export default defineComponent({
      *  We check if the field prop is contained in the errors object, if it is we
      *  return the first validation error for that field.
      */
-    const errorFor = (): string | void => {
+    const renderError = (): string | void => {
       if (Object.prototype.hasOwnProperty.call(props.errors, props.field)) {
         const validationFieldArray = props.errors[props.field as keyof {}];
         return validationFieldArray[0];
       }
     };
 
-    return { errorFor };
+    return { renderError };
   },
 });
 </script>
