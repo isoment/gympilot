@@ -114,21 +114,19 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore(key);
 
-    // The login form state
     const loginForm = ref({
       email: "",
       password: "",
     });
 
-    // State related to login
+    /********************
+     *  Logic for login *
+     *******************/
     const loadingLoginAPI = ref(false);
     const loginValidationError = ref("");
 
-    // Make a call to the login api endpoint, if the response is successful
-    // call the vuex store to set the local storage and global state.
     const login = async () => {
       try {
-        // Get the CSRF token that sanctum generates
         await APIAuthCsrf();
         const response = await APIAuthLogin(loginForm.value);
         if (response.status === 200) {

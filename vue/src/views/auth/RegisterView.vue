@@ -29,6 +29,7 @@
               placeholder="Name"
               required
               class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
+              data-test="name-input"
             />
           </div>
           <ValidationErrors
@@ -51,6 +52,7 @@
               placeholder="Email"
               required
               class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
+              data-test="email-input"
             />
           </div>
           <ValidationErrors
@@ -73,6 +75,7 @@
               type="password"
               placeholder="Password"
               class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
+              data-test="password-input"
             />
           </div>
           <ValidationErrors
@@ -95,6 +98,7 @@
               type="password"
               placeholder="Re-type password"
               class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
+              data-test="password-confirm-input"
             />
           </div>
           <ValidationErrors
@@ -108,7 +112,8 @@
           <button
             class="w-full px-4 py-2 font-bold text-white transition-all duration-200 bg-emerald-500 hover:bg-emerald-400 focus:outline-emerald-400"
             :disabled="loadingRegisterApi"
-            @click="attemptRegister()"
+            data-test="submit-button"
+            @click.prevent="attemptRegister()"
           >
             <span v-if="!loadingRegisterApi">Sign up</span>
             <span v-if="loadingRegisterApi"
@@ -176,25 +181,25 @@ export default defineComponent({
     const loadingRegisterApi = ref(false);
     const registerValidationErrors = ref<ApiValidationErrors>({});
 
+    const register = async () => {
+      try {
+        await APIAuthCsrf();
+        const response = await APIAuthRegister(registerForm.value);
+        if (response.status === 201) {
+          store.dispatch(LOGIN_USER);
+          router.push({ name: "home" });
+        }
+      } catch (error: any) {
+        if ((error as AxiosError)?.response?.status === 422) {
+          registerValidationErrors.value = error.response.data.errors;
+        }
+      }
+    };
+
     const attemptRegister = async () => {
       loadingRegisterApi.value = true;
       registerValidationErrors.value = {};
-      await APIAuthCsrf();
-
-      // Make a call to the register api endpoint
-      APIAuthRegister(registerForm.value)
-        .then((response) => {
-          if (response.status === 201) {
-            store.dispatch(LOGIN_USER);
-            router.push({ name: "home" });
-          }
-        })
-        .catch((error) => {
-          if ((error as AxiosError)?.response?.status === 422) {
-            registerValidationErrors.value = error.response.data.errors;
-          }
-        });
-
+      await register();
       loadingRegisterApi.value = false;
     };
 

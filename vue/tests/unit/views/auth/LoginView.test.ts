@@ -34,7 +34,7 @@ describe("LoginView", () => {
     jest.clearAllMocks();
   });
 
-  describe("the login view component is displayed with correct HTML elements", () => {
+  describe("the login view component is displayed with correct elements", () => {
     it("loads the component", () => {
       // Mock out the dispatch method since we are calling a vuex action in this component.
       useStoreMock.mockReturnValue({ dispatch: jest.fn() });
