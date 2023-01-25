@@ -3,7 +3,7 @@
     <div class="flex items-center justify-center mb-12">
       <img alt="Vue logo" src="../assets/logo.png" />
     </div>
-    <h1 class="text-3xl font-bold mb-4 underline">{{ msg }}</h1>
+    <h1 class="mb-4 text-3xl font-bold underline">{{ msg }}</h1>
     <p>
       For a guide and recipes on how to configure / customize this project,<br />
       check out the
@@ -13,11 +13,11 @@
     </p>
     <div class="mt-8">
       <div v-if="result">
-        <h3 class="font-bold text-xl my-2">The API says:</h3>
+        <h3 class="my-2 text-xl font-bold">The API says:</h3>
         <h6 class="text-green-300">{{ result.title }}</h6>
       </div>
       <div v-if="apiError">
-        <h3 class="font-bold text-xl my-2">The API says:</h3>
+        <h3 class="my-2 text-xl font-bold">The API says:</h3>
         <h6 class="text-red-300">{{ apiErrorMessage }}</h6>
       </div>
     </div>
@@ -54,9 +54,7 @@ export default defineComponent({
     // Make a call to the API test endpoint
     const callApi = async () => {
       try {
-        let response = await axios.get<TestResult>(
-          `http://localhost/api/testX`
-        );
+        let response = await axios.get<TestResult>(`http://localhost/api/test`);
         result.value = response.data;
         console.log(response.data);
       } catch (err) {

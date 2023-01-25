@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// This is the fortify route that will display the password reset form
+Route::get('/reset-password/{token}', function($token) {
+    return view('auth.password-reset', [
+      'token' => $token
+    ]);
+})->middleware(['guest:'.config('fortify.guard')])
+  ->name('password.reset');

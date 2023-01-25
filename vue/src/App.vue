@@ -1,16 +1,14 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <SimpleNav />
+  <router-view />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue";
+import SimpleNav from "./components/navigation/SimpleNav.vue";
 
 export default defineComponent({
-  name: "App",
-  components: {
-    HelloWorld,
-  },
+  components: { SimpleNav },
 });
 </script>
 
@@ -21,6 +19,5 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
