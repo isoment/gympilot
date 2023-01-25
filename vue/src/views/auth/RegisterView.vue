@@ -131,6 +131,7 @@
           <router-link
             :to="{ name: 'login' }"
             class="font-bold transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
+            data-test="login-link"
           >
             Login
           </router-link>

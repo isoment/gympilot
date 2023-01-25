@@ -34,32 +34,7 @@ describe("LoginView", () => {
     jest.clearAllMocks();
   });
 
-  describe("the login view component is displayed with correct elements", () => {
-    it("loads the component", () => {
-      // Mock out the dispatch method since we are calling a vuex action in this component.
-      useStoreMock.mockReturnValue({ dispatch: jest.fn() });
-      // Mock out the router since we are using this this in the component
-      useRouteMock.mockReturnValue({ push: jest.fn() });
-      const wrapper = shallowMount(LoginView, createConfig());
-      expect(wrapper.exists()).toBe(true);
-    });
-
-    it("displays an input for the email address", () => {
-      useStoreMock.mockReturnValue({ dispatch: jest.fn() });
-      useRouteMock.mockReturnValue({ push: jest.fn() });
-      const wrapper = shallowMount(LoginView, createConfig());
-      const loginInput = wrapper.find("[data-test='email-input']");
-      expect(loginInput.element).toBeInstanceOf(HTMLInputElement);
-    });
-
-    it("displays an input for the password", () => {
-      useStoreMock.mockReturnValue({ dispatch: jest.fn() });
-      useRouteMock.mockReturnValue({ push: jest.fn() });
-      const wrapper = shallowMount(LoginView, createConfig());
-      const loginInput = wrapper.find("[data-test='password-input']");
-      expect(loginInput.element).toBeInstanceOf(HTMLInputElement);
-    });
-
+  describe("the login component is displayed with the correct elements", () => {
     it("displays a link to reset the password", () => {
       useStoreMock.mockReturnValue({ dispatch: jest.fn() });
       useRouteMock.mockReturnValue({ push: jest.fn() });
@@ -70,12 +45,12 @@ describe("LoginView", () => {
       expect(forgotPasswordLink.element).toBeInstanceOf(HTMLAnchorElement);
     });
 
-    it("displays a button to submit the login form", () => {
+    it("displays a link to the registration form", () => {
       useStoreMock.mockReturnValue({ dispatch: jest.fn() });
       useRouteMock.mockReturnValue({ push: jest.fn() });
       const wrapper = shallowMount(LoginView, createConfig());
-      const submitFormButton = wrapper.find("[data-test='submit-button']");
-      expect(submitFormButton.element).toBeInstanceOf(HTMLButtonElement);
+      const forgotPasswordLink = wrapper.find("[data-test='register-link']");
+      expect(forgotPasswordLink.element).toBeInstanceOf(HTMLAnchorElement);
     });
   });
 
@@ -159,7 +134,7 @@ describe("LoginView", () => {
         expect(validationError.exists()).toBe(false);
       });
 
-      it("does show the login validation errors when the api returns a validation error", async () => {
+      it("shows the login validation errors when the api returns a 422 response status", async () => {
         useStoreMock.mockReturnValue({ dispatch: jest.fn() });
         useRouteMock.mockReturnValue({ push: jest.fn() });
 

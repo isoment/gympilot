@@ -90,6 +90,7 @@
           <router-link
             :to="{ name: 'register' }"
             class="font-bold transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
+            data-test="register-link"
             >Register</router-link
           >
         </div>
