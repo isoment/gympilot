@@ -1,6 +1,6 @@
 version: "3.0"
 services:
-  #PHP Service
+  # Laravel Backend
   laravel:
     build:
       context: ./laravel
@@ -20,7 +20,7 @@ services:
     networks:
       - app-network
 
-  #Vue Frontend
+  # Vue Frontend
   vue:
     stdin_open: true
     container_name: vue
@@ -41,7 +41,7 @@ services:
       - "8080:8080"
       - "8081:8081"
 
-  #Nginx Service
+  # Nginx
   webserver:
     depends_on:
       - laravel
@@ -57,7 +57,7 @@ services:
     networks:
       - app-network
 
-  #Mysql DB
+  # Mysql
   mysql:
     image: mysql:8.0
     container_name: mysql
@@ -69,11 +69,11 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
-      - ./mysql:/mysql
+      - databasevolume:/var/lib/mysql
     networks:
       - app-network
 
-  #Mailhog
+  # Mailhog
   mailhog:
     image: mailhog/mailhog
     container_name: mailhog
@@ -83,11 +83,11 @@ services:
     networks:
       - app-network
 
-#Docker Networks
+# Networks
 networks:
   app-network:
     driver: bridge
 
+# Volumes
 volumes:
-  mysql:
-    driver: local
+  databasevolume:
