@@ -19,7 +19,15 @@ services:
       - ./laravel/php/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
     networks:
       - app-network
-  # Vue Frontend
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: laravel
+
+  # Vue frontent, in development node server is used, in production nginx
   vue:
     stdin_open: true
     container_name: vue
@@ -39,6 +47,14 @@ services:
     ports:
       - "8080:8080"
       - "8081:8081"
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: vue
+
   # Nginx
   webserver:
     depends_on:
@@ -54,6 +70,14 @@ services:
       - "80:80"
     networks:
       - app-network
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: nginx-proxy
+
   # Mysql
   mysql:
     image: mysql:8.0
@@ -69,6 +93,14 @@ services:
       - databasevolume:/var/lib/mysql
     networks:
       - app-network
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: mysql
+
   # Redis
   redis:
     image: "redis"
@@ -81,7 +113,15 @@ services:
       - ./redis/conf:/usr/local/etc/redis/redis.conf
     networks:
       - app-network
-  # Mailhog
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: redis
+
+  # Mailhog for testing email during development
   mailhog:
     image: mailhog/mailhog
     container_name: mailhog
@@ -90,6 +130,66 @@ services:
       - "8025:8025"
     networks:
       - app-network
+
+  # Fluentd will collect logs from the other containers
+  fluentd:
+    build:
+      context: ./fluentd
+      dockerfile: fluentd.dockerfile
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+    links:
+      - "elasticsearch"
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    networks:
+      - app-network
+
+  # Elasticsearch is used for storing and searching logs
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.1
+    container_name: elasticsearch
+    environment:
+      # - "discovery.type=single-node"
+      - cluster.name=elasticsearch
+      - node.name=elasticsearch
+      - discovery.seed_hosts=elasticsearch
+      - cluster.initial_master_nodes=elasticsearch
+      # Disable swapping, requires memlock below
+      - bootstrap.memory_lock=true
+      # Min and max Java heap size
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        # Maximum number of open files for the Elasticsearch user, also
+        # may need to run the following on the host...
+        # sudo sysctl -w vm.max_map_count=262144
+        soft: 262144
+        hard: 262144
+    expose:
+      - "9200"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+    networks:
+      - app-network
+
+  # Kibana a UI elasticsearch
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.6.1
+    links:
+      - "elasticsearch"
+    ports:
+      - "5601:5601"
+    networks:
+      - app-network
+
 # Networks
 networks:
   app-network:
@@ -98,3 +198,4 @@ networks:
 # Volumes
 volumes:
   databasevolume:
+  elasticsearch:
