@@ -148,19 +148,18 @@ services:
 
   # Elasticsearch is used for storing and searching logs
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.1
+    image: elasticsearch:7.17.9
     container_name: elasticsearch
     environment:
-      # - "discovery.type=single-node"
+      - discovery.type=single-node
       - cluster.name=elasticsearch
       - node.name=elasticsearch
-      - discovery.seed_hosts=elasticsearch
-      - cluster.initial_master_nodes=elasticsearch
       # Disable swapping, requires memlock below
       - bootstrap.memory_lock=true
       # Min and max Java heap size
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.security.enabled=false
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     ulimits:
       memlock:
         soft: -1
@@ -177,16 +176,6 @@ services:
       - "9200:9200"
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
-    networks:
-      - app-network
-
-  # Kibana a UI elasticsearch
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.6.1
-    links:
-      - "elasticsearch"
-    ports:
-      - "5601:5601"
     networks:
       - app-network
 
