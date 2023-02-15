@@ -1,6 +1,6 @@
 version: "3.0"
 services:
-  # Laravel Backend
+  # Laravel backend
   laravel:
     build:
       context: ./laravel
@@ -27,6 +27,31 @@ services:
         fluentd-address: localhost:24224
         tag: laravel
 
+  # Supervisord for restarting the queue workers
+  supervisor:
+    container_name: supervisor
+    build:
+      context: ./supervisor
+      dockerfile: supervisord.dockerfile
+    restart: unless-stopped
+    environment:
+      APP_ROOT: ${SUPERVISOR_APP_ROOT}
+      QUEUE_DRIVER: ${SUPERVISOR_QUEUE_CONNECTION}
+      OPTIONS: ${SUPERVISOR_QUEUE_OPTIONS}
+      NUM_PROCS: ${SUPERVISOR_NUM_PROCS}
+    volumes:
+      - ./laravel:/${SUPERVISOR_APP_ROOT}
+    # network_mode: host
+    networks:
+      - app-network
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: supervisor
+
   # Vue frontent, in development node server is used, in production nginx
   vue:
     stdin_open: true
@@ -49,11 +74,11 @@ services:
       - "8081:8081"
     links:
       - fluentd
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: localhost:24224
-        tag: vue
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-address: localhost:24224
+    #     tag: vue
 
   # Nginx
   webserver:
@@ -76,7 +101,7 @@ services:
       driver: "fluentd"
       options:
         fluentd-address: localhost:24224
-        tag: nginx-proxy
+        tag: webserver
 
   # Mysql
   mysql:

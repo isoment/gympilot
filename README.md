@@ -2,8 +2,8 @@
 
 OpenLibrum is your free and open source library software. It supports all the features needed for library management
 including media checkout and tracking, creating collections, scanning and generating barcodes and much more all with
-a simple modern UI. It comes with a docker container setup for easy development and deployment. The backend is built
-in PHP with Laravel and the frontent is built with Vue 3 and Typescript.
+a simple modern UI. It comes with a docker container setup for easy development and deployment. The backend API uses
+Laravel and the frontent is built with Vue 3 and Typescript. There is an extensive automated test suite as well.
 
 ## Development
 
