@@ -41,7 +41,6 @@ services:
       NUM_PROCS: ${SUPERVISOR_NUM_PROCS}
     volumes:
       - ./laravel:/${SUPERVISOR_APP_ROOT}
-    # network_mode: host
     networks:
       - app-network
     links:
