@@ -1,4 +1,5 @@
-FROM php:8.1-fpm
+ARG PHP_VERSION
+FROM php:$PHP_VERSION-fpm
 
 # Copy composer.lock and composer.json into the working directory
 COPY composer.lock composer.json /var/www/html/

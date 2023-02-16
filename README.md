@@ -7,7 +7,7 @@ Laravel and the frontent is built with Vue 3 and Typescript. There is an extensi
 
 ## Development
 
-For development run...
+Before bringing up the containers create the necessary environment files in the project root and the vue and laravel directories. There are example files included. Then to bring the containers up for development run...
 
 ```
 docker-compose up -d --build

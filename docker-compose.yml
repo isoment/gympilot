@@ -4,6 +4,8 @@ services:
   laravel:
     build:
       context: ./laravel
+      args:
+        PHP_VERSION: ${PHP_VERSION}
       dockerfile: laravel.dockerfile
     image: laravel
     user: "1000:1000"
@@ -32,6 +34,8 @@ services:
     container_name: supervisor
     build:
       context: ./supervisor
+      args:
+        PHP_VERSION: ${PHP_VERSION}
       dockerfile: supervisord.dockerfile
     restart: unless-stopped
     environment:
@@ -157,6 +161,7 @@ services:
 
   # Fluentd will collect logs from the other containers
   fluentd:
+    container_name: fluentd
     build:
       context: ./fluentd
       dockerfile: fluentd.dockerfile
