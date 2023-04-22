@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function() {
  *  Public routes *
  *****************/
 Route::get('/test', function() {
+    Cache::store('redis')->put('test', 'Test route was hit.', 600);
     return [
         'title' => 'Fake Title',
         'junk' => 'value'

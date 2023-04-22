@@ -1,9 +1,11 @@
 version: "3.0"
 services:
-  #PHP Service
+  # Laravel backend
   laravel:
     build:
       context: ./laravel
+      args:
+        PHP_VERSION: ${PHP_VERSION}
       dockerfile: laravel.dockerfile
     image: laravel
     user: "1000:1000"
@@ -18,9 +20,42 @@ services:
       - ./laravel:/var/www/html/
       - ./laravel/php/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
     networks:
-      - app-network
+      - librum-network
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: laravel
 
-  #Vue Frontend
+  # Supervisord for restarting the queue workers
+  supervisor:
+    container_name: supervisor
+    build:
+      context: ./supervisor
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+      dockerfile: supervisord.dockerfile
+    restart: unless-stopped
+    environment:
+      APP_ROOT: ${SUPERVISOR_APP_ROOT}
+      QUEUE_DRIVER: ${SUPERVISOR_QUEUE_CONNECTION}
+      OPTIONS: ${SUPERVISOR_QUEUE_OPTIONS}
+      NUM_PROCS: ${SUPERVISOR_NUM_PROCS}
+    volumes:
+      - ./laravel:/${SUPERVISOR_APP_ROOT}
+    networks:
+      - librum-network
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: supervisor
+
+  # Vue frontent, in development node server is used, in production nginx
   vue:
     stdin_open: true
     container_name: vue
@@ -32,7 +67,7 @@ services:
       - ./vue:/app
       - /app/node_modules/
     networks:
-      - app-network
+      - librum-network
     environment:
       - CHOKIDAR_USEPOLLING=true
     expose:
@@ -40,8 +75,15 @@ services:
     ports:
       - "8080:8080"
       - "8081:8081"
+    links:
+      - fluentd
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-address: localhost:24224
+    #     tag: vue
 
-  #Nginx Service
+  # Nginx
   webserver:
     depends_on:
       - laravel
@@ -55,9 +97,16 @@ services:
     ports:
       - "80:80"
     networks:
-      - app-network
+      - librum-network
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: webserver
 
-  #Mysql DB
+  # Mysql
   mysql:
     image: mysql:8.0
     container_name: mysql
@@ -69,11 +118,38 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
-      - ./mysql:/mysql
+      - librum_database:/var/lib/mysql
     networks:
-      - app-network
+      - librum-network
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: mysql
 
-  #Mailhog
+  # Redis
+  redis:
+    image: "redis"
+    container_name: redis
+    command: redis-server
+    ports:
+      - "6379:6397"
+    volumes:
+      - librum_redis:/data
+      - ./redis/conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - librum-network
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: redis
+
+  # Mailhog for testing email during development
   mailhog:
     image: mailhog/mailhog
     container_name: mailhog
@@ -81,13 +157,50 @@ services:
       - "1025:1025"
       - "8025:8025"
     networks:
-      - app-network
+      - librum-network
 
-#Docker Networks
+  # Fluentd will collect logs from the other containers
+  fluentd:
+    container_name: fluentd
+    build:
+      context: ./fluentd
+      dockerfile: fluentd.dockerfile
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+    links:
+      - "mongodb"
+    environment:
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    networks:
+      - librum-network
+
+  # The logs that fluentd collects are stored in mongodb
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: unless-stopped
+    hostname: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - 27017:27017
+    volumes:
+      - librum_mongodb:/data/db
+    networks:
+      - librum-network
+
+# Networks
 networks:
-  app-network:
+  librum-network:
     driver: bridge
 
+# Volumes
 volumes:
-  mysql:
-    driver: local
+  librum_database:
+  librum_redis:
+  librum_mongodb:

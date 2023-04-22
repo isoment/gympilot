@@ -1,4 +1,5 @@
-FROM php:8.1-fpm
+ARG PHP_VERSION
+FROM php:$PHP_VERSION-fpm
 
 # Copy composer.lock and composer.json into the working directory
 COPY composer.lock composer.json /var/www/html/
@@ -6,7 +7,7 @@ COPY composer.lock composer.json /var/www/html/
 # Set working directory
 WORKDIR /var/www/html/
 
-# Install dependencies for the operating system software
+# Install required software
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
@@ -15,11 +16,15 @@ RUN apt-get update && apt-get install -y \
     git \
     curl
 
-# Install extensions for php
-RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install gd
+# Install phpredis using pecl
+RUN pecl install redis
 
-# Install composer (php package manager)
+# Install extensions for php
+RUN docker-php-ext-install pdo pdo_mysql gd
+# Enable redis
+RUN docker-php-ext-enable redis.so
+
+# Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Copy existing application directory contents to the working directory
