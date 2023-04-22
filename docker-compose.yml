@@ -20,7 +20,7 @@ services:
       - ./laravel:/var/www/html/
       - ./laravel/php/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
     networks:
-      - app-network
+      - librum-network
     links:
       - fluentd
     logging:
@@ -46,7 +46,7 @@ services:
     volumes:
       - ./laravel:/${SUPERVISOR_APP_ROOT}
     networks:
-      - app-network
+      - librum-network
     links:
       - fluentd
     logging:
@@ -67,7 +67,7 @@ services:
       - ./vue:/app
       - /app/node_modules/
     networks:
-      - app-network
+      - librum-network
     environment:
       - CHOKIDAR_USEPOLLING=true
     expose:
@@ -97,7 +97,7 @@ services:
     ports:
       - "80:80"
     networks:
-      - app-network
+      - librum-network
     links:
       - fluentd
     logging:
@@ -118,9 +118,9 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
-      - databasevolume:/var/lib/mysql
+      - librum_database:/var/lib/mysql
     networks:
-      - app-network
+      - librum-network
     links:
       - fluentd
     logging:
@@ -137,10 +137,10 @@ services:
     ports:
       - "6379:6397"
     volumes:
-      - ./redis/data:/data
+      - librum_redis:/data
       - ./redis/conf:/usr/local/etc/redis/redis.conf
     networks:
-      - app-network
+      - librum-network
     links:
       - fluentd
     logging:
@@ -157,7 +157,7 @@ services:
       - "1025:1025"
       - "8025:8025"
     networks:
-      - app-network
+      - librum-network
 
   # Fluentd will collect logs from the other containers
   fluentd:
@@ -176,7 +176,7 @@ services:
       - "24224:24224"
       - "24224:24224/udp"
     networks:
-      - app-network
+      - librum-network
 
   # The logs that fluentd collects are stored in mongodb
   mongodb:
@@ -190,16 +190,17 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - mongodb:/data/db
+      - librum_mongodb:/data/db
     networks:
-      - app-network
+      - librum-network
 
 # Networks
 networks:
-  app-network:
+  librum-network:
     driver: bridge
 
 # Volumes
 volumes:
-  databasevolume:
-  mongodb:
+  librum_database:
+  librum_redis:
+  librum_mongodb:
