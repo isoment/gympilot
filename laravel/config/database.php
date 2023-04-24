@@ -152,7 +152,7 @@ return [
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
             // Uses a separate database for the queue
-            'database' => '0',
+            'database' => '2',
             'prefix' => 'q:'
         ]
 
