@@ -1,7 +1,9 @@
 <?php
 
+use App\Jobs\TestJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +35,8 @@ Route::middleware('auth:sanctum')->group(function() {
  *  Public routes *
  *****************/
 Route::get('/test', function() {
+    Log::info('Test route was hit');
+    TestJob::dispatch();
     Cache::store('redis')->put('test', 'Test route was hit.', 600);
     return [
         'title' => 'Fake Title',

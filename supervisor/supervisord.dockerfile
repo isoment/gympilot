@@ -13,4 +13,8 @@ RUN docker-php-ext-install pdo_mysql \
     && apt-get update \ 
     && apt-get install -y --no-install-recommends procps supervisor
 
+# Install and enable redis
+RUN pecl install redis
+RUN docker-php-ext-enable redis.so
+
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]
