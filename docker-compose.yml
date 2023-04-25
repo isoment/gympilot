@@ -20,7 +20,7 @@ services:
       - ./laravel:/var/www/html/
       - ./laravel/php/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
     networks:
-      - librum-network
+      - gympilot-network
     links:
       - fluentd
     logging:
@@ -46,7 +46,7 @@ services:
     volumes:
       - ./laravel:/${SUPERVISOR_APP_ROOT}
     networks:
-      - librum-network
+      - gympilot-network
     links:
       - fluentd
     logging:
@@ -67,7 +67,7 @@ services:
       - ./vue:/app
       - /app/node_modules/
     networks:
-      - librum-network
+      - gympilot-network
     environment:
       - CHOKIDAR_USEPOLLING=true
     expose:
@@ -97,7 +97,7 @@ services:
     ports:
       - "80:80"
     networks:
-      - librum-network
+      - gympilot-network
     links:
       - fluentd
     logging:
@@ -118,9 +118,9 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
-      - librum_database:/var/lib/mysql
+      - gympilot_database:/var/lib/mysql
     networks:
-      - librum-network
+      - gympilot-network
     links:
       - fluentd
     logging:
@@ -137,10 +137,10 @@ services:
     ports:
       - "6379:6397"
     volumes:
-      - librum_redis:/data
+      - gympilot_redis:/data
       - ./redis/conf:/usr/local/etc/redis/redis.conf
     networks:
-      - librum-network
+      - gympilot-network
     links:
       - fluentd
     logging:
@@ -157,7 +157,7 @@ services:
       - "1025:1025"
       - "8025:8025"
     networks:
-      - librum-network
+      - gympilot-network
 
   # Fluentd will collect logs from the other containers
   fluentd:
@@ -176,7 +176,7 @@ services:
       - "24224:24224"
       - "24224:24224/udp"
     networks:
-      - librum-network
+      - gympilot-network
 
   # The logs that fluentd collects are stored in mongodb
   mongodb:
@@ -190,17 +190,17 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - librum_mongodb:/data/db
+      - gympilot_mongodb:/data/db
     networks:
-      - librum-network
+      - gympilot-network
 
 # Networks
 networks:
-  librum-network:
+  gympilot-network:
     driver: bridge
 
 # Volumes
 volumes:
-  librum_database:
-  librum_redis:
-  librum_mongodb:
+  gympilot_database:
+  gympilot_redis:
+  gympilot_mongodb:
