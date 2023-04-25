@@ -1,9 +1,6 @@
-# OpenLibrum
+# GymPilot
 
-OpenLibrum is your free and open source library software. It supports all the features needed for library management
-including media checkout and tracking, creating collections, scanning and generating barcodes and much more all with
-a simple modern UI. It comes with a docker container setup for easy development and deployment. The backend API uses
-Laravel and the frontent is built with Vue 3 and Typescript. There is an extensive automated test suite as well.
+GymPilot is your complete gym management solution. It comes with a docker container setup for easy development and deployment. The backend is a Laravel API and the frontent is built with Vue 3 and Typescript. There is an extensive automated test suite as well.
 
 ## Development
 
@@ -16,7 +13,7 @@ docker-compose up -d --build
 ## Logging
 
 The logs from all of the service containers are collected by fluentd and saved in a mongodb
-database. By default they are saved in the "admin" database in the "logs" collection. You can
+database. By default they are saved in the "container_logs" database in the "logs" collection. You can
 use a GUI client or get to a mongosh as follows...
 
 ```
@@ -24,7 +21,7 @@ use a GUI client or get to a mongosh as follows...
 docker exec -it mongodb mongosh -u root
 
 # Switch to the admin database
-use admin
+use container_logs
 
 # List the log entries
 db.logs.find()
