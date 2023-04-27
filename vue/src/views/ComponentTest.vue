@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <div class="flex justify-around">
-      <CheckBox v-model="checkboxData" label="Test Check" />
+      <CheckBox
+        v-model="checkboxData"
+        label="Test Check"
+        @click="handleClick"
+      />
       <CheckBox v-model="checkboxData" label="Test Check" />
     </div>
   </div>
@@ -19,7 +23,17 @@ export default defineComponent({
   setup() {
     const checkboxData = ref(true);
 
-    return { checkboxData };
+    const handleChange = (event: InputEvent) => {
+      const target = event.target as HTMLInputElement;
+      console.log(target.checked);
+    };
+
+    const handleClick = (event: MouseEvent) => {
+      const target = event.target as HTMLInputElement;
+      console.log(target.checked);
+    };
+
+    return { checkboxData, handleChange, handleClick };
   },
 });
 </script>

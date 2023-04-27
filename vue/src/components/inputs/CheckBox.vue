@@ -5,6 +5,7 @@
       type="checkbox"
       class="w-5 h-5"
       @change="onChange"
+      @click="onClick"
     />
     <label class="ml-2 font-mono font-bold">{{ label }}</label>
   </div>
@@ -27,7 +28,7 @@ export default defineComponent({
     },
   },
 
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "click"],
 
   setup(props, { emit }) {
     const isChecked = ref(props.modelValue);
@@ -36,8 +37,13 @@ export default defineComponent({
       emit("update:modelValue", isChecked.value);
     };
 
+    const onClick = (event: MouseEvent) => {
+      emit("click", event);
+    };
+
     return {
       onChange,
+      onClick,
       isChecked,
     };
   },
