@@ -6,7 +6,6 @@
         label="Test Check"
         @click="handleClick"
       />
-      <CheckBox v-model="checkboxData" label="Test Check" />
     </div>
   </div>
 </template>

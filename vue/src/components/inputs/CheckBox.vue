@@ -3,11 +3,12 @@
     <input
       v-model="isChecked"
       type="checkbox"
-      class="w-5 h-5"
+      class="w-5 h-5 border-gray-400 rounded text-emerald-500 focus:ring-emerald-400"
+      aria-describedby="checkbox-label"
       @change="onChange"
       @click="onClick"
     />
-    <label class="ml-2 font-mono font-bold">{{ label }}</label>
+    <label id="checkbox-label" class="ml-2 font-mono">{{ label }}</label>
   </div>
 </template>
 
@@ -49,3 +50,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+#checkbox-label {
+  padding-top: 2px;
+}
+</style>
