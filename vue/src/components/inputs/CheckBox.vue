@@ -3,7 +3,8 @@
     <input
       v-model="isChecked"
       type="checkbox"
-      class="w-5 h-5 border-gray-400 rounded text-emerald-500 focus:ring-emerald-400"
+      class="w-5 h-5 border-gray-400 rounded focus:ring-slate-700"
+      :class="color"
       aria-describedby="checkbox-label"
       @change="onChange"
       @click="onClick"
@@ -26,6 +27,10 @@ export default defineComponent({
     modelValue: {
       type: Boolean,
       required: true,
+    },
+    color: {
+      type: String,
+      default: "text-emerald-500",
     },
   },
 
