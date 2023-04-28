@@ -4,7 +4,8 @@
       <CheckBox
         v-model="checkboxData"
         label="Test Check"
-        color="text-sky-500"
+        color="text-emerald-500"
+        size="md"
         @click="handleClick"
       />
     </div>
