@@ -4,7 +4,7 @@
       id="checkbox"
       v-model="isChecked"
       type="checkbox"
-      class="border-gray-400 rounded focus:ring-slate-700"
+      class="border-gray-400 rounded cursor-pointer focus:ring-slate-700"
       :disabled="isDisabled"
       :class="color"
       aria-describedby="checkbox-label"
@@ -88,7 +88,7 @@ export default defineComponent({
       if (props.disabled) {
         isDisabled.value = true;
         const checkbox = document.getElementById("checkbox");
-        checkbox?.classList.remove(props.color);
+        checkbox?.classList.remove(props.color, "cursor-pointer");
         checkbox?.classList.add("text-zinc-300");
       }
     };

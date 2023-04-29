@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Combobox v-model="selectedItem" as="div">
+    <Combobox v-model="selectedItem" as="div" :disabled="isDisabled">
       <ComboboxLabel
         v-if="label"
         class="block ml-1 text-sm font-medium text-left text-gray-700"
@@ -8,6 +8,7 @@
       >
       <div class="relative mt-1">
         <ComboboxInput
+          :class="disabledText"
           class="w-full py-2 pl-3 pr-10 bg-white border border-gray-300 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-700 sm:text-sm"
           :display-value="displayValue"
           @change="onInputChange"
@@ -116,6 +117,10 @@ export default defineComponent({
       type: String,
       default: null,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   emits: ["update:modelValue"],
@@ -123,6 +128,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const query = ref("");
     const selectedItem = ref();
+    const isDisabled = ref(props.disabled);
 
     onMounted(() => {
       setSelectedItem();
@@ -144,6 +150,10 @@ export default defineComponent({
           })
     );
 
+    const disabledText = computed(() => {
+      return isDisabled.value ? "text-slate-400" : "";
+    });
+
     const displayValue = (item: unknown) => (item as Item).text;
 
     const onInputChange = (event: ComboboxInputChangeEvent): void => {
@@ -160,6 +170,8 @@ export default defineComponent({
       filteredItems,
       displayValue,
       onInputChange,
+      isDisabled,
+      disabledText,
     };
   },
 });
