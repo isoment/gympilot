@@ -10,7 +10,7 @@
       />
     </div>
     <div class="flex justify-around mt-10">
-      <SelectInput />
+      <SelectInput v-model="memberId" :items="names" />
     </div>
   </div>
 </template>
@@ -44,8 +44,18 @@ export default defineComponent({
     /**
      *  SelectInput
      */
+    const memberId = ref(6);
+    const names = ref([
+      { value: 1, text: "Leslie Alexander" },
+      { value: 2, text: "John Smith" },
+      { value: 3, text: "Tim Franklin" },
+      { value: 4, text: "Amy Brown" },
+      { value: 5, text: "Fran Nolan" },
+      { value: 6, text: "Andy Black" },
+      { value: 7, text: "Wanda Liu" },
+    ]);
 
-    return { checkboxData, handleChange, handleClick };
+    return { checkboxData, handleChange, handleClick, names, memberId };
   },
 });
 </script>
