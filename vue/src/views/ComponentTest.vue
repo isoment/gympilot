@@ -10,7 +10,10 @@
       />
     </div>
     <div class="flex justify-around mt-10">
-      <SelectInput v-model="memberId" :items="names" />
+      <div>
+        <SelectInput v-model="memberId" :items="names" label="Names" />
+        <p class="text-sm">Selected User ID: {{ memberId }}</p>
+      </div>
     </div>
   </div>
 </template>

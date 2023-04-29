@@ -2,14 +2,15 @@
   <div>
     <Combobox v-model="selectedItem" as="div">
       <ComboboxLabel
+        v-if="label"
         class="block ml-1 text-sm font-medium text-left text-gray-700"
-        >Assigned to</ComboboxLabel
+        >{{ label }}</ComboboxLabel
       >
       <div class="relative mt-1">
         <ComboboxInput
           class="w-full py-2 pl-3 pr-10 bg-white border border-gray-300 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-700 sm:text-sm"
           :display-value="displayValue"
-          @change="onChange($event)"
+          @change="onInputChange"
         />
         <ComboboxButton
           class="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none"
@@ -62,7 +63,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, PropType, onMounted } from "vue";
+import {
+  defineComponent,
+  computed,
+  ref,
+  PropType,
+  onMounted,
+  watch,
+} from "vue";
 import {
   Combobox,
   ComboboxButton,
@@ -76,6 +84,8 @@ interface Item {
   value: number | string;
   text: string;
 }
+
+type ComboboxInputChangeEvent = Event & { target: HTMLInputElement };
 
 export default defineComponent({
   name: "SelectInput",
@@ -101,6 +111,10 @@ export default defineComponent({
     color: {
       type: String,
       default: "bg-emerald-300",
+    },
+    label: {
+      type: String,
+      default: null,
     },
   },
 
@@ -132,17 +146,20 @@ export default defineComponent({
 
     const displayValue = (item: unknown) => (item as Item).text;
 
-    const onChange = (event: any): void => {
+    const onInputChange = (event: ComboboxInputChangeEvent): void => {
       query.value = event.target.value;
-      emit("update:modelValue", selectedItem.value);
     };
+
+    watch(selectedItem, () => {
+      emit("update:modelValue", selectedItem.value.value);
+    });
 
     return {
       query,
       selectedItem,
       filteredItems,
       displayValue,
-      onChange,
+      onInputChange,
     };
   },
 });
