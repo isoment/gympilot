@@ -5,6 +5,7 @@
       v-model="isChecked"
       type="checkbox"
       class="border-gray-400 rounded focus:ring-slate-700"
+      :disabled="isDisabled"
       :class="color"
       aria-describedby="checkbox-label"
       @change="onChange"
@@ -41,14 +42,20 @@ export default defineComponent({
         return size.includes(value);
       },
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   emits: ["update:modelValue", "click"],
 
   setup(props, { emit }) {
     const isChecked = ref(props.modelValue);
+    const isDisabled = ref(props.disabled);
 
     onMounted((): void => {
+      setDisabled();
       setSize();
     });
 
@@ -77,10 +84,20 @@ export default defineComponent({
       }
     };
 
+    const setDisabled = (): void => {
+      if (props.disabled) {
+        isDisabled.value = true;
+        const checkbox = document.getElementById("checkbox");
+        checkbox?.classList.remove(props.color);
+        checkbox?.classList.add("text-zinc-300");
+      }
+    };
+
     return {
       onChange,
       onClick,
       isChecked,
+      isDisabled,
     };
   },
 });

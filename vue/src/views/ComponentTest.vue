@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="flex justify-around">
+    <div class="flex justify-around mt-3">
       <CheckBox
         v-model="checkboxData"
         label="Test Check"
