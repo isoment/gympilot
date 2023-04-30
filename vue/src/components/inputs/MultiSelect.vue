@@ -15,7 +15,8 @@
             <div
               v-for="(item, index) in selectedItem"
               :key="index"
-              class="flex items-center px-2 py-1 mx-1 mb-1 text-xs text-white rounded-full bg-emerald-400 focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500"
+              :class="backgroundColor"
+              class="flex items-center px-2 py-1 mx-1 mb-1 text-xs text-white rounded-full focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500"
               :tabindex="0"
               @keydown.space.prevent="handleChipKeydown(index)"
             >
@@ -23,14 +24,14 @@
               <span @click.prevent="deleteSelectedItem(index)">
                 <font-awesome-icon
                   :icon="['fa', 'circle-xmark']"
-                  class="z-10 text-sm text-white fill-current circle-xmark-icon input-icons"
+                  class="z-10 text-sm text-white cursor-pointer fill-current circle-xmark-icon input-icons"
                 >
                 </font-awesome-icon>
               </span>
             </div>
           </div>
           <span
-            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+            class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer"
           >
             <font-awesome-icon
               :icon="['fa', 'chevron-down']"
@@ -51,7 +52,7 @@
               <ListboxOption v-slot="{ active, selected }" :value="item">
                 <li
                   :class="[
-                    active ? 'text-white bg-emerald-400' : 'text-gray-900',
+                    active ? 'text-white ' + backgroundColor : 'text-gray-900',
                     'cursor-default select-none relative py-2 pl-3 pr-9',
                   ]"
                 >
@@ -68,7 +69,7 @@
                   <span
                     v-if="selected"
                     :class="[
-                      active ? 'text-white' : 'text-emerald-600',
+                      active ? 'text-white' : 'text-slate-600',
                       'absolute inset-y-0 right-0 flex items-center pr-4',
                     ]"
                   >
@@ -89,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { PropType, defineComponent, onMounted, ref, watch } from "vue";
 import {
   Listbox,
   ListboxButton,
@@ -114,21 +115,40 @@ export default defineComponent({
     ListboxOptions,
   },
 
-  setup() {
-    const items = ref<Item[]>([
-      { value: 1, text: "Wade Cooper" },
-      { value: 2, text: "Arlene Mccoy" },
-      { value: 3, text: "Devon Webb" },
-      { value: 4, text: "Tom Cook" },
-      { value: 5, text: "Tanya Fox" },
-      { value: 6, text: "Hellen Schmvaluet" },
-      { value: 7, text: "Caroline Schultz" },
-      { value: 8, text: "Mason Heaney" },
-      { value: 9, text: "Claudie Smitham" },
-      { value: 10, text: "Emil Schaefer" },
-    ]);
+  props: {
+    modelValue: {
+      type: Array as PropType<string[] | number[]>,
+      required: true,
+    },
+    items: {
+      type: Array as PropType<Item[]>,
+      required: true,
+    },
+    backgroundColor: {
+      type: String,
+      default: "bg-emerald-400",
+    },
+  },
+
+  emits: ["update:modelValue"],
+
+  setup(props, { emit }) {
     const selectedItem = ref<Item[]>([]);
     const placeholder = ref("Select value...");
+
+    onMounted(() => {
+      setSelectedItems();
+    });
+
+    const setSelectedItems = () => {
+      for (const model of props.modelValue) {
+        for (const item of props.items) {
+          if (model === item.value) {
+            selectedItem.value.push(item);
+          }
+        }
+      }
+    };
 
     const handleChipKeydown = (index: number): void => {
       deleteSelectedItem(index);
@@ -138,8 +158,19 @@ export default defineComponent({
       selectedItem.value.splice(index, 1);
     };
 
+    watch(
+      selectedItem,
+      () => {
+        const arr = [];
+        for (const i of selectedItem.value) {
+          arr.push(i.value);
+        }
+        emit("update:modelValue", arr);
+      },
+      { deep: true }
+    );
+
     return {
-      items,
       selectedItem,
       placeholder,
       handleChipKeydown,

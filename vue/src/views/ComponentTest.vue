@@ -17,7 +17,7 @@
     </div>
     <div class="flex justify-around mt-10">
       <div class="w-80">
-        <MultiSelect />
+        <MultiSelect v-model="selectedEmployees" :items="employees" />
       </div>
     </div>
   </div>
@@ -67,6 +67,19 @@ export default defineComponent({
     /**
      *  MultiSelect
      */
+    const selectedEmployees = ref([7, 2, 1]);
+    const employees = ref([
+      { value: 1, text: "Wade Cooper" },
+      { value: 2, text: "Arlene Mccoy" },
+      { value: 3, text: "Devon Webb" },
+      { value: 4, text: "Tom Cook" },
+      { value: 5, text: "Tanya Fox" },
+      { value: 6, text: "Hellen Schmvaluet" },
+      { value: 7, text: "Caroline Schultz" },
+      { value: 8, text: "Mason Heaney" },
+      { value: 9, text: "Claudie Smitham" },
+      { value: 10, text: "Emil Schaefer" },
+    ]);
 
     return {
       checkboxData,
@@ -74,6 +87,8 @@ export default defineComponent({
       handleClick,
       names,
       memberId,
+      employees,
+      selectedEmployees,
     };
   },
 });
