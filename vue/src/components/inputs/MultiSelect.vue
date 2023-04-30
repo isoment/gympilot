@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Listbox v-model="selected" multiple>
+    <Listbox v-model="selectedItem" multiple>
       <ListboxLabel
         class="block ml-1 text-sm font-medium text-left text-gray-700"
       >
@@ -10,14 +10,14 @@
         <ListboxButton
           class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-700 sm:text-sm"
         >
-          <span v-if="!selected.length">{{ placeholder }}</span>
+          <span v-if="!selectedItem.length">{{ placeholder }}</span>
           <div v-else class="flex flex-row flex-wrap mt-1">
             <div
-              v-for="value in selected"
-              :key="value.id"
-              class="px-2 py-1 mx-1 mb-1 text-xs text-white bg-indigo-400 rounded-full"
+              v-for="(item, index) in selectedItem"
+              :key="index"
+              class="px-2 py-1 mx-1 mb-1 text-xs text-white rounded-full bg-emerald-400"
             >
-              {{ value.name }}
+              {{ item.text }}
             </div>
           </div>
           <span
@@ -30,7 +30,6 @@
             </font-awesome-icon>
           </span>
         </ListboxButton>
-
         <transition
           leave-active-class="transition duration-100 ease-in"
           leave-from-class="opacity-100"
@@ -39,11 +38,11 @@
           <ListboxOptions
             class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
           >
-            <template v-for="person in people" :key="person.id">
-              <ListboxOption v-slot="{ active, selected }" :value="person">
+            <template v-for="item in items" :key="item.id">
+              <ListboxOption v-slot="{ active, selected }" :value="item">
                 <li
                   :class="[
-                    active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                    active ? 'text-white bg-emerald-400' : 'text-gray-900',
                     'cursor-default select-none relative py-2 pl-3 pr-9',
                   ]"
                 >
@@ -54,13 +53,13 @@
                       'block truncate',
                     ]"
                   >
-                    {{ person.name }}
+                    {{ item.text }}
                   </span>
 
                   <span
                     v-if="selected"
                     :class="[
-                      active ? 'text-white' : 'text-indigo-600',
+                      active ? 'text-white' : 'text-emerald-600',
                       'absolute inset-y-0 right-0 flex items-center pr-4',
                     ]"
                   >
@@ -90,7 +89,14 @@ import {
   ListboxOptions,
 } from "@headlessui/vue";
 
+interface Item {
+  value: number | string;
+  text: string;
+}
+
 export default defineComponent({
+  name: "MultiSelect",
+
   components: {
     Listbox,
     ListboxButton,
@@ -98,44 +104,26 @@ export default defineComponent({
     ListboxOption,
     ListboxOptions,
   },
+
   setup() {
-    const people = ref([
-      { id: 1, name: "Wade Cooper" },
-      { id: 2, name: "Arlene Mccoy" },
-      { id: 3, name: "Devon Webb" },
-      { id: 4, name: "Tom Cook" },
-      { id: 5, name: "Tanya Fox" },
-      { id: 6, name: "Hellen Schmidt" },
-      { id: 7, name: "Caroline Schultz" },
-      { id: 8, name: "Mason Heaney" },
-      { id: 9, name: "Claudie Smitham" },
-      { id: 10, name: "Emil Schaefer" },
+    const items = ref<Item[]>([
+      { value: 1, text: "Wade Cooper" },
+      { value: 2, text: "Arlene Mccoy" },
+      { value: 3, text: "Devon Webb" },
+      { value: 4, text: "Tom Cook" },
+      { value: 5, text: "Tanya Fox" },
+      { value: 6, text: "Hellen Schmvaluet" },
+      { value: 7, text: "Caroline Schultz" },
+      { value: 8, text: "Mason Heaney" },
+      { value: 9, text: "Claudie Smitham" },
+      { value: 10, text: "Emil Schaefer" },
     ]);
-    const selected = ref([]);
-    const selectedValues = ref([]);
+    const selectedItem = ref<Item[]>([]);
     const placeholder = ref("Select value...");
 
-    const isItemSelected = (person: any) => {
-      return selectedValues.value.some((item) => item.id === person.id);
-    };
-
-    const toggleItemSelected = (person) => {
-      if (isItemSelected(person)) {
-        selectedValues.value = selectedValues.value.filter(
-          (item) => item.id !== person.id
-        );
-      } else {
-        selectedValues.value.push(person);
-      }
-      selected.value = selectedValues.value;
-    };
-
     return {
-      people,
-      selected,
-      selectedValues,
-      isItemSelected,
-      toggleItemSelected,
+      items,
+      selectedItem,
       placeholder,
     };
   },

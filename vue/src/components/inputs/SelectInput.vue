@@ -22,43 +22,50 @@
           >
           </font-awesome-icon>
         </ComboboxButton>
-        <ComboboxOptions
-          v-if="filteredItems.length > 0"
-          class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+
+        <transition
+          leave-active-class="transition duration-100 ease-in"
+          leave-from-class="opacity-100"
+          leave-to-class="opacity-0"
         >
-          <ComboboxOption
-            v-for="item in filteredItems"
-            v-slot="{ active, selected }"
-            :key="item.value"
-            :value="item"
-            as="template"
+          <ComboboxOptions
+            v-if="filteredItems.length > 0"
+            class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
           >
-            <li
-              class="text-left"
-              :class="[
-                'relative cursor-default select-none py-2 pl-3 pr-9',
-                active ? color + ' text-white' : 'text-gray-900',
-              ]"
+            <ComboboxOption
+              v-for="item in filteredItems"
+              v-slot="{ active, selected }"
+              :key="item.value"
+              :value="item"
+              as="template"
             >
-              <span :class="['block truncate', selected && 'font-semibold']">
-                {{ item.text }}
-              </span>
-              <span
-                v-if="selected"
+              <li
+                class="text-left"
                 :class="[
-                  'absolute inset-y-0 right-0 flex items-center pr-4',
-                  active ? 'text-white' : 'text-slate-600',
+                  'relative cursor-default select-none py-2 pl-3 pr-9',
+                  active ? color + ' text-white' : 'text-gray-900',
                 ]"
               >
-                <font-awesome-icon
-                  :icon="['fa', 'check']"
-                  class="z-10 text-xs fill-current input-icons text-slate-700"
+                <span :class="['block truncate', selected && 'font-semibold']">
+                  {{ item.text }}
+                </span>
+                <span
+                  v-if="selected"
+                  :class="[
+                    'absolute inset-y-0 right-0 flex items-center pr-4',
+                    active ? 'text-white' : 'text-slate-600',
+                  ]"
                 >
-                </font-awesome-icon>
-              </span>
-            </li>
-          </ComboboxOption>
-        </ComboboxOptions>
+                  <font-awesome-icon
+                    :icon="['fa', 'check']"
+                    class="z-10 text-xs fill-current input-icons text-slate-700"
+                  >
+                  </font-awesome-icon>
+                </span>
+              </li>
+            </ComboboxOption>
+          </ComboboxOptions>
+        </transition>
       </div>
     </Combobox>
   </div>
