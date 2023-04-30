@@ -17,7 +17,11 @@
     </div>
     <div class="flex justify-around mt-10">
       <div class="w-80">
-        <MultiSelect v-model="selectedEmployees" :items="employees" />
+        <MultiSelect
+          v-model="selectedEmployees"
+          :items="employees"
+          :disabled="false"
+        />
       </div>
     </div>
   </div>

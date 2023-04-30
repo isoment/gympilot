@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Listbox v-model="selectedItem" multiple>
+    <Listbox v-model="selectedItem" multiple :disabled="disabled">
       <ListboxLabel
         class="block ml-1 text-sm font-medium text-left text-gray-700"
       >
@@ -15,23 +15,25 @@
             <div
               v-for="(item, index) in selectedItem"
               :key="index"
-              :class="backgroundColor"
-              class="flex items-center px-2 py-1 mx-1 mb-1 text-xs text-white rounded-full focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500"
-              :tabindex="0"
+              :class="setChipStyles"
+              class="flex items-center px-2 py-1 mx-1 mb-1 text-xs text-white rounded-full"
+              :tabindex="disabled ? -1 : 0"
               @keydown.space.prevent="handleChipKeydown(index)"
             >
               <span class="mr-1">{{ item.text }}</span>
               <span @click.prevent="deleteSelectedItem(index)">
                 <font-awesome-icon
                   :icon="['fa', 'circle-xmark']"
-                  class="z-10 text-sm text-white cursor-pointer fill-current circle-xmark-icon input-icons"
+                  class="z-10 text-sm text-white fill-current circle-xmark-icon input-icons"
+                  :class="setCursorStyles"
                 >
                 </font-awesome-icon>
               </span>
             </div>
           </div>
           <span
-            class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer"
+            class="absolute inset-y-0 right-0 flex items-center pr-2"
+            :class="setCursorStyles"
           >
             <font-awesome-icon
               :icon="['fa', 'chevron-down']"
@@ -52,7 +54,9 @@
               <ListboxOption v-slot="{ active, selected }" :value="item">
                 <li
                   :class="[
-                    active ? 'text-white ' + backgroundColor : 'text-gray-900',
+                    active
+                      ? 'text-white ' + setBackgroundColor
+                      : 'text-gray-900',
                     'cursor-default select-none relative py-2 pl-3 pr-9',
                   ]"
                 >
@@ -90,7 +94,14 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, onMounted, ref, watch } from "vue";
+import {
+  PropType,
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import {
   Listbox,
   ListboxButton,
@@ -128,6 +139,10 @@ export default defineComponent({
       type: String,
       default: "bg-emerald-400",
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   emits: ["update:modelValue"],
@@ -138,6 +153,21 @@ export default defineComponent({
 
     onMounted(() => {
       setSelectedItems();
+    });
+
+    const setBackgroundColor = computed(() => {
+      return props.disabled ? "bg-slate-400" : props.backgroundColor;
+    });
+
+    const setChipStyles = computed(() => {
+      return props.disabled
+        ? "bg-slate-400"
+        : props.backgroundColor +
+            " focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500";
+    });
+
+    const setCursorStyles = computed(() => {
+      return props.disabled ? "" : "cursor-pointer";
     });
 
     const setSelectedItems = () => {
@@ -155,7 +185,9 @@ export default defineComponent({
     };
 
     const deleteSelectedItem = (index: number): void => {
-      selectedItem.value.splice(index, 1);
+      if (!props.disabled) {
+        selectedItem.value.splice(index, 1);
+      }
     };
 
     watch(
@@ -175,6 +207,9 @@ export default defineComponent({
       placeholder,
       handleChipKeydown,
       deleteSelectedItem,
+      setBackgroundColor,
+      setChipStyles,
+      setCursorStyles,
     };
   },
 });
