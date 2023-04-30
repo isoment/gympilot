@@ -34,6 +34,7 @@
             as="template"
           >
             <li
+              class="text-left"
               :class="[
                 'relative cursor-default select-none py-2 pl-3 pr-9',
                 active ? color + ' text-white' : 'text-gray-900',
@@ -111,7 +112,7 @@ export default defineComponent({
     },
     color: {
       type: String,
-      default: "bg-emerald-300",
+      default: "bg-emerald-400",
     },
     label: {
       type: String,

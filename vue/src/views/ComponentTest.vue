@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="flex justify-around mt-3">
       <CheckBox
         v-model="checkboxData"
@@ -15,6 +15,11 @@
         <p class="text-sm">Selected User ID: {{ memberId }}</p>
       </div>
     </div>
+    <div class="flex justify-around mt-10">
+      <div class="w-80">
+        <MultiSelect />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -22,11 +27,12 @@
 import { defineComponent, ref } from "vue";
 import CheckBox from "@/components/inputs/CheckBox.vue";
 import SelectInput from "@/components/inputs/SelectInput.vue";
+import MultiSelect from "@/components/inputs/MultiSelect.vue";
 
 export default defineComponent({
   name: "ComponentTest",
 
-  components: { CheckBox, SelectInput },
+  components: { CheckBox, SelectInput, MultiSelect },
 
   setup() {
     /**
@@ -58,7 +64,17 @@ export default defineComponent({
       { value: 7, text: "Wanda Liu" },
     ]);
 
-    return { checkboxData, handleChange, handleClick, names, memberId };
+    /**
+     *  MultiSelect
+     */
+
+    return {
+      checkboxData,
+      handleChange,
+      handleClick,
+      names,
+      memberId,
+    };
   },
 });
 </script>
