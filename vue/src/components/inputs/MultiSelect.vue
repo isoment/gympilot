@@ -8,16 +8,25 @@
       </ListboxLabel>
       <div class="relative mt-1">
         <ListboxButton
-          class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-700 sm:text-sm"
+          class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500 sm:text-sm"
         >
           <span v-if="!selectedItem.length">{{ placeholder }}</span>
           <div v-else class="flex flex-row flex-wrap mt-1">
             <div
               v-for="(item, index) in selectedItem"
               :key="index"
-              class="px-2 py-1 mx-1 mb-1 text-xs text-white rounded-full bg-emerald-400"
+              class="flex items-center px-2 py-1 mx-1 mb-1 text-xs text-white rounded-full bg-emerald-400 focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500"
+              :tabindex="0"
+              @keydown.space.prevent="handleChipKeydown(index)"
             >
-              {{ item.text }}
+              <span class="mr-1">{{ item.text }}</span>
+              <span @click.prevent="deleteSelectedItem(index)">
+                <font-awesome-icon
+                  :icon="['fa', 'circle-xmark']"
+                  class="z-10 text-sm text-white fill-current circle-xmark-icon input-icons"
+                >
+                </font-awesome-icon>
+              </span>
             </div>
           </div>
           <span
@@ -121,11 +130,27 @@ export default defineComponent({
     const selectedItem = ref<Item[]>([]);
     const placeholder = ref("Select value...");
 
+    const handleChipKeydown = (index: number): void => {
+      deleteSelectedItem(index);
+    };
+
+    const deleteSelectedItem = (index: number): void => {
+      selectedItem.value.splice(index, 1);
+    };
+
     return {
       items,
       selectedItem,
       placeholder,
+      handleChipKeydown,
+      deleteSelectedItem,
     };
   },
 });
 </script>
+
+<style scoped>
+.circle-xmark-icon {
+  padding-top: 2px;
+}
+</style>

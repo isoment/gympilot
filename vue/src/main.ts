@@ -28,6 +28,7 @@ import {
   faUser,
   faChevronDown,
   faCheck,
+  faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faUser);
 library.add(faLock);
@@ -36,6 +37,7 @@ library.add(faSpinner);
 library.add(faEnvelopeSquare);
 library.add(faChevronDown);
 library.add(faCheck);
+library.add(faCircleXmark);
 
 /*********************************************************************
  *  Create the Vue application instance, creating global components, *
