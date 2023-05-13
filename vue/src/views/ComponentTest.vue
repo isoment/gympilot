@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Checkbox -->
     <div class="flex justify-around mt-3">
       <CheckBox
         v-model="checkboxData"
@@ -9,20 +10,27 @@
         @click="handleClick"
       />
     </div>
+    <!-- Select -->
     <div class="flex justify-around mt-10">
       <div>
         <SelectInput v-model="memberId" :items="names" label="Names" />
         <p class="text-sm">Selected User ID: {{ memberId }}</p>
       </div>
     </div>
+    <!-- Multiselect -->
     <div class="flex justify-around mt-10">
       <div class="w-80">
         <MultiSelect
           v-model="selectedEmployees"
+          label="Employees"
           :items="employees"
           :disabled="false"
         />
       </div>
+    </div>
+    <!-- Text -->
+    <div class="flex justify-around mt-10">
+      <TextInput v-model="firstName" label="First Name" />
     </div>
   </div>
 </template>
@@ -32,11 +40,12 @@ import { defineComponent, ref } from "vue";
 import CheckBox from "@/components/inputs/CheckBox.vue";
 import SelectInput from "@/components/inputs/SelectInput.vue";
 import MultiSelect from "@/components/inputs/MultiSelect.vue";
+import TextInput from "@/components/inputs/TextInput.vue";
 
 export default defineComponent({
   name: "ComponentTest",
 
-  components: { CheckBox, SelectInput, MultiSelect },
+  components: { CheckBox, SelectInput, MultiSelect, TextInput },
 
   setup() {
     /**
@@ -85,6 +94,11 @@ export default defineComponent({
       { value: 10, text: "Emil Schaefer" },
     ]);
 
+    /**
+     *  TextInput
+     */
+    const firstName = ref("William Foster");
+
     return {
       checkboxData,
       handleChange,
@@ -93,6 +107,7 @@ export default defineComponent({
       memberId,
       employees,
       selectedEmployees,
+      firstName,
     };
   },
 });

@@ -2,13 +2,14 @@
   <div>
     <Listbox v-model="selectedItem" multiple :disabled="disabled">
       <ListboxLabel
+        v-if="label"
         class="block ml-1 text-xs font-medium text-left text-gray-700"
       >
-        Label Here
+        {{ label }}
       </ListboxLabel>
       <div class="relative mt-1">
         <ListboxButton
-          class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500 sm:text-sm"
+          class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500 sm:text-sm"
         >
           <span v-if="!selectedItem.length">{{ placeholder }}</span>
           <div v-else class="flex flex-row flex-wrap mt-1">
@@ -49,7 +50,7 @@
         >
           <ListboxOptions
             v-click-outside="resetSearch()"
-            class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
             @keydown.escape="resetSearch()"
           >
             <div>
@@ -146,12 +147,16 @@ export default defineComponent({
       required: true,
     },
     backgroundColor: {
-      type: String,
+      type: String as PropType<string>,
       default: "bg-emerald-400",
     },
     disabled: {
-      type: Boolean,
+      type: Boolean as PropType<boolean>,
       default: false,
+    },
+    label: {
+      type: String as PropType<string>,
+      default: null,
     },
   },
 
@@ -160,7 +165,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const selectedItem = ref<Item[]>([]);
     const placeholder = ref("Select value...");
-    const search = ref<string>("");
+    const search = ref("");
 
     onMounted(() => {
       setSelectedItems();
@@ -187,7 +192,7 @@ export default defineComponent({
       );
     });
 
-    const setSelectedItems = () => {
+    const setSelectedItems = (): void => {
       for (const model of props.modelValue) {
         for (const item of props.items) {
           if (model === item.value) {
@@ -207,7 +212,7 @@ export default defineComponent({
       }
     };
 
-    const resetSearch = () => {
+    const resetSearch = (): void => {
       search.value = "";
     };
 

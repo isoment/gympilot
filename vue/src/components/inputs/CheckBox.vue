@@ -16,26 +16,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { PropType, defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
   name: "CheckBox",
 
   props: {
     label: {
-      type: String,
+      type: String as PropType<string>,
       required: true,
     },
     modelValue: {
-      type: Boolean,
+      type: Boolean as PropType<boolean>,
       required: true,
     },
     color: {
-      type: String,
+      type: String as PropType<string>,
       default: "text-emerald-500",
     },
     size: {
-      type: String,
+      type: String as PropType<string>,
       default: "md",
       validator: (value: string) => {
         const size = ["sm", "md", "lg"];
@@ -43,7 +43,7 @@ export default defineComponent({
       },
     },
     disabled: {
-      type: Boolean,
+      type: Boolean as PropType<boolean>,
       default: false,
     },
   },

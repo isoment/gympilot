@@ -8,8 +8,8 @@
       >
       <div class="relative mt-1">
         <ComboboxInput
-          :class="disabledText"
-          class="w-full py-2 pl-3 pr-10 bg-white border border-gray-300 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-700 sm:text-sm"
+          :class="disabledClasses"
+          class="w-full py-2 pl-3 pr-10 bg-white border border-gray-300 rounded shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-700 sm:text-sm"
           :display-value="displayValue"
           @change="onInputChange"
         />
@@ -30,7 +30,7 @@
         >
           <ComboboxOptions
             v-if="filteredItems.length > 0"
-            class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
           >
             <ComboboxOption
               v-for="item in filteredItems"
@@ -118,15 +118,15 @@ export default defineComponent({
       required: true,
     },
     color: {
-      type: String,
+      type: String as PropType<string>,
       default: "bg-emerald-400",
     },
     label: {
-      type: String,
+      type: String as PropType<string>,
       default: null,
     },
     disabled: {
-      type: Boolean,
+      type: Boolean as PropType<boolean>,
       default: false,
     },
   },
@@ -142,14 +142,6 @@ export default defineComponent({
       setSelectedItem();
     });
 
-    const setSelectedItem = (): void => {
-      for (const i of props.items) {
-        if (i.value === props.modelValue) {
-          selectedItem.value = i;
-        }
-      }
-    };
-
     const filteredItems = computed(() =>
       query.value === ""
         ? props.items
@@ -158,11 +150,19 @@ export default defineComponent({
           })
     );
 
-    const disabledText = computed(() => {
+    const disabledClasses = computed(() => {
       return isDisabled.value ? "text-slate-400" : "";
     });
 
-    const displayValue = (item: unknown) => (item as Item).text;
+    const setSelectedItem = (): void => {
+      for (const i of props.items) {
+        if (i.value === props.modelValue) {
+          selectedItem.value = i;
+        }
+      }
+    };
+
+    const displayValue = (item: unknown): string => (item as Item).text;
 
     const onInputChange = (event: ComboboxInputChangeEvent): void => {
       query.value = event.target.value;
@@ -179,7 +179,7 @@ export default defineComponent({
       displayValue,
       onInputChange,
       isDisabled,
-      disabledText,
+      disabledClasses,
     };
   },
 });
