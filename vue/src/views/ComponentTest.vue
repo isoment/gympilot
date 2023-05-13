@@ -30,7 +30,11 @@
     </div>
     <!-- Text -->
     <div class="flex justify-around mt-10">
-      <TextInput v-model="firstName" label="First Name" />
+      <TextInput
+        v-model="firstName"
+        label="First Name"
+        placeholder="Text here..."
+      />
     </div>
   </div>
 </template>
@@ -97,7 +101,7 @@ export default defineComponent({
     /**
      *  TextInput
      */
-    const firstName = ref("William Foster");
+    const firstName = ref("");
 
     return {
       checkboxData,

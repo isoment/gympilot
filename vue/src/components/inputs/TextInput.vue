@@ -14,7 +14,7 @@
         name="input"
         :class="disabledClasses"
         class="block w-full text-sm border-gray-300 rounded shadow-sm focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500"
-        placeholder="First Name"
+        :placeholder="placeholder"
         :disabled="isDisabled"
       />
     </div>
@@ -37,6 +37,10 @@ export default defineComponent({
       default: false,
     },
     label: {
+      type: String as PropType<string>,
+      default: null,
+    },
+    placeholder: {
       type: String as PropType<string>,
       default: null,
     },

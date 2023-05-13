@@ -11,7 +11,9 @@
         <ListboxButton
           class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500 sm:text-sm"
         >
-          <span v-if="!selectedItem.length">{{ placeholder }}</span>
+          <span v-if="!selectedItem.length" class="text-slate-500">{{
+            placeholder
+          }}</span>
           <div v-else class="flex flex-row flex-wrap mt-1">
             <div
               v-for="(item, index) in selectedItem"
@@ -158,13 +160,16 @@ export default defineComponent({
       type: String as PropType<string>,
       default: null,
     },
+    placeholder: {
+      type: String as PropType<string>,
+      default: "Select value...",
+    },
   },
 
   emits: ["update:modelValue"],
 
   setup(props, { emit }) {
     const selectedItem = ref<Item[]>([]);
-    const placeholder = ref("Select value...");
     const search = ref("");
 
     onMounted(() => {
@@ -230,7 +235,6 @@ export default defineComponent({
 
     return {
       selectedItem,
-      placeholder,
       handleChipKeydown,
       deleteSelectedItem,
       setBackgroundColor,
