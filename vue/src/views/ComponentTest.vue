@@ -34,6 +34,7 @@
         v-model="firstName"
         label="First Name"
         placeholder="Text here..."
+        :icon="['fa', 'user']"
       />
     </div>
   </div>
@@ -101,7 +102,7 @@ export default defineComponent({
     /**
      *  TextInput
      */
-    const firstName = ref("");
+    const firstName = ref("Franklin");
 
     return {
       checkboxData,
