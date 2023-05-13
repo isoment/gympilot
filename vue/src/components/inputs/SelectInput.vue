@@ -3,7 +3,7 @@
     <Combobox v-model="selectedItem" as="div" :disabled="isDisabled">
       <ComboboxLabel
         v-if="label"
-        class="block ml-1 text-sm font-medium text-left text-gray-700"
+        class="block ml-1 text-xs font-medium text-left text-gray-700"
         >{{ label }}</ComboboxLabel
       >
       <div class="relative mt-1">

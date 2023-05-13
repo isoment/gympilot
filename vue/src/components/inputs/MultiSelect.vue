@@ -2,7 +2,7 @@
   <div>
     <Listbox v-model="selectedItem" multiple :disabled="disabled">
       <ListboxLabel
-        class="block ml-1 text-sm font-medium text-left text-gray-700"
+        class="block ml-1 text-xs font-medium text-left text-gray-700"
       >
         Label Here
       </ListboxLabel>
@@ -48,9 +48,19 @@
           leave-to-class="opacity-0"
         >
           <ListboxOptions
+            v-click-outside="resetSearch()"
             class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            @keydown.escape="resetSearch()"
           >
-            <template v-for="item in items" :key="item.id">
+            <div>
+              <input
+                v-model="search"
+                type="text"
+                class="w-full text-sm border-none focus:outline-none focus:ring-0"
+                placeholder="Search..."
+              />
+            </div>
+            <template v-for="item in filteredItems" :key="item.id">
               <ListboxOption v-slot="{ active, selected }" :value="item">
                 <li
                   :class="[
@@ -150,6 +160,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const selectedItem = ref<Item[]>([]);
     const placeholder = ref("Select value...");
+    const search = ref<string>("");
 
     onMounted(() => {
       setSelectedItems();
@@ -168,6 +179,12 @@ export default defineComponent({
 
     const setCursorStyles = computed(() => {
       return props.disabled ? "" : "cursor-pointer";
+    });
+
+    const filteredItems = computed(() => {
+      return props.items.filter((item) =>
+        item.text.toLowerCase().includes(search.value.toLowerCase())
+      );
     });
 
     const setSelectedItems = () => {
@@ -190,6 +207,10 @@ export default defineComponent({
       }
     };
 
+    const resetSearch = () => {
+      search.value = "";
+    };
+
     watch(
       selectedItem,
       () => {
@@ -210,6 +231,9 @@ export default defineComponent({
       setBackgroundColor,
       setChipStyles,
       setCursorStyles,
+      search,
+      filteredItems,
+      resetSearch,
     };
   },
 });

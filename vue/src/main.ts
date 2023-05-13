@@ -5,6 +5,7 @@ import App from "@/App.vue";
 import "./assets/tailwind.css";
 import router from "./router";
 import store, { key } from "./store";
+import { OnClickOutside } from "@vueuse/components";
 
 /*********************************
  * Import axios and set defaults *
@@ -52,4 +53,5 @@ createApp({
   .use(store, key)
   .use(router)
   .component("font-awesome-icon", FontAwesomeIcon)
+  .directive("click-outside", OnClickOutside)
   .mount("#app");
