@@ -16,7 +16,7 @@
       <span
         aria-hidden="true"
         :class="[
-          toggle ? 'translate-x-8' : 'translate-x-0',
+          buttonTranslateClass(),
           size === 'large' ? 'h-7' : 'h-5',
           size === 'large' ? 'w-7' : 'w-5',
           'pointer-events-none inline-block rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200',
@@ -84,6 +84,14 @@ export default defineComponent({
       emit("update:modelValue", toggle.value);
     });
 
+    const buttonTranslateClass = (): string => {
+      if (toggle.value) {
+        return props.size === "large" ? "translate-x-8" : "translate-x-5";
+      } else {
+        return "translate-x-0";
+      }
+    };
+
     const wrapperClasses = (): string => {
       const fields: LabelPositionOptions = {
         top: "flex-col items-start",
@@ -102,7 +110,6 @@ export default defineComponent({
         left: "mr-2",
         right: "ml-2",
       };
-
       const labelPosition =
         fields[props.labelPosition as keyof LabelPositionOptions];
       const size = props.size === "large" ? " text-sm" : " text-xs";
@@ -113,6 +120,7 @@ export default defineComponent({
       toggle,
       wrapperClasses,
       labelClasses,
+      buttonTranslateClass,
     };
   },
 });
