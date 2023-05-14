@@ -9,7 +9,7 @@
       </ListboxLabel>
       <div class="relative mt-1">
         <ListboxButton
-          class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500 sm:text-sm"
+          class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
         >
           <span v-if="!selectedItem.length" class="text-slate-500">{{
             placeholder
@@ -184,7 +184,7 @@ export default defineComponent({
       return props.disabled
         ? "bg-slate-400"
         : props.backgroundColor +
-            " focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500";
+            " focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500";
     });
 
     const setCursorStyles = computed(() => {

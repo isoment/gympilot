@@ -9,8 +9,9 @@
       <div class="relative mt-1">
         <ComboboxInput
           :class="disabledClasses"
-          class="w-full py-2 pl-3 pr-10 bg-white border border-gray-300 rounded shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-700 sm:text-sm"
+          class="w-full py-2 pl-3 pr-10 bg-white border border-gray-300 rounded shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500 sm:text-sm"
           :display-value="displayValue"
+          :placeholder="placeholder"
           @change="onInputChange"
         />
         <ComboboxButton
@@ -128,6 +129,10 @@ export default defineComponent({
     disabled: {
       type: Boolean as PropType<boolean>,
       default: false,
+    },
+    placeholder: {
+      type: String as PropType<string>,
+      default: "Select value...",
     },
   },
 

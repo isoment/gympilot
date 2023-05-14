@@ -37,6 +37,10 @@
         :icon="['fa', 'user']"
       />
     </div>
+    <!-- Toggle -->
+    <div class="flex justify-around mt-10">
+      <ToggleInput v-model="toggle" />
+    </div>
   </div>
 </template>
 
@@ -46,11 +50,12 @@ import CheckBox from "@/components/inputs/CheckBox.vue";
 import SelectInput from "@/components/inputs/SelectInput.vue";
 import MultiSelect from "@/components/inputs/MultiSelect.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
+import ToggleInput from "@/components/inputs/ToggleInput.vue";
 
 export default defineComponent({
   name: "ComponentTest",
 
-  components: { CheckBox, SelectInput, MultiSelect, TextInput },
+  components: { CheckBox, SelectInput, MultiSelect, TextInput, ToggleInput },
 
   setup() {
     /**
@@ -104,6 +109,11 @@ export default defineComponent({
      */
     const firstName = ref("Franklin");
 
+    /**
+     *  Toggle
+     */
+    const toggle = ref(false);
+
     return {
       checkboxData,
       handleChange,
@@ -113,6 +123,7 @@ export default defineComponent({
       employees,
       selectedEmployees,
       firstName,
+      toggle,
     };
   },
 });

@@ -14,7 +14,7 @@
         <font-awesome-icon
           :icon="icon"
           :class="iconColor"
-          class="z-10 text-sm fill-current"
+          class="text-sm fill-current"
         >
         </font-awesome-icon>
       </div>
@@ -24,7 +24,7 @@
         type="text"
         name="input"
         :class="inputClasses"
-        class="block w-full text-sm border-gray-300 rounded shadow-sm focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-500"
+        class="block w-full text-sm border-gray-300 rounded shadow-sm focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500"
         :placeholder="placeholder"
         :disabled="disabled"
       />
@@ -69,7 +69,6 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const input = ref(props.modelValue);
-    // const isDisabled = ref(props.disabled);
 
     const inputClasses = computed(() => {
       let classes: string[] = [];

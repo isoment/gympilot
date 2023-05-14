@@ -4,7 +4,7 @@
       id="checkbox"
       v-model="isChecked"
       type="checkbox"
-      class="border-gray-400 rounded cursor-pointer focus:ring-slate-700"
+      class="border-gray-400 rounded cursor-pointer focus:ring-slate-500"
       :disabled="isDisabled"
       :class="color"
       aria-describedby="checkbox-label"
