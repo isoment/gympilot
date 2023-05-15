@@ -8,10 +8,13 @@
       :disabled="isDisabled"
       :class="color"
       aria-describedby="checkbox-label"
+      data-test="checkbox"
       @change="onChange"
       @click="onClick"
     />
-    <label id="checkbox-label" class="ml-2">{{ label }}</label>
+    <label id="checkbox-label" class="ml-2" data-test="label">{{
+      label
+    }}</label>
   </div>
 </template>
 
