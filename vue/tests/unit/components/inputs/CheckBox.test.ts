@@ -1,4 +1,4 @@
-import { mount, shallowMount, flushPromises } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import CheckBox from "@/components/inputs/CheckBox.vue";
 
 describe("CheckBox", () => {

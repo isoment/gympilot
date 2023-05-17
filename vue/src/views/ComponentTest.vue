@@ -13,7 +13,12 @@
     <!-- Select -->
     <div class="flex justify-around mt-10">
       <div>
-        <SelectInput v-model="memberId" :items="names" label="Names" />
+        <SelectInput
+          v-model="memberId"
+          :items="names"
+          label="Names"
+          :disabled="false"
+        />
         <p class="text-sm">Selected User ID: {{ memberId }}</p>
       </div>
     </div>

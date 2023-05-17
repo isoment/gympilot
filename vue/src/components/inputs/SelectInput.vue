@@ -1,21 +1,29 @@
 <template>
   <div>
-    <Combobox v-model="selectedItem" as="div" :disabled="isDisabled">
+    <Combobox
+      v-model="selectedItem"
+      as="div"
+      :disabled="disabled"
+      data-test="select"
+    >
       <ComboboxLabel
         v-if="label"
         class="block ml-1 text-xs font-medium text-left text-gray-700"
+        data-test="label"
         >{{ label }}</ComboboxLabel
       >
       <div class="relative mt-1">
         <ComboboxInput
           :class="disabledClasses"
           class="w-full py-2 pl-3 pr-10 bg-white border border-gray-300 rounded shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500 sm:text-sm"
+          data-test="input"
           :display-value="displayValue"
           :placeholder="placeholder"
           @change="onInputChange"
         />
         <ComboboxButton
           class="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none"
+          data-test="dropdown-button"
         >
           <font-awesome-icon
             :icon="['fa', 'chevron-down']"
@@ -42,6 +50,7 @@
             >
               <li
                 class="text-left"
+                data-test="list-item"
                 :class="[
                   'relative cursor-default select-none py-2 pl-3 pr-9',
                   active ? color + ' text-white' : 'text-gray-900',
@@ -141,7 +150,6 @@ export default defineComponent({
   setup(props, { emit }) {
     const query = ref("");
     const selectedItem = ref();
-    const isDisabled = ref(props.disabled);
 
     onMounted(() => {
       setSelectedItem();
@@ -156,7 +164,7 @@ export default defineComponent({
     );
 
     const disabledClasses = computed(() => {
-      return isDisabled.value ? "text-slate-400" : "";
+      return props.disabled ? "disabled-text" : "";
     });
 
     const setSelectedItem = (): void => {
@@ -183,11 +191,14 @@ export default defineComponent({
       filteredItems,
       displayValue,
       onInputChange,
-      isDisabled,
       disabledClasses,
     };
   },
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.disabled-text {
+  @apply text-slate-400;
+}
+</style>
