@@ -51,45 +51,44 @@ describe("CheckBox", () => {
     expect(checkbox.classes("text-rose-700")).toBe(true);
   });
 
-  // Using setTimeout is kind of hacky. None of the other methods seemed to work. Revisit if time allows
-  describe("the size of the component can be set through the size prop", () => {
-    it("applies the small-checkbox class when the size prop is sm", async () => {
+  describe("the size of the checkbox can be set through the size prop", () => {
+    it("sets the size of the checkbox using the small checkbox class", () => {
       const wrapper = mount(CheckBox, createConfig({ size: "sm" }));
-      setTimeout(() => {
-        const checkbox = wrapper.find("[data-test='checkbox']");
-        expect(checkbox.classes()).toContain("small-checkbox");
-        expect(checkbox.classes()).not.toContain("med-checkbox");
-        expect(checkbox.classes()).not.toContain("large-checkbox");
-      }, 1500);
+      const checkbox = wrapper.find("[data-test='checkbox']");
+      expect(checkbox.classes()).toContain("small-checkbox");
+      expect(checkbox.classes()).not.toContain("med-checkbox");
+      expect(checkbox.classes()).not.toContain("large-checkbox");
     });
 
-    it("applies the med-checkbox class when the size prop is md", async () => {
+    it("sets the size of the checkbox using the med checkbox class", () => {
       const wrapper = mount(CheckBox, createConfig({ size: "md" }));
-      setTimeout(() => {
-        const checkbox = wrapper.find("[data-test='checkbox']");
-        expect(checkbox.classes()).toContain("med-checkbox");
-        expect(checkbox.classes()).not.toContain("small-checkbox");
-        expect(checkbox.classes()).not.toContain("large-checkbox");
-      }, 1500);
+      const checkbox = wrapper.find("[data-test='checkbox']");
+      expect(checkbox.classes()).toContain("med-checkbox");
+      expect(checkbox.classes()).not.toContain("small-checkbox");
+      expect(checkbox.classes()).not.toContain("large-checkbox");
     });
 
-    it("applies the large-checkbox class when the size prop is md", async () => {
+    it("sets the size of the checkbox using the large checkbox class", () => {
       const wrapper = mount(CheckBox, createConfig({ size: "lg" }));
-      setTimeout(() => {
-        const checkbox = wrapper.find("[data-test='checkbox']");
-        expect(checkbox.classes()).toContain("large-checkbox");
-        expect(checkbox.classes()).not.toContain("small-checkbox");
-        expect(checkbox.classes()).not.toContain("med-checkbox");
-      }, 1500);
+      const checkbox = wrapper.find("[data-test='checkbox']");
+      expect(checkbox.classes()).toContain("large-checkbox");
+      expect(checkbox.classes()).not.toContain("med-checkbox");
+      expect(checkbox.classes()).not.toContain("small-checkbox");
     });
   });
 
-  it("disables the input when the disabled prop is set to true", () => {
-    const wrapper = shallowMount(CheckBox, createConfig({ disabled: true }));
-    const checkbox = wrapper.find("[data-test='checkbox']");
-    setTimeout(() => {
-      expect(checkbox.attributes("disabled")).toBe("disabled");
-    }, 1500);
+  describe("the disabled prop sets the correct component state", () => {
+    it("disables the input when the prop is set to true", () => {
+      const wrapper = shallowMount(CheckBox, createConfig({ disabled: true }));
+      const checkbox = wrapper.find("[data-test='checkbox']");
+      expect(checkbox.attributes("disabled")).toBeDefined();
+    });
+
+    it("is enabled with the prop is false", () => {
+      const wrapper = shallowMount(CheckBox, createConfig({ disabled: false }));
+      const checkbox = wrapper.find("[data-test='checkbox']");
+      expect(checkbox.attributes("disabled")).not.toBeDefined();
+    });
   });
 
   it("emits 'click' event when checkbox is clicked", async () => {

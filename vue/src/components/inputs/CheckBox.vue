@@ -4,22 +4,26 @@
       id="checkbox"
       v-model="isChecked"
       type="checkbox"
-      class="border-gray-400 rounded cursor-pointer focus:ring-slate-500"
-      :disabled="isDisabled"
-      :class="color"
+      class="border-gray-400 rounded focus:ring-slate-500"
+      :disabled="disabled"
+      :class="inputClasses()"
       aria-describedby="checkbox-label"
       data-test="checkbox"
       @change="onChange"
       @click="onClick"
     />
-    <label id="checkbox-label" class="ml-2" data-test="label">{{
-      label
-    }}</label>
+    <label
+      id="checkbox-label"
+      class="ml-2"
+      :class="labelClasses()"
+      data-test="label"
+      >{{ label }}</label
+    >
   </div>
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, onMounted, ref } from "vue";
+import { PropType, defineComponent, ref } from "vue";
 
 export default defineComponent({
   name: "CheckBox",
@@ -55,12 +59,6 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const isChecked = ref(props.modelValue);
-    const isDisabled = ref(props.disabled);
-
-    onMounted((): void => {
-      setDisabled();
-      setSize();
-    });
 
     const onChange = (): void => {
       emit("update:modelValue", isChecked.value);
@@ -70,29 +68,35 @@ export default defineComponent({
       emit("click", event);
     };
 
-    const setSize = (): void => {
-      const checkbox = document.getElementById("checkbox");
-      const label = document.getElementById("checkbox-label");
+    const inputClasses = (): string => {
+      let classes: string[] = [];
+
+      // Set the classes based on disabled prop
+      if (props.disabled) {
+        classes.push("text-zinc-300");
+      } else {
+        classes.push("cursor-pointer", props.color);
+      }
+
+      // Set the size classes
       if (props.size === "sm") {
-        checkbox?.classList.add("small-checkbox");
-        label?.classList.add("text-sm");
+        classes.push("small-checkbox");
+      } else if (props.size === "md") {
+        classes.push("med-checkbox");
+      } else if (props.size === "lg") {
+        classes.push("large-checkbox");
       }
-      if (props.size === "md") {
-        checkbox?.classList.add("med-checkbox");
-        label?.classList.add("text-base");
-      }
-      if (props.size === "lg") {
-        checkbox?.classList.add("large-checkbox");
-        label?.classList.add("text-lg");
-      }
+
+      return classes.join(" ");
     };
 
-    const setDisabled = (): void => {
-      if (props.disabled) {
-        isDisabled.value = true;
-        const checkbox = document.getElementById("checkbox");
-        checkbox?.classList.remove(props.color, "cursor-pointer");
-        checkbox?.classList.add("text-zinc-300");
+    const labelClasses = (): string => {
+      if (props.size === "sm") {
+        return "text-sm";
+      } else if (props.size === "md") {
+        return "text-base";
+      } else {
+        return "text-lg";
       }
     };
 
@@ -100,7 +104,8 @@ export default defineComponent({
       onChange,
       onClick,
       isChecked,
-      isDisabled,
+      inputClasses,
+      labelClasses,
     };
   },
 });
