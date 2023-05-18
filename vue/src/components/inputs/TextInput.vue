@@ -4,6 +4,7 @@
       v-if="label"
       for="input"
       class="block ml-1 text-xs font-medium text-left text-gray-700"
+      data-test="label"
       >{{ label }}</label
     >
     <div class="relative mt-1">
@@ -15,6 +16,7 @@
           :icon="icon"
           :class="iconColor"
           class="text-sm fill-current"
+          data-test="icon"
         >
         </font-awesome-icon>
       </div>
@@ -27,6 +29,7 @@
         class="block w-full text-sm border-gray-300 rounded shadow-sm focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500"
         :placeholder="placeholder"
         :disabled="disabled"
+        data-test="input"
       />
     </div>
   </div>
