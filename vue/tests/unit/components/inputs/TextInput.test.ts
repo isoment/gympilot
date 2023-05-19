@@ -27,7 +27,7 @@ describe("TextInput", () => {
       expect(label.text()).toBe("MyEmail");
     });
 
-    it("displays the correct label for the component", () => {
+    it("does not display the label when it is not provided", () => {
       const wrapper = shallowMount(TextInput, createConfig({ label: null }));
       const label = wrapper.find("[data-test='label']");
       expect(label.exists()).toBe(false);

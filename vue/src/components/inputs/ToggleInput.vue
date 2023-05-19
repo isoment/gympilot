@@ -1,6 +1,8 @@
 <template>
-  <div :class="wrapperClasses()" class="flex">
-    <label :for="label" :class="labelClasses()">{{ label }}</label>
+  <div :class="wrapperClasses()" class="flex" data-test="wrapper">
+    <label :for="label" :class="labelClasses()" data-test="label">{{
+      label
+    }}</label>
     <Switch
       v-model="toggle"
       :name="label"
@@ -11,6 +13,7 @@
         size === 'large' ? 'w-16' : 'w-11',
         'relative inline-flex flex-shrink-0 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500',
       ]"
+      data-test="switch"
     >
       <span class="sr-only">Use setting</span>
       <span
@@ -112,7 +115,7 @@ export default defineComponent({
       };
       const labelPosition =
         fields[props.labelPosition as keyof LabelPositionOptions];
-      const size = props.size === "large" ? " text-sm" : " text-xs";
+      const size = props.size === "large" ? " large-label" : " base-label";
       return labelPosition + size;
     };
 
@@ -125,3 +128,13 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.large-label {
+  @apply text-sm;
+}
+
+.base-label {
+  @apply text-xs;
+}
+</style>
