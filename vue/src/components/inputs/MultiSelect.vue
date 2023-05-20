@@ -4,6 +4,7 @@
       <ListboxLabel
         v-if="label"
         class="block ml-1 text-xs font-medium text-left text-gray-700"
+        data-test="label"
       >
         {{ label }}
       </ListboxLabel>
@@ -12,9 +13,12 @@
           class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
           @click="dropdownRefresh()"
         >
-          <span v-if="!selectedItem.length" class="text-slate-500">{{
-            placeholder
-          }}</span>
+          <span
+            v-if="!selectedItem.length"
+            class="text-slate-500"
+            data-test="placeholder"
+            >{{ placeholder }}</span
+          >
           <div v-else class="flex flex-row flex-wrap mt-1">
             <div
               v-for="(item, index) in selectedItem"
@@ -22,10 +26,14 @@
               :class="setChipStyles"
               class="flex items-center px-2 py-1 mx-1 mb-1 text-xs text-white rounded-full"
               :tabindex="disabled ? -1 : 0"
+              data-test="chip"
               @keydown.space.prevent="handleChipKeydown(index)"
             >
-              <span class="mr-1">{{ item.text }}</span>
-              <span @click.prevent="deleteSelectedItem(index)">
+              <span class="mr-1" data-test="chip-text">{{ item.text }}</span>
+              <span
+                data-test="chip-close"
+                @click.prevent="deleteSelectedItem(index)"
+              >
                 <font-awesome-icon
                   :icon="['fa', 'circle-xmark']"
                   class="z-10 text-sm text-white fill-current circle-xmark-icon input-icons"

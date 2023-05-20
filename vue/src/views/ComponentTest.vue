@@ -44,7 +44,7 @@
     </div>
     <!-- Toggle -->
     <div class="flex justify-around mt-10">
-      <ToggleInput v-model="toggle" size="large" />
+      <ToggleInput v-model="toggle" size="base" />
     </div>
   </div>
 </template>
