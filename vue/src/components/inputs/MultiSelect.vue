@@ -11,6 +11,7 @@
       <div class="relative mt-1">
         <ListboxButton
           class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
+          data-test="listbox-button"
           @click="dropdownRefresh()"
         >
           <span
@@ -46,6 +47,7 @@
           <span
             class="absolute inset-y-0 right-0 flex items-center pr-2"
             :class="setCursorStyles"
+            data-test="open-dialog"
           >
             <font-awesome-icon
               :icon="['fa', 'chevron-down']"
@@ -82,6 +84,7 @@
                       : 'text-gray-900',
                     'cursor-default select-none relative py-2 pl-3 pr-9',
                   ]"
+                  data-test="list-options"
                 >
                   <span
                     class="text-left"
