@@ -10,6 +10,7 @@
       <div class="relative mt-1">
         <ListboxButton
           class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
+          @click="dropdownRefresh()"
         >
           <span v-if="!selectedItem.length" class="text-slate-500">{{
             placeholder
@@ -51,6 +52,7 @@
           leave-to-class="opacity-0"
         >
           <ListboxOptions
+            v-if="dropdownOpen"
             v-click-outside="resetSearch()"
             class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
             @keydown.escape="resetSearch()"
@@ -171,6 +173,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const selectedItem = ref<Item[]>([]);
     const search = ref("");
+    const dropdownOpen = ref(false);
 
     onMounted(() => {
       setSelectedItems();
@@ -214,7 +217,12 @@ export default defineComponent({
     const deleteSelectedItem = (index: number): void => {
       if (!props.disabled) {
         selectedItem.value.splice(index, 1);
+        dropdownOpen.value = false;
       }
+    };
+
+    const dropdownRefresh = (): void => {
+      dropdownOpen.value = true;
     };
 
     const resetSearch = (): void => {
@@ -243,6 +251,8 @@ export default defineComponent({
       search,
       filteredItems,
       resetSearch,
+      dropdownOpen,
+      dropdownRefresh,
     };
   },
 });
