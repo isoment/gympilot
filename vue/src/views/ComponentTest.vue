@@ -1,30 +1,27 @@
 <template>
-  <div>
-    <!-- Checkbox -->
-    <div class="flex justify-around mt-3">
-      <CheckBox
-        v-model="checkboxData"
-        label="Test Check"
-        color="text-emerald-500"
-        size="md"
-        @click="handleClick"
-      />
-    </div>
-    <!-- Select -->
-    <div class="flex justify-around mt-10">
-      <div>
+  <div class="flex items-center justify-center">
+    <div class="w-96">
+      <!-- Checkbox -->
+      <div class="flex justify-center mt-3">
+        <CheckBox
+          v-model="checkboxData"
+          label="Test Check"
+          color="text-emerald-500"
+          size="md"
+          @click="handleClick"
+        />
+      </div>
+      <!-- Select -->
+      <div class="flex justify-around mt-10">
         <SelectInput
           v-model="memberId"
           :items="names"
           label="Names"
           :disabled="false"
         />
-        <p class="text-sm">Selected User ID: {{ memberId }}</p>
       </div>
-    </div>
-    <!-- Multiselect -->
-    <div class="flex justify-around mt-10">
-      <div class="w-80">
+      <!-- Multiselect -->
+      <div class="flex justify-around mt-10">
         <MultiSelect
           v-model="selectedEmployees"
           label="Employees"
@@ -32,19 +29,23 @@
           :disabled="false"
         />
       </div>
-    </div>
-    <!-- Text -->
-    <div class="flex justify-around mt-10">
-      <TextInput
-        v-model="firstName"
-        label="First Name"
-        placeholder="Text here..."
-        :icon="['fa', 'user']"
-      />
-    </div>
-    <!-- Toggle -->
-    <div class="flex justify-around mt-10">
-      <ToggleInput v-model="toggle" size="base" />
+      <!-- Text -->
+      <div class="flex justify-around mt-10">
+        <TextInput
+          v-model="firstName"
+          label="First Name"
+          placeholder="Text here..."
+          :icon="['fa', 'user']"
+        />
+      </div>
+      <!-- Toggle -->
+      <div class="flex justify-start mt-10">
+        <ToggleInput v-model="toggle" size="base" />
+      </div>
+      <!-- Button Primary -->
+      <div class="flex flex-col justify-center mt-10">
+        <ButtonPrimary text="My Button" />
+      </div>
     </div>
   </div>
 </template>
@@ -56,11 +57,19 @@ import SelectInput from "@/components/inputs/SelectInput.vue";
 import MultiSelect from "@/components/inputs/MultiSelect.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
 import ToggleInput from "@/components/inputs/ToggleInput.vue";
+import ButtonPrimary from "@/components/buttons/ButtonPrimary.vue";
 
 export default defineComponent({
   name: "ComponentTest",
 
-  components: { CheckBox, SelectInput, MultiSelect, TextInput, ToggleInput },
+  components: {
+    CheckBox,
+    SelectInput,
+    MultiSelect,
+    TextInput,
+    ToggleInput,
+    ButtonPrimary,
+  },
 
   setup() {
     /**

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full">
     <Listbox v-model="selectedItem" multiple :disabled="disabled">
       <ListboxLabel
         v-if="label"

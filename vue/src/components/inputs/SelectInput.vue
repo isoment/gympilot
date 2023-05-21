@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div class="w-full">
     <Combobox
       v-model="selectedItem"
+      class="w-full"
       as="div"
       :disabled="disabled"
       data-test="select"
