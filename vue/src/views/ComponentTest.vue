@@ -43,8 +43,8 @@
         <ToggleInput v-model="toggle" size="base" />
       </div>
       <!-- Button Primary -->
-      <div class="flex flex-col justify-center mt-10">
-        <ButtonPrimary text="My Button" />
+      <div class="flex justify-center mt-10">
+        <ButtonPrimary text="My Button" size="base" />
       </div>
     </div>
   </div>

@@ -1,9 +1,10 @@
 <template>
   <button
     type="button"
-    class="inline-flex items-center justify-center w-full text-sm font-medium leading-4 text-white border border-transparent rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
+    class="inline-flex items-center justify-center w-full font-medium leading-4 text-white border border-transparent rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
     :class="buttonClasses()"
     :disabled="disabled"
+    data-test="button"
   >
     <font-awesome-icon
       v-if="icon"
@@ -13,7 +14,7 @@
       data-test="icon"
     >
     </font-awesome-icon>
-    <span :class="textClasses()">
+    <span :class="textClasses()" data-test="text">
       <slot>{{ text }}</slot>
     </span>
   </button>
@@ -66,9 +67,9 @@ export default defineComponent({
       if (props.icon) {
         if (props.iconPosition === "left") classes.push("mr-2");
         if (props.iconPosition === "right") classes.push("ml-2");
-        if (props.size === "small") classes.push("text-xs");
-        if (props.size === "base") classes.push("text-sm");
-        if (props.size === "large") classes.push("text-sm");
+        if (props.size === "small") classes.push("icon-small");
+        if (props.size === "base" || props.size === "large")
+          classes.push("icon-base");
       }
       return classes.join(" ");
     };
@@ -81,21 +82,17 @@ export default defineComponent({
         props.hover,
       ];
       if (props.iconPosition === "right") classes.push("flex-row-reverse");
-      if (props.size === "small") {
-        classes.push("px-2", "py-1");
-      } else if (props.size === "large") {
-        classes.push("px-3", "py-3");
-      } else {
-        classes.push("px-3", "py-2");
-      }
+      if (props.size === "small") classes.push("padding-small");
+      if (props.size === "base") classes.push("padding-base");
+      if (props.size === "large") classes.push("padding-large");
       return classes.join(" ");
     };
 
     const textClasses = (): string => {
       const classes = [props.textColor];
-      if (props.size === "small") classes.push("text-xs");
-      if (props.size === "base") classes.push("text-sm");
-      if (props.size === "large") classes.push("text-base");
+      if (props.size === "small") classes.push("text-small");
+      if (props.size === "base") classes.push("text-normal");
+      if (props.size === "large") classes.push("text-large");
       return classes.join(" ");
     };
 
@@ -107,3 +104,37 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.text-small {
+  @apply text-xs;
+}
+
+.text-normal {
+  @apply text-base;
+}
+
+.text-large {
+  @apply text-lg;
+}
+
+.padding-small {
+  @apply px-2 py-1;
+}
+
+.padding-base {
+  @apply px-3 py-2;
+}
+
+.padding-large {
+  @apply px-3 py-3;
+}
+
+.icon-small {
+  @apply text-xs;
+}
+
+.icon-base {
+  @apply text-sm;
+}
+</style>
