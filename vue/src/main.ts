@@ -5,6 +5,7 @@ import App from "@/App.vue";
 import "./assets/tailwind.css";
 import router from "./router";
 import store, { key } from "./store";
+import { OnClickOutside } from "@vueuse/components";
 
 /*********************************
  * Import axios and set defaults *
@@ -26,12 +27,18 @@ import {
   faLock,
   faSpinner,
   faUser,
+  faChevronDown,
+  faCheck,
+  faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faUser);
 library.add(faLock);
 library.add(faDoorOpen);
 library.add(faSpinner);
 library.add(faEnvelopeSquare);
+library.add(faChevronDown);
+library.add(faCheck);
+library.add(faCircleXmark);
 
 /*********************************************************************
  *  Create the Vue application instance, creating global components, *
@@ -46,4 +53,5 @@ createApp({
   .use(store, key)
   .use(router)
   .component("font-awesome-icon", FontAwesomeIcon)
+  .directive("click-outside", OnClickOutside)
   .mount("#app");
