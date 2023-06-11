@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import { authRoutes } from "./auth";
+import { dashboard } from "./dashboard";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -8,23 +10,12 @@ const routes: Array<RouteRecordRaw> = [
     component: HomeView,
   },
   {
-    path: "/login",
-    name: "login",
-    // This generates a separate chunk (login.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "login" */ "@/views/auth/LoginView.vue"),
-  },
-  {
-    path: "/register",
-    name: "register",
-    component: () => import("@/views/auth/RegisterView.vue"),
-  },
-  {
     path: "/component-test",
     name: "component-test",
     component: () => import("@/views/ComponentTest.vue"),
   },
+  ...authRoutes,
+  ...dashboard,
 ];
 
 const router = createRouter({
