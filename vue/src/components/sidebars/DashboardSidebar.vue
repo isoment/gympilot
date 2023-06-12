@@ -1,12 +1,12 @@
 <template>
-  <div class="h-full bg-green-500">Home</div>
+  <div class="h-full bg-rose-500">Sidebar</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "DashboardHome",
+  name: "DashboardSidebar",
 
   components: {},
 
