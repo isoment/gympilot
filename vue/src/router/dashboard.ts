@@ -1,5 +1,7 @@
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import DashboardHome from "@/views/dashboard/DashboardHome.vue";
+import DashboardAbout from "@/views/dashboard/DashboardAbout.vue";
+import DashboardSettings from "@/views/dashboard/DashboardSettings.vue";
 
 export const dashboard = [
   {
@@ -9,6 +11,14 @@ export const dashboard = [
       {
         path: "",
         component: DashboardHome,
+      },
+      {
+        path: "",
+        component: DashboardAbout,
+      },
+      {
+        path: "",
+        component: DashboardSettings,
       },
     ],
   },

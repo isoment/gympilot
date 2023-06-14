@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full bg-rose-500">Sidebar</div>
+  <div class="h-full">Sidebar</div>
 </template>
 
 <script lang="ts">
