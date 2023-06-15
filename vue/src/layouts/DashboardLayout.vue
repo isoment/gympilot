@@ -8,6 +8,7 @@
     ```
   -->
   <div class="bg-gray-50">
+    <!-- Mobile Sidebar -->
     <TransitionRoot as="template" :show="sidebarOpen">
       <Dialog
         as="div"
@@ -46,10 +47,10 @@
               leave-from="opacity-100"
               leave-to="opacity-0"
             >
-              <div class="absolute top-0 right-0 pt-2 -mr-12">
+              <div class="absolute top-0 right-0 pt-2">
                 <button
                   type="button"
-                  class="flex items-center justify-center w-10 h-10 ml-1 text-gray-900 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                  class="flex items-center justify-center w-10 h-10 ml-1 text-gray-900 rounded-full focus:outline-none"
                   @click="sidebarOpen = false"
                 >
                   <span class="sr-only">Close sidebar</span>
@@ -120,60 +121,99 @@
       </Dialog>
     </TransitionRoot>
 
-    <!-- Static sidebar for desktop -->
+    <!-- Desktop Sidebar -->
     <div class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-      <!-- Sidebar component, swap this element with another sidebar if you like -->
-      <div class="flex flex-col flex-1 min-h-0 bg-gray-700">
-        <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
-          <div class="flex items-center flex-shrink-0 px-4">
-            <img
-              class="w-auto h-8"
-              src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
-              alt="Workflow"
-            />
-          </div>
-          <nav class="flex-1 px-2 mt-5 space-y-1">
-            <a
-              v-for="item in navigation"
-              :key="item.name"
-              :href="item.href"
-              :class="[
-                item.current
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
-              ]"
-            >
-              <font-awesome-icon
-                :icon="['fa', 'user']"
-                class="z-10 mr-2 text-xs fill-current input-icons text-white-400"
+      <div class="flex items-center flex-shrink-0 px-4 py-5 bg-slate-700">
+        <img
+          class="w-auto h-8"
+          src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
+          alt="Workflow"
+        />
+      </div>
+      <div class="flex flex-col flex-grow">
+        <nav class="flex-1 px-2 space-y-1 bg-slate-700" aria-label="Sidebar">
+          <template v-for="item in navigation" :key="item.name">
+            <div v-if="!item.children">
+              <a
+                href="#"
+                :class="[
+                  item.current
+                    ? 'bg-slate-700 text-white'
+                    : 'bg-slate-700 text-white hover:text-white',
+                  'group w-full flex items-center pl-2 py-2 text-sm font-medium',
+                ]"
               >
-              </font-awesome-icon>
-              {{ item.name }}
-            </a>
-          </nav>
-        </div>
-        <div class="flex flex-shrink-0 p-4 bg-gray-600">
-          <a href="#" class="flex-shrink-0 block w-full group">
-            <div class="flex items-center">
-              <div>
-                <img
-                  class="inline-block rounded-full h-9 w-9"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-              </div>
-              <div class="ml-3">
-                <p class="text-sm font-medium text-white">Tom Cook</p>
-                <p
-                  class="text-xs font-medium text-gray-300 group-hover:text-gray-200"
+                <font-awesome-icon
+                  :icon="item.icon"
+                  :class="[
+                    item.current ? 'text-white' : 'text-white',
+                    'mr-3 flex-shrink-0 h-4 w-4',
+                  ]"
+                  aria-hidden="true"
                 >
-                  View profile
-                </p>
-              </div>
+                </font-awesome-icon>
+                {{ item.name }}
+              </a>
             </div>
-          </a>
-        </div>
+            <Disclosure v-else v-slot="{ open }" as="div" class="space-y-1">
+              <DisclosureButton
+                :class="[
+                  item.current
+                    ? 'bg-slate-700 text-white'
+                    : 'bg-slate-700 text-white hover:text-white',
+                  'group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500',
+                ]"
+              >
+                <font-awesome-icon
+                  :icon="item.icon"
+                  class="flex-shrink-0 w-4 h-4 mr-3 text-white group-hover:text-white"
+                  aria-hidden="true"
+                >
+                </font-awesome-icon>
+                <span class="flex-1">
+                  {{ item.name }}
+                </span>
+                <svg
+                  :class="[
+                    open ? 'text-white rotate-90' : 'text-white',
+                    'ml-3 flex-shrink-0 h-5 w-5 transform group-hover:text-white transition-colors ease-in-out duration-500',
+                  ]"
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                    clip-rule="evenodd"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </DisclosureButton>
+              <transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-200 ease-out"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
+              >
+                <DisclosurePanel
+                  class="ml-3.5 space-y-1 border-l-2 border-slate-600"
+                >
+                  <DisclosureButton
+                    v-for="subItem in item.children"
+                    :key="subItem.name"
+                    as="a"
+                    :href="subItem.href"
+                    class="flex items-center w-full py-2 pl-8 pr-2 text-sm font-medium text-white group hover:text-white"
+                  >
+                    {{ subItem.name }}
+                  </DisclosureButton>
+                </DisclosurePanel>
+              </transition>
+            </Disclosure>
+          </template>
+        </nav>
       </div>
     </div>
     <!-- Navigation Bar -->
@@ -289,15 +329,50 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
 } from "@headlessui/vue";
 
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-  { name: "Documents", href: "#", current: false },
-  { name: "Reports", href: "#", current: false },
+  { name: "Dashboard", icon: ["fa", "user"], current: true, href: "#" },
+  {
+    name: "Team",
+    icon: ["fa", "user"],
+    current: false,
+    children: [
+      { name: "Overview", href: "#" },
+      { name: "Settings", href: "#" },
+    ],
+  },
+  {
+    name: "Projects",
+    icon: ["fa", "lock"],
+    current: false,
+    children: [{ name: "Settings", href: "#" }],
+  },
+  {
+    name: "Calendar",
+    icon: ["fa", "door-open"],
+    current: false,
+    children: [
+      { name: "Overview", href: "#" },
+      { name: "Members", href: "#" },
+      { name: "Calendar", href: "#" },
+      { name: "Settings", href: "#" },
+    ],
+  },
+  {
+    name: "Reports",
+    icon: ["fa", "check"],
+    current: false,
+    children: [
+      { name: "Overview", href: "#" },
+      { name: "Members", href: "#" },
+      { name: "Calendar", href: "#" },
+      { name: "Settings", href: "#" },
+    ],
+  },
 ];
 
 const userNavigation = [
@@ -316,6 +391,9 @@ export default defineComponent({
     MenuButton,
     MenuItem,
     MenuItems,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
   },
   setup() {
     const sidebarOpen = ref(false);
