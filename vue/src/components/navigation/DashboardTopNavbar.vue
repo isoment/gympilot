@@ -2,13 +2,13 @@
   <div class="sticky top-0 z-10 flex flex-shrink-0 h-16 bg-white shadow">
     <button
       type="button"
-      class="px-4 my-3 text-gray-500 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500 md:hidden"
+      class="px-4 my-3 border-r border-gray-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500 md:hidden"
       @click="sidebarOpen()"
     >
       <span class="sr-only">Open sidebar</span>
       <font-awesome-icon
         :icon="['fa', 'bars']"
-        class="z-10 text-xl text-gray-900 fill-current input-icons"
+        class="z-10 text-xl text-gray-900 fill-current"
         aria-hidden="true"
       >
       </font-awesome-icon>
@@ -21,7 +21,12 @@
             <div
               class="absolute inset-y-0 left-0 flex items-center pointer-events-none"
             >
-              <SearchIcon class="w-5 h-5" aria-hidden="true" />
+              <font-awesome-icon
+                :icon="['fa', 'magnifying-glass']"
+                class="z-10 w-4 h-4 text-gray-900 fill-current"
+                aria-hidden="true"
+              >
+              </font-awesome-icon>
             </div>
             <input
               id="search-field"
@@ -39,7 +44,12 @@
           class="p-1 text-gray-400 bg-white rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
         >
           <span class="sr-only">View notifications</span>
-          <BellIcon class="w-6 h-6" aria-hidden="true" />
+          <font-awesome-icon
+            :icon="['far', 'bell']"
+            class="z-10 w-6 h-6 mt-1 fill-current text-slate-700"
+            aria-hidden="true"
+          >
+          </font-awesome-icon>
         </button>
 
         <!-- Profile dropdown -->
@@ -112,7 +122,7 @@ export default defineComponent({
   emits: ["openSidebar"],
 
   setup(props, { emit }) {
-    const sidebarOpen = () => {
+    const sidebarOpen = (): void => {
       emit("openSidebar", true);
     };
 
