@@ -78,7 +78,7 @@
               class="absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
               <MenuItem
-                v-for="item in menuItems"
+                v-for="item in items"
                 :key="item.name"
                 v-slot="{ active }"
               >
@@ -100,14 +100,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { PropType, defineComponent } from "vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-
-const menuItems = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
+import { DashboardTopNavItems } from "@/config/types";
 
 export default defineComponent({
   name: "DashboardTopNavbar",
@@ -119,6 +114,13 @@ export default defineComponent({
     MenuItems,
   },
 
+  props: {
+    items: {
+      type: Array as PropType<DashboardTopNavItems[]>,
+      required: true,
+    },
+  },
+
   emits: ["openSidebar"],
 
   setup(props, { emit }) {
@@ -126,7 +128,7 @@ export default defineComponent({
       emit("openSidebar", true);
     };
 
-    return { menuItems, sidebarOpen };
+    return { sidebarOpen };
   },
 });
 </script>

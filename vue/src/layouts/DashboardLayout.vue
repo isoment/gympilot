@@ -71,7 +71,10 @@
 
     <div class="flex flex-col flex-1 md:pl-64">
       <!-- Top Navigation Bar -->
-      <DashboardTopNavbar @open-sidebar="sidebarOpen = true" />
+      <DashboardTopNavbar
+        :items="navbarItems"
+        @open-sidebar="sidebarOpen = true"
+      />
       <main class="flex-1">
         <div class="py-6">
           <router-view></router-view>
@@ -92,6 +95,7 @@ import {
 import DashboardSidebar from "@/components/sidebars/DashboardSidebar.vue";
 import DashboardTopNavbar from "@/components/navigation/DashboardTopNavbar.vue";
 import sidebarItems from "@/config/dashboardSidebar";
+import navbarItems from "@/config/dashboardTopNav";
 
 export default defineComponent({
   components: {
@@ -109,6 +113,7 @@ export default defineComponent({
     return {
       sidebarOpen,
       sidebarItems,
+      navbarItems,
     };
   },
 });

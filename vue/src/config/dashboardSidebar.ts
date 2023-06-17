@@ -1,6 +1,6 @@
-import { SidebarItems } from "./types";
+import { DashboardSidebarItems } from "./types";
 
-const items: SidebarItems[] = [
+const items: DashboardSidebarItems[] = [
   { name: "Dashboard", icon: ["fa", "user"], current: false, href: "#" },
   {
     name: "Team",

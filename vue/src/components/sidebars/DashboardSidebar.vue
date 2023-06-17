@@ -119,7 +119,7 @@
 <script lang="ts">
 import { PropType, defineComponent } from "vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { SidebarItems } from "@/config/types";
+import { DashboardSidebarItems } from "@/config/types";
 
 export default defineComponent({
   name: "DashboardSidebar",
@@ -132,7 +132,7 @@ export default defineComponent({
 
   props: {
     items: {
-      type: Array as PropType<SidebarItems[]>,
+      type: Array as PropType<DashboardSidebarItems[]>,
       required: true,
     },
   },
