@@ -55,7 +55,7 @@
                 </button>
               </div>
             </TransitionChild>
-            <DashboardSidebar />
+            <DashboardSidebar :items="sidebarItems" />
           </div>
         </TransitionChild>
         <div class="flex-shrink-0 w-14">
@@ -66,7 +66,7 @@
 
     <!-- Desktop Sidebar -->
     <div class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-      <DashboardSidebar />
+      <DashboardSidebar :items="sidebarItems" />
     </div>
 
     <div class="flex flex-col flex-1 md:pl-64">
@@ -91,6 +91,7 @@ import {
 } from "@headlessui/vue";
 import DashboardSidebar from "@/components/sidebars/DashboardSidebar.vue";
 import DashboardTopNavbar from "@/components/navigation/DashboardTopNavbar.vue";
+import sidebarItems from "@/config/dashboardSidebar";
 
 export default defineComponent({
   components: {
@@ -104,8 +105,10 @@ export default defineComponent({
 
   setup() {
     const sidebarOpen = ref(false);
+
     return {
       sidebarOpen,
+      sidebarItems,
     };
   },
 });

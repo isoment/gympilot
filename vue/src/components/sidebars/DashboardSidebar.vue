@@ -9,7 +9,7 @@
     </div>
     <div class="flex flex-col flex-grow h-full">
       <nav class="flex-1 px-2 space-y-1 sidebar-color" aria-label="Sidebar">
-        <template v-for="item in navigation" :key="item.name">
+        <template v-for="item in items" :key="item.name">
           <div v-if="!item.children">
             <a
               href="#"
@@ -23,7 +23,7 @@
               <font-awesome-icon
                 :icon="item.icon"
                 :class="[
-                  item.current ? 'text-white' : 'text-slate-400',
+                  item.current ? 'text-white' : 'text-white',
                   'mr-4 flex-shrink-0 h-4 w-4',
                 ]"
                 aria-hidden="true"
@@ -117,49 +117,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { PropType, defineComponent } from "vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-
-const navigation = [
-  { name: "Dashboard", icon: ["fa", "user"], current: false, href: "#" },
-  {
-    name: "Team",
-    icon: ["fa", "user"],
-    current: false,
-    children: [
-      { name: "Overview", href: "#" },
-      { name: "Settings", href: "#" },
-    ],
-  },
-  {
-    name: "Projects",
-    icon: ["fa", "lock"],
-    current: false,
-    children: [{ name: "Settings", href: "#" }],
-  },
-  {
-    name: "Calendar",
-    icon: ["fa", "door-open"],
-    current: false,
-    children: [
-      { name: "Overview", href: "#" },
-      { name: "Members", href: "#" },
-      { name: "Calendar", href: "#" },
-      { name: "Settings", href: "#" },
-    ],
-  },
-  {
-    name: "Reports",
-    icon: ["fa", "check"],
-    current: false,
-    children: [
-      { name: "Overview", href: "#" },
-      { name: "Members", href: "#" },
-      { name: "Calendar", href: "#" },
-      { name: "Settings", href: "#" },
-    ],
-  },
-];
+import { SidebarItems } from "@/config/types";
 
 export default defineComponent({
   name: "DashboardSidebar",
@@ -170,10 +130,15 @@ export default defineComponent({
     DisclosurePanel,
   },
 
+  props: {
+    items: {
+      type: Array as PropType<SidebarItems[]>,
+      required: true,
+    },
+  },
+
   setup() {
-    return {
-      navigation,
-    };
+    return {};
   },
 });
 </script>
