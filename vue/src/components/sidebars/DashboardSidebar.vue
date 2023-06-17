@@ -11,8 +11,8 @@
       <nav class="flex-1 px-2 space-y-1 sidebar-color" aria-label="Sidebar">
         <template v-for="item in items" :key="item.name">
           <div v-if="!item.children">
-            <a
-              href="#"
+            <router-link
+              :to="item.to || '/'"
               :class="[
                 item.current
                   ? 'sidebar-color text-white'
@@ -30,7 +30,7 @@
               >
               </font-awesome-icon>
               {{ item.name }}
-            </a>
+            </router-link>
           </div>
           <Disclosure v-else v-slot="{ open }" as="div" class="space-y-1">
             <DisclosureButton
@@ -77,15 +77,14 @@
               <DisclosurePanel
                 class="ml-3.5 space-y-1 border-l-2 border-slate-600"
               >
-                <DisclosureButton
+                <router-link
                   v-for="subItem in item.children"
                   :key="subItem.name"
-                  as="a"
-                  :href="subItem.href"
+                  :to="subItem.to"
                   class="flex items-center w-full py-2 pl-8 pr-2 text-sm font-medium transition-all duration-200 text-slate-400 group hover:text-white focus:text-white focus:outline-none"
                 >
                   {{ subItem.name }}
-                </DisclosureButton>
+                </router-link>
               </DisclosurePanel>
             </transition>
           </Disclosure>

@@ -13,11 +13,11 @@ export const dashboard = [
         component: DashboardHome,
       },
       {
-        path: "",
+        path: "about",
         component: DashboardAbout,
       },
       {
-        path: "",
+        path: "settings",
         component: DashboardSettings,
       },
     ],

@@ -1,31 +1,31 @@
 import { DashboardSidebarItems } from "./types";
 
 const items: DashboardSidebarItems[] = [
-  { name: "Dashboard", icon: ["fa", "user"], current: false, href: "#" },
+  { name: "Dashboard", icon: ["fa", "user"], current: false, to: "/dashboard" },
   {
     name: "Team",
     icon: ["fa", "user"],
     current: false,
     children: [
-      { name: "Overview", href: "#" },
-      { name: "Settings", href: "#" },
+      { name: "About", to: "/dashboard/about" },
+      { name: "Settings", to: "/dashboard/settings" },
     ],
   },
   {
     name: "Projects",
     icon: ["fa", "lock"],
     current: false,
-    children: [{ name: "Settings", href: "#" }],
+    children: [{ name: "Settings", to: "#" }],
   },
   {
     name: "Calendar",
     icon: ["fa", "door-open"],
     current: false,
     children: [
-      { name: "Overview", href: "#" },
-      { name: "Members", href: "#" },
-      { name: "Calendar", href: "#" },
-      { name: "Settings", href: "#" },
+      { name: "Overview", to: "#" },
+      { name: "Members", to: "#" },
+      { name: "Calendar", to: "#" },
+      { name: "Settings", to: "#" },
     ],
   },
   {
@@ -33,10 +33,10 @@ const items: DashboardSidebarItems[] = [
     icon: ["fa", "check"],
     current: false,
     children: [
-      { name: "Overview", href: "#" },
-      { name: "Members", href: "#" },
-      { name: "Calendar", href: "#" },
-      { name: "Settings", href: "#" },
+      { name: "Overview", to: "#" },
+      { name: "Members", to: "#" },
+      { name: "Calendar", to: "#" },
+      { name: "Settings", to: "#" },
     ],
   },
 ];

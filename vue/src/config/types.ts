@@ -2,13 +2,13 @@ export interface DashboardSidebarItems {
   name: string;
   icon: string[];
   current: boolean;
-  href?: string;
+  to?: string;
   children?: DashboardSidebarChildren[];
 }
 
 interface DashboardSidebarChildren {
   name: string;
-  href: string;
+  to: string;
 }
 
 export interface DashboardTopNavItems {
