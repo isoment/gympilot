@@ -68,12 +68,12 @@
               </svg>
             </DisclosureButton>
             <transition
-              enter-active-class="transition duration-200 ease-out"
-              enter-from-class="transform scale-95 opacity-0"
-              enter-to-class="transform scale-100 opacity-100"
-              leave-active-class="transition duration-200 ease-out"
-              leave-from-class="transform scale-100 opacity-100"
-              leave-to-class="transform scale-95 opacity-0"
+              enter-active-class="transition-all ease-linear duration-600"
+              enter-from-class="origin-top-right transform opacity-0"
+              enter-to-class="origin-bottom-right transform opacity-100"
+              leave-active-class="transition-all ease-linear duration-600"
+              leave-from-class="origin-bottom-right transform opacity-100"
+              leave-to-class="origin-top-right transform opacity-0"
             >
               <DisclosurePanel
                 class="ml-3.5 space-y-1 border-l-2 border-slate-600"
