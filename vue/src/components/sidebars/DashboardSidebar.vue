@@ -14,18 +14,18 @@
             <router-link
               :to="item.to || '/'"
               :class="[
-                item.current
-                  ? 'sidebar-color text-white'
+                pathIsActive(item.to)
+                  ? 'text-white font-semibold'
                   : 'sidebar-color text-slate-400 hover:text-white duration-200 transition-all',
-                'group w-full flex items-center pl-2 py-2 text-sm font-medium focus:outline-none',
+                'sidebar-color group w-full flex items-center pl-2 py-2 text-sm font-medium focus:outline-none',
               ]"
               @click="linkClicked"
             >
               <font-awesome-icon
                 :icon="item.icon"
                 :class="[
-                  item.current ? 'text-white' : 'text-white',
-                  'mr-4 flex-shrink-0 h-4 w-4',
+                  pathIsActive(item.to) ? 'font-semibold' : '',
+                  'mr-4 flex-shrink-0 h-4 w-4 text-white',
                 ]"
                 aria-hidden="true"
               >
@@ -36,10 +36,10 @@
           <Disclosure v-else v-slot="{ open }" as="div" class="space-y-1">
             <DisclosureButton
               :class="[
-                item.current
-                  ? 'sidebar-color text-white'
-                  : 'sidebar-color text-slate-400 hover:text-white duration-200 transition-all',
-                'group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium focus:outline-none focus:text-white',
+                childPathIsActive(item)
+                  ? 'text-white font-semibold'
+                  : 'text-slate-400 hover:text-white duration-200 transition-all',
+                'sidebar-color group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium focus:outline-none focus:text-white',
               ]"
             >
               <font-awesome-icon
@@ -82,7 +82,12 @@
                   v-for="subItem in item.children"
                   :key="subItem.name"
                   :to="subItem.to"
-                  class="flex items-center w-full py-2 pl-8 pr-2 text-sm font-medium transition-all duration-200 text-slate-400 group hover:text-white focus:text-white focus:outline-none"
+                  :class="[
+                    pathIsActive(subItem.to)
+                      ? 'font-semibold text-white ml-1'
+                      : 'text-slate-400',
+                    'flex items-center w-full py-2 pl-8 pr-2 text-sm font-medium transition-all duration-200 group hover:text-white focus:text-white focus:outline-none',
+                  ]"
                   @click="linkClicked"
                 >
                   {{ subItem.name }}
@@ -118,9 +123,10 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from "vue";
+import { PropType, defineComponent, onMounted, ref } from "vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { DashboardSidebarItems } from "@/config/types";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "DashboardSidebar",
@@ -141,14 +147,51 @@ export default defineComponent({
   emits: ["linkClicked"],
 
   setup(props, { emit }) {
+    const currentPath = ref("");
+
+    onMounted(() => {
+      const route = useRoute();
+      currentPath.value = route.path;
+    });
+
+    /**
+     *  A helper to check if the current path matches the path passed in as a param.
+     *  Useful for applying styles for the current path.
+     */
+    const pathIsActive = (path?: string): boolean => {
+      return path === currentPath.value;
+    };
+
+    /**
+     *  If one of the children of an item matches the current path return true. This
+     *  is useful for styling the parent when one of the children is selected.
+     */
+    const childPathIsActive = (item: DashboardSidebarItems): boolean => {
+      let isActive = false;
+      if (item.children) {
+        for (const child of item.children) {
+          if (child.to === currentPath.value) {
+            isActive = true;
+            break;
+          }
+        }
+      }
+      return isActive;
+    };
+
+    /**
+     *  When a link is clicked we want to set the currentPath and emit a linkClicked
+     *  event.
+     */
     const linkClicked = (event: PointerEvent): void => {
       if (event.target && "pathname" in event.target) {
         const targetElement = event.target;
+        currentPath.value = targetElement.pathname as string;
         emit("linkClicked", { clicked: true, path: targetElement.pathname });
       }
     };
 
-    return { linkClicked };
+    return { linkClicked, currentPath, pathIsActive, childPathIsActive };
   },
 });
 </script>

@@ -1,7 +1,6 @@
 export interface DashboardSidebarItems {
   name: string;
   icon: string[];
-  current: boolean;
   to?: string;
   children?: DashboardSidebarChildren[];
 }
