@@ -55,7 +55,10 @@
                 </button>
               </div>
             </TransitionChild>
-            <DashboardSidebar :items="sidebarItems" />
+            <DashboardSidebar
+              :items="sidebarItems"
+              @link-clicked="handleSidebarLinkClick"
+            />
           </div>
         </TransitionChild>
         <div class="flex-shrink-0 w-14">
@@ -66,7 +69,10 @@
 
     <!-- Desktop Sidebar -->
     <div class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-      <DashboardSidebar :items="sidebarItems" />
+      <DashboardSidebar
+        :items="sidebarItems"
+        @link-clicked="handleSidebarLinkClick"
+      />
     </div>
 
     <div class="flex flex-col flex-1 md:pl-64">
@@ -96,6 +102,7 @@ import DashboardSidebar from "@/components/sidebars/DashboardSidebar.vue";
 import DashboardTopNavbar from "@/components/navigation/DashboardTopNavbar.vue";
 import sidebarItems from "@/config/dashboardSidebar";
 import navbarItems from "@/config/dashboardTopNav";
+import { SideBarLinkClickedEvent } from "@/events/types";
 
 export default defineComponent({
   components: {
@@ -110,10 +117,17 @@ export default defineComponent({
   setup() {
     const sidebarOpen = ref(false);
 
+    const handleSidebarLinkClick = (e: SideBarLinkClickedEvent): void => {
+      if (sidebarOpen.value === true && e.clicked) {
+        sidebarOpen.value = false;
+      }
+    };
+
     return {
       sidebarOpen,
       sidebarItems,
       navbarItems,
+      handleSidebarLinkClick,
     };
   },
 });

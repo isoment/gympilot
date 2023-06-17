@@ -19,6 +19,7 @@
                   : 'sidebar-color text-slate-400 hover:text-white duration-200 transition-all',
                 'group w-full flex items-center pl-2 py-2 text-sm font-medium focus:outline-none',
               ]"
+              @click="linkClicked"
             >
               <font-awesome-icon
                 :icon="item.icon"
@@ -82,6 +83,7 @@
                   :key="subItem.name"
                   :to="subItem.to"
                   class="flex items-center w-full py-2 pl-8 pr-2 text-sm font-medium transition-all duration-200 text-slate-400 group hover:text-white focus:text-white focus:outline-none"
+                  @click="linkClicked"
                 >
                   {{ subItem.name }}
                 </router-link>
@@ -136,8 +138,17 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    return {};
+  emits: ["linkClicked"],
+
+  setup(props, { emit }) {
+    const linkClicked = (event: PointerEvent): void => {
+      if (event.target && "pathname" in event.target) {
+        const targetElement = event.target;
+        emit("linkClicked", { clicked: true, path: targetElement.pathname });
+      }
+    };
+
+    return { linkClicked };
   },
 });
 </script>
