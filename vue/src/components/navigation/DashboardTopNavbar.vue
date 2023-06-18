@@ -2,13 +2,13 @@
   <div class="sticky top-0 z-10 flex flex-shrink-0 h-16 bg-white shadow">
     <button
       type="button"
-      class="px-4 my-3 border-r border-gray-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500 md:hidden"
+      class="pl-3 pr-3 my-3 ml-1 border-r border-gray-200 rounded text-slate-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-500 md:hidden"
       @click="sidebarOpen()"
     >
       <span class="sr-only">Open sidebar</span>
       <font-awesome-icon
         :icon="['fa', 'bars']"
-        class="z-10 text-xl text-gray-900 fill-current"
+        class="z-10 mt-1 text-xl text-gray-900 fill-current"
         aria-hidden="true"
       >
       </font-awesome-icon>
@@ -41,7 +41,7 @@
       <div class="flex items-center ml-4 md:ml-6">
         <button
           type="button"
-          class="p-1 text-gray-400 bg-white rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+          class="p-1 text-gray-400 bg-white rounded hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
         >
           <span class="sr-only">View notifications</span>
           <font-awesome-icon
@@ -56,7 +56,7 @@
         <Menu as="div" class="relative ml-3">
           <div>
             <MenuButton
-              class="flex items-center max-w-xs text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+              class="flex items-center max-w-xs text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
             >
               <span class="sr-only">Open user menu</span>
               <img
