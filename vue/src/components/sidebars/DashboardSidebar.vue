@@ -1,14 +1,17 @@
 <template>
-  <div class="h-full">
-    <div class="flex items-center flex-shrink-0 px-4 py-5 sidebar-color">
-      <img
-        class="w-auto h-8"
-        src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
-        alt="Workflow"
-      />
-    </div>
+  <div class="h-full overflow-auto">
     <div class="flex flex-col flex-grow h-full">
-      <nav class="flex-1 px-2 space-y-1 sidebar-color" aria-label="Sidebar">
+      <div class="flex items-center flex-shrink-0 px-4 py-5 sidebar-color">
+        <img
+          class="w-auto h-8"
+          src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
+          alt="Workflow"
+        />
+      </div>
+      <nav
+        class="flex-1 px-2 pb-4 space-y-1 sidebar-color"
+        aria-label="Sidebar"
+      >
         <template v-for="item in items" :key="item.name">
           <div v-if="!item.children">
             <router-link
@@ -103,28 +106,28 @@
           </Disclosure>
         </template>
       </nav>
-    </div>
-  </div>
-  <div class="flex flex-shrink-0 p-4 bg-gray-700">
-    <a href="#" class="flex-shrink-0 block group">
-      <div class="flex items-center">
-        <div>
-          <img
-            class="inline-block w-10 h-10 rounded-full"
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt=""
-          />
-        </div>
-        <div class="ml-3">
-          <p class="text-base font-medium text-white">Tom Cook</p>
-          <p
-            class="text-sm font-medium text-gray-400 group-hover:text-gray-300"
-          >
-            View profile
-          </p>
-        </div>
+      <div class="flex flex-shrink-0 p-4 bg-gray-700">
+        <a href="#" class="flex-shrink-0 block group">
+          <div class="flex items-center">
+            <div>
+              <img
+                class="inline-block w-10 h-10 rounded-full"
+                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                alt=""
+              />
+            </div>
+            <div class="ml-3">
+              <p class="text-base font-medium text-white">Tom Cook</p>
+              <p
+                class="text-sm font-medium text-gray-400 group-hover:text-gray-300"
+              >
+                View profile
+              </p>
+            </div>
+          </div>
+        </a>
       </div>
-    </a>
+    </div>
   </div>
 </template>
 
@@ -199,8 +202,21 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .sidebar-color {
   @apply bg-[#2C3849];
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #586a8a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #2c3849;
 }
 </style>

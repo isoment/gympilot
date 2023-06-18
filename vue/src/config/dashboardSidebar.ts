@@ -35,6 +35,16 @@ const items: DashboardSidebarItems[] = [
       { name: "Settings", to: "#" },
     ],
   },
+  {
+    name: "Tests",
+    icon: ["fa", "check"],
+    children: [
+      { name: "Overview", to: "#" },
+      { name: "Members", to: "#" },
+      { name: "Calendar", to: "#" },
+      { name: "Settings", to: "#" },
+    ],
+  },
 ];
 
 export default items;
