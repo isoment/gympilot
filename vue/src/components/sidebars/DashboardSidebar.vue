@@ -33,7 +33,13 @@
               {{ item.name }}
             </router-link>
           </div>
-          <Disclosure v-else v-slot="{ open }" as="div" class="space-y-1">
+          <Disclosure
+            v-else
+            v-slot="{ open }"
+            as="div"
+            class="space-y-1"
+            :default-open="childPathIsActive(item)"
+          >
             <DisclosureButton
               :class="[
                 childPathIsActive(item)
@@ -123,7 +129,7 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, onMounted, ref } from "vue";
+import { PropType, defineComponent } from "vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { DashboardSidebarItems } from "@/config/types";
 import { useRoute } from "vue-router";
@@ -147,19 +153,14 @@ export default defineComponent({
   emits: ["linkClicked"],
 
   setup(props, { emit }) {
-    const currentPath = ref("");
-
-    onMounted(() => {
-      const route = useRoute();
-      currentPath.value = route.path;
-    });
+    const route = useRoute();
 
     /**
      *  A helper to check if the current path matches the path passed in as a param.
      *  Useful for applying styles for the current path.
      */
     const pathIsActive = (path?: string): boolean => {
-      return path === currentPath.value;
+      return path === route.path;
     };
 
     /**
@@ -170,7 +171,7 @@ export default defineComponent({
       let isActive = false;
       if (item.children) {
         for (const child of item.children) {
-          if (child.to === currentPath.value) {
+          if (child.to === route.path) {
             isActive = true;
             break;
           }
@@ -180,18 +181,20 @@ export default defineComponent({
     };
 
     /**
-     *  When a link is clicked we want to set the currentPath and emit a linkClicked
-     *  event.
+     *  When a link is clicked we want to emit a linkClicked event.
      */
     const linkClicked = (event: PointerEvent): void => {
       if (event.target && "pathname" in event.target) {
         const targetElement = event.target;
-        currentPath.value = targetElement.pathname as string;
         emit("linkClicked", { clicked: true, path: targetElement.pathname });
       }
     };
 
-    return { linkClicked, currentPath, pathIsActive, childPathIsActive };
+    return {
+      linkClicked,
+      pathIsActive,
+      childPathIsActive,
+    };
   },
 });
 </script>
