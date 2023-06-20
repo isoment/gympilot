@@ -34,6 +34,7 @@ import {
   faBars,
   faXmark,
   faMagnifyingGlass,
+  faDumbbell,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faUser);
 library.add(faLock);
@@ -47,6 +48,7 @@ library.add(faBars);
 library.add(faXmark);
 library.add(faMagnifyingGlass);
 library.add(faBell as IconDefinition);
+library.add(faDumbbell);
 
 /*********************************************************************
  *  Create the Vue application instance, creating global components, *
