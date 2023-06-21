@@ -500,46 +500,57 @@
 
       <!-- Gradient Feature Section -->
       <div class="border-gray-200">
-        <div
-          class="max-w-4xl px-4 py-16 mx-auto text-center mb-28 bg-emerald-400 sm:px-6 sm:pt-20 sm:pb-24 lg:max-w-7xl lg:pt-24 lg:px-8 rounded-xl"
-        >
-          <h2 class="text-3xl font-extrabold tracking-tight text-white">
-            Inbox support built for efficiency
-          </h2>
-          <div>
-            <p class="mt-4 text-lg text-white">
-              Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et
-              magna sit morbi lobortis. Blandit aliquam sit nisl euismod mattis
-              in.
-            </p>
-          </div>
+        <div class="mx-4 mb-24">
           <div
-            class="grid grid-cols-1 mt-12 gap-x-6 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-16"
+            class="max-w-5xl py-12 mx-auto text-white rounded-2xl bg-slate-800"
           >
-            <div
-              v-for="feature in features"
-              :key="feature.name"
-              class="flex flex-col items-center"
-            >
-              <div>
-                <span
-                  class="flex items-center justify-center w-12 h-12 rounded-md bg-emerald-600"
+            <div class="max-w-4xl px-4 mx-auto sm:px-6 lg:px-8">
+              <div class="mb-12 lg:text-center">
+                <h2
+                  class="text-base font-semibold tracking-wide uppercase text-emerald-600"
                 >
-                  <font-awesome-icon
-                    :icon="feature.icon"
-                    class="w-6 h-6 text-white"
-                    aria-hidden="true"
-                  >
-                  </font-awesome-icon>
-                </span>
-              </div>
-              <div class="mt-6">
-                <h3 class="text-lg font-bold text-white">
-                  {{ feature.name }}
-                </h3>
-                <p class="mt-2 text-base text-white">
-                  {{ feature.description }}
+                  Features
+                </h2>
+                <p
+                  class="mt-2 text-3xl font-extrabold leading-8 tracking-tight text-white sm:text-4xl"
+                >
+                  A better way to manage
                 </p>
+                <p class="max-w-2xl mt-4 text-xl text-gray-300 lg:mx-auto">
+                  Lorem ipsum dolor sit amet consect adipisicing elit. Possimus
+                  magnam voluptatum cupiditate veritatis in accusamus quisquam.
+                </p>
+              </div>
+
+              <div class="mt-10">
+                <dl
+                  class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10"
+                >
+                  <div
+                    v-for="feature in features"
+                    :key="feature.name"
+                    class="relative"
+                  >
+                    <dt>
+                      <div
+                        class="absolute flex items-center justify-center w-12 h-12 text-white rounded-md bg-emerald-500"
+                      >
+                        <font-awesome-icon
+                          :icon="feature.icon"
+                          class="w-6 h-6 text-white"
+                          aria-hidden="true"
+                        >
+                        </font-awesome-icon>
+                      </div>
+                      <p class="ml-16 text-lg font-bold leading-6 text-white">
+                        {{ feature.name }}
+                      </p>
+                    </dt>
+                    <dd class="mt-2 ml-16 text-sm text-gray-300">
+                      {{ feature.description }}
+                    </dd>
+                  </div>
+                </dl>
               </div>
             </div>
           </div>
@@ -799,7 +810,7 @@ const features = [
   {
     name: "Unlimited Inboxes",
     description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
+      "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
     icon: ["fa", "check"],
   },
   {
@@ -811,37 +822,35 @@ const features = [
   {
     name: "Spam Report",
     description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
+      "Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc.",
     icon: ["fa", "check"],
   },
   {
     name: "Compose in Markdown",
     description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
+      "Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.",
     icon: ["fa", "user"],
   },
   {
     name: "Team Reporting",
-    description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
+    description: "Aellentesque rhoncus. Et magna sit morbi lobortis.",
     icon: ["fa", "bars"],
   },
   {
     name: "Saved Replies",
-    description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
+    description: "Sapien vehicula erat auctor pellentesque magna sit morbi.",
     icon: ["fa", "magnifying-glass"],
   },
   {
     name: "Email Commenting",
     description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
+      "Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero.",
     icon: ["fa", "check"],
   },
   {
     name: "Connect with Customers",
     description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
+      "Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Lorem ipsum dorem runit gretun sed et magna sit morbi lobortis.",
     icon: ["fa", "envelope-square"],
   },
 ];
