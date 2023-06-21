@@ -257,10 +257,10 @@
                 class="text-4xl font-extrabold tracking-tight text-center sm:text-5xl lg:text-6xl"
               >
                 <span class="block text-white">Take control of your</span>
-                <span class="block text-indigo-200">customer support</span>
+                <span class="block text-white">customer support</span>
               </h1>
               <p
-                class="max-w-lg mx-auto mt-6 text-xl text-center text-indigo-200 sm:max-w-3xl"
+                class="max-w-lg mx-auto mt-6 text-xl text-center text-white sm:max-w-3xl"
               >
                 Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
                 lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
@@ -369,7 +369,12 @@
                   <span
                     class="flex items-center justify-center w-12 h-12 rounded-md bg-gradient-to-r from-emerald-300 to-green-500"
                   >
-                    <InboxIcon class="w-6 h-6 text-white" aria-hidden="true" />
+                    <font-awesome-icon
+                      :icon="['fa', 'bars']"
+                      class="w-6 h-6 text-white"
+                      aria-hidden="true"
+                    >
+                    </font-awesome-icon>
                   </span>
                 </div>
                 <div class="mt-6">
@@ -446,10 +451,12 @@
                   <span
                     class="flex items-center justify-center w-12 h-12 rounded-md bg-gradient-to-r from-emerald-300 to-green-500"
                   >
-                    <SparklesIcon
+                    <font-awesome-icon
+                      :icon="['fa', 'user']"
                       class="w-6 h-6 text-white"
                       aria-hidden="true"
-                    />
+                    >
+                    </font-awesome-icon>
                   </span>
                 </div>
                 <div class="mt-6">
@@ -492,38 +499,45 @@
       </div>
 
       <!-- Gradient Feature Section -->
-      <div class="bg-gradient-to-r from-purple-800 to-green-500">
+      <div class="border-gray-200">
         <div
-          class="max-w-4xl px-4 py-16 mx-auto sm:px-6 sm:pt-20 sm:pb-24 lg:max-w-7xl lg:pt-24 lg:px-8"
+          class="max-w-4xl px-4 py-16 mx-auto text-center mb-28 bg-emerald-400 sm:px-6 sm:pt-20 sm:pb-24 lg:max-w-7xl lg:pt-24 lg:px-8 rounded-xl"
         >
           <h2 class="text-3xl font-extrabold tracking-tight text-white">
             Inbox support built for efficiency
           </h2>
-          <p class="max-w-3xl mt-4 text-lg text-purple-200">
-            Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et
-            magna sit morbi lobortis. Blandit aliquam sit nisl euismod mattis
-            in.
-          </p>
+          <div>
+            <p class="mt-4 text-lg text-white">
+              Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et
+              magna sit morbi lobortis. Blandit aliquam sit nisl euismod mattis
+              in.
+            </p>
+          </div>
           <div
             class="grid grid-cols-1 mt-12 gap-x-6 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-16"
           >
-            <div v-for="feature in features" :key="feature.name">
+            <div
+              v-for="feature in features"
+              :key="feature.name"
+              class="flex flex-col items-center"
+            >
               <div>
                 <span
-                  class="flex items-center justify-center w-12 h-12 bg-white rounded-md bg-opacity-10"
+                  class="flex items-center justify-center w-12 h-12 rounded-md bg-emerald-600"
                 >
-                  <component
-                    :is="feature.icon"
+                  <font-awesome-icon
+                    :icon="feature.icon"
                     class="w-6 h-6 text-white"
                     aria-hidden="true"
-                  />
+                  >
+                  </font-awesome-icon>
                 </span>
               </div>
               <div class="mt-6">
-                <h3 class="text-lg font-medium text-white">
+                <h3 class="text-lg font-bold text-white">
                   {{ feature.name }}
                 </h3>
-                <p class="mt-2 text-base text-purple-200">
+                <p class="mt-2 text-base text-white">
                   {{ feature.description }}
                 </p>
               </div>
@@ -557,7 +571,7 @@
           >
             <h2 class="text-sm font-semibold tracking-wide uppercase">
               <span
-                class="text-transparent bg-gradient-to-r from-purple-300 to-green-500 bg-clip-text"
+                class="text-transparent bg-gradient-to-r from-emerald-300 to-green-500 bg-clip-text"
                 >Valuable Metrics</span
               >
             </h2>
@@ -611,7 +625,7 @@
             </a>
             <a
               href="#"
-              class="flex items-center justify-center px-4 py-3 text-base font-medium text-indigo-800 border border-transparent rounded-md shadow-sm bg-indigo-50 hover:bg-indigo-100"
+              class="flex items-center justify-center px-4 py-3 text-base font-medium border border-transparent rounded-md shadow-sm text-emerald-800 bg-emerald-50 hover:bg-emerald-100"
             >
               Get started
             </a>
@@ -737,7 +751,7 @@
           class="pt-8 mt-12 border-t border-gray-200 md:flex md:items-center md:justify-between lg:mt-16"
         >
           <p class="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
-            &copy; 2020 Workflow, Inc. All rights reserved.
+            &copy; 2023 Gympilot, Inc. All rights reserved.
           </p>
         </div>
       </div>
@@ -786,49 +800,49 @@ const features = [
     name: "Unlimited Inboxes",
     description:
       "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    // icon: InboxIcon,
+    icon: ["fa", "check"],
   },
   {
     name: "Manage Team Members",
     description:
       "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    // icon: UsersIcon,
+    icon: ["fa", "lock"],
   },
   {
     name: "Spam Report",
     description:
       "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    // icon: TrashIcon,
+    icon: ["fa", "check"],
   },
   {
     name: "Compose in Markdown",
     description:
       "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    // icon: PencilAltIcon,
+    icon: ["fa", "user"],
   },
   {
     name: "Team Reporting",
     description:
       "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    // icon: DocumentReportIcon,
+    icon: ["fa", "bars"],
   },
   {
     name: "Saved Replies",
     description:
       "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    // icon: ReplyIcon,
+    icon: ["fa", "magnifying-glass"],
   },
   {
     name: "Email Commenting",
     description:
       "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    // icon: ChatAltIcon,
+    icon: ["fa", "check"],
   },
   {
     name: "Connect with Customers",
     description:
       "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    // icon: HeartIcon,
+    icon: ["fa", "envelope-square"],
   },
 ];
 const metrics = [
