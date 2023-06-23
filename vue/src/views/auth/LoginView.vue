@@ -14,21 +14,12 @@
           <h2 class="mt-4 mb-5 text-lg font-bold text-gray-600">Sign in</h2>
           <!-- Email -->
           <div class="w-full mb-6">
-            <div class="flex items-center">
-              <font-awesome-icon
-                :icon="['fa', 'user']"
-                class="z-10 text-xs fill-current input-icons text-emerald-400"
-              >
-              </font-awesome-icon>
-              <input
-                v-model="loginForm.email"
-                type="email"
-                name="email"
-                placeholder="Email"
-                class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
-                data-test="email-input"
-              />
-            </div>
+            <TextInput
+              v-model="loginForm.email"
+              placeholder="Email"
+              :icon="['fa', 'user']"
+              data-test="email-input"
+            />
             <div
               v-if="loginValidationError"
               class="mt-2 ml-1 text-xs text-left text-red-400"
@@ -39,20 +30,13 @@
           </div>
           <!-- Password -->
           <div class="w-full mt-5 mb-8">
-            <div class="flex items-center">
-              <font-awesome-icon
-                :icon="['fa', 'lock']"
-                class="z-10 text-xs fill-current input-icons text-emerald-400"
-              ></font-awesome-icon>
-              <input
-                v-model="loginForm.password"
-                name="password"
-                type="password"
-                placeholder="Password"
-                class="w-full px-8 py-2 -mx-6 text-gray-700 border rounded focus:outline-emerald-400"
-                data-test="password-input"
-              />
-            </div>
+            <TextInput
+              v-model="loginForm.password"
+              placeholder="Password"
+              :icon="['fa', 'lock']"
+              type="password"
+              data-test="password-input"
+            />
           </div>
           <!-- Forgot Password -->
           <div>
@@ -107,11 +91,12 @@ import { AxiosError } from "axios";
 import { APIAuthLogin, APIAuthCsrf } from "@/api/auth";
 import { LOGIN_USER } from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
+import TextInput from "@/components/inputs/TextInput.vue";
 
 export default defineComponent({
   name: "LoginView",
 
-  components: { GuestTopNavbar },
+  components: { GuestTopNavbar, TextInput },
 
   setup() {
     const router = useRouter();

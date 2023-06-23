@@ -25,4 +25,10 @@ const router = createRouter({
   },
 });
 
+router.beforeEach((to, from, next) => {
+  const pageTitle = to.meta.title || "GymPilot";
+  document.title = pageTitle as string;
+  next();
+});
+
 export default router;

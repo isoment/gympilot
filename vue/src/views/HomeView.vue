@@ -21,8 +21,8 @@
               <h1
                 class="text-4xl font-extrabold tracking-tight text-center sm:text-5xl lg:text-6xl"
               >
-                <span class="block text-white">Take control of your</span>
-                <span class="block text-white">customer support</span>
+                <span class="block text-white">Elevate your performance</span>
+                <span class="block text-emerald-200">with GymPilot</span>
               </h1>
               <p
                 class="max-w-lg mx-auto mt-6 text-xl text-center text-white sm:max-w-3xl"
