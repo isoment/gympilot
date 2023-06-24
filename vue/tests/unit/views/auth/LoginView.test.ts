@@ -1,4 +1,9 @@
-import { shallowMount, RouterLinkStub, flushPromises } from "@vue/test-utils";
+import {
+  shallowMount,
+  RouterLinkStub,
+  flushPromises,
+  mount,
+} from "@vue/test-utils";
 import LoginView from "@/views/auth/LoginView.vue";
 
 import { useStore } from "vuex";
@@ -73,7 +78,7 @@ describe("LoginView", () => {
       useStoreMock.mockReturnValue({ dispatch: jest.fn() });
       useRouteMock.mockReturnValue({ push: jest.fn() });
 
-      const wrapper = shallowMount(
+      const wrapper = mount(
         LoginView,
         createConfig({ attachTo: document.body })
       );
@@ -104,7 +109,7 @@ describe("LoginView", () => {
         useRouteMock.mockReturnValue({ push });
         APIAuthLoginMock.mockResolvedValue({ status: 200 });
 
-        const wrapper = shallowMount(
+        const wrapper = mount(
           LoginView,
           createConfig({ attachTo: document.body })
         );
@@ -146,7 +151,7 @@ describe("LoginView", () => {
           });
         });
 
-        const wrapper = shallowMount(
+        const wrapper = mount(
           LoginView,
           createConfig({ attachTo: document.body })
         );

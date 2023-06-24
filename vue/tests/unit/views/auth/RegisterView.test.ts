@@ -68,7 +68,7 @@ describe("RegisterView", () => {
       useStoreMock.mockReturnValue({ dispatch: jest.fn() });
       useRouteMock.mockReturnValue({ push: jest.fn() });
 
-      const wrapper = shallowMount(
+      const wrapper = mount(
         RegisterView,
         createConfig({ attachTo: document.body })
       );
@@ -110,7 +110,7 @@ describe("RegisterView", () => {
       useRouteMock.mockReturnValue({ push });
       APIAuthRegisterMock.mockResolvedValue({ status: 201 });
 
-      const wrapper = shallowMount(
+      const wrapper = mount(
         RegisterView,
         createConfig({ attachTo: document.body })
       );

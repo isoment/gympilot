@@ -13,6 +13,7 @@ describe("TextInput", () => {
       modelValue: "test@test.com",
       disabled: false,
       placeholder: "Select value",
+      dataTest: "input",
       ...props,
     },
   });
@@ -32,6 +33,21 @@ describe("TextInput", () => {
       const label = wrapper.find("[data-test='label']");
       expect(label.exists()).toBe(false);
     });
+  });
+
+  it("sets the data test attribute from the prop", () => {
+    const wrapper = shallowMount(
+      TextInput,
+      createConfig({ dataTest: "TEST123" })
+    );
+    const input = wrapper.find("[data-test='TEST123']");
+    expect(input).not.toBeNull();
+  });
+
+  it("sets the type attribute from the prop", () => {
+    const wrapper = shallowMount(TextInput, createConfig({ type: "password" }));
+    const input = wrapper.find("[data-test='input']");
+    expect(input.attributes("type")).toBe("password");
   });
 
   it("shows the placeholder text when the modelValue is empty", () => {
