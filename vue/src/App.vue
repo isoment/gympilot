@@ -1,14 +1,14 @@
 <template>
-  <!-- <SimpleNav /> -->
+  <SimpleNav />
   <router-view />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-// import SimpleNav from "./components/navigation/SimpleNav.vue";
+import SimpleNav from "./components/navigation/SimpleNav.vue";
 
 export default defineComponent({
-  // components: { SimpleNav },
+  components: { SimpleNav },
 });
 </script>
 

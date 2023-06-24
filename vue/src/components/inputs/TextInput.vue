@@ -21,14 +21,15 @@
         </font-awesome-icon>
       </div>
       <input
+        id="input"
         v-model="input"
-        :type="type"
+        type="text"
         name="input"
         :class="inputClasses"
         class="block w-full text-sm border-gray-300 rounded shadow-sm focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500"
         :placeholder="placeholder"
         :disabled="disabled"
-        :data-test="dataTest"
+        data-test="input"
       />
     </div>
   </div>
@@ -64,14 +65,6 @@ export default defineComponent({
     iconColor: {
       type: String as PropType<string>,
       default: "text-emerald-400",
-    },
-    type: {
-      type: String as PropType<string>,
-      default: "text",
-    },
-    dataTest: {
-      type: String as PropType<string>,
-      default: "",
     },
   },
 

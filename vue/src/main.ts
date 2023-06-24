@@ -20,8 +20,7 @@ axios.defaults.withCredentials = true;
  * Import the font awesome library modules we need *
  **************************************************/
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { IconDefinition, library } from "@fortawesome/fontawesome-svg-core";
-import { faBell } from "@fortawesome/free-regular-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faDoorOpen,
   faEnvelopeSquare,
@@ -31,10 +30,6 @@ import {
   faChevronDown,
   faCheck,
   faCircleXmark,
-  faBars,
-  faXmark,
-  faMagnifyingGlass,
-  faDumbbell,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faUser);
 library.add(faLock);
@@ -44,11 +39,6 @@ library.add(faEnvelopeSquare);
 library.add(faChevronDown);
 library.add(faCheck);
 library.add(faCircleXmark);
-library.add(faBars);
-library.add(faXmark);
-library.add(faMagnifyingGlass);
-library.add(faBell as IconDefinition);
-library.add(faDumbbell);
 
 /*********************************************************************
  *  Create the Vue application instance, creating global components, *
