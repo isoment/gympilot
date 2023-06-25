@@ -1,60 +1,23 @@
 version: "3.0"
 services:
-  # Laravel backend
-  laravel:
+  # The backend API
+  api:
+    container_name: api
     build:
-      context: ./laravel
-      args:
-        PHP_VERSION: ${PHP_VERSION}
-      dockerfile: laravel.dockerfile
-    image: laravel
-    user: "1000:1000"
-    container_name: laravel
-    restart: unless-stopped
-    tty: true
-    environment:
-      SERVICE_NAME: laravel
-      SERVICE_TAGS: dev
-    working_dir: /var/www/html/
+      context: ./api
+      dockerfile: api.dockerfile
+      target: development-build-stage
+    ports:
+      - "5000:5000"
     volumes:
-      - ./laravel:/var/www/html/
-      - ./laravel/php/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
+      - ./api:/app
+      - /app/node_modules
+    restart: "unless-stopped"
     networks:
       - gympilot-network
-    links:
-      - fluentd
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: localhost:24224
-        tag: laravel
-
-  # Supervisord for restarting the queue workers
-  supervisor:
-    container_name: supervisor
-    build:
-      context: ./supervisor
-      args:
-        PHP_VERSION: ${PHP_VERSION}
-      dockerfile: supervisord.dockerfile
-    restart: unless-stopped
-    # user: "1000:1000"
-    environment:
-      APP_ROOT: ${SUPERVISOR_APP_ROOT}
-      QUEUE_DRIVER: ${SUPERVISOR_QUEUE_CONNECTION}
-      OPTIONS: ${SUPERVISOR_QUEUE_OPTIONS}
-      NUM_PROCS: ${SUPERVISOR_NUM_PROCS}
-    volumes:
-      - ./laravel:/${SUPERVISOR_APP_ROOT}
-    networks:
-      - gympilot-network
-    links:
-      - fluentd
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: localhost:24224
-        tag: supervisor
+    depends_on:
+      - mysql
+      - redis
 
   # Vue frontent, in development node server is used, in production nginx
   vue:
@@ -87,10 +50,10 @@ services:
   # Nginx
   webserver:
     depends_on:
-      - laravel
+      - api
       - vue
     build:
-      context: ./laravel/nginx
+      context: ./nginx-reverse-proxy
       dockerfile: nginx.dockerfile
     container_name: nginx
     restart: unless-stopped
