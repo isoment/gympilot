@@ -7,9 +7,6 @@ WORKDIR /app
 
 RUN npm install
 
-RUN chown -R node node_modules
-USER node
-
 EXPOSE 5000
 
 # Dvelopment build stage
