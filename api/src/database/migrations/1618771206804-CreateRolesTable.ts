@@ -13,6 +13,8 @@ export class CreateRolesTable1618771206804 implements MigrationInterface {
           generationStrategy: 'increment',
         },
         { name: 'name', type: 'varchar', length: '50', isUnique: true },
+        { name: 'created_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
+        { name: 'updated_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
       ],
     });
 
