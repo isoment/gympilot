@@ -28,10 +28,9 @@ export class RegisterService {
       {
         userId: user.id,
         email: user.email,
-        role_id: user.role_id,
-        role: user.role.name,
+        // We will want to include the users roles
       },
-      { user: { id: user.id, email: user.email, role: user.role.name } },
+      { user: { id: user.id, email: user.email /** Will want to include roles here */ } },
     );
   }
 }
