@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToMany } from 'typeorm';
 import { EntityBase } from '@base/infrastructure/abstracts/EntityBase';
+import { User } from './User';
 
 @Entity({ name: 'roles' })
 export class Role extends EntityBase {
@@ -14,4 +15,7 @@ export class Role extends EntityBase {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
+
+  @ManyToMany(() => User, (user) => user.roles)
+  users: User[];
 }

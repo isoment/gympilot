@@ -16,24 +16,12 @@ export class CreateUsersTable1618771301779 implements MigrationInterface {
         { name: 'last_name', type: 'varchar', length: '191' },
         { name: 'email', type: 'varchar', length: '191' },
         { name: 'password', type: 'varchar', length: '191' },
-        { name: 'role_id', type: 'bigint' },
         { name: 'created_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
         { name: 'updated_at', type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
       ],
     });
 
     await queryRunner.createTable(table);
-
-    await queryRunner.createForeignKey(
-      'users',
-      new TableForeignKey({
-        columnNames: ['role_id'],
-        referencedTableName: 'roles',
-        referencedColumnNames: ['id'],
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      }),
-    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

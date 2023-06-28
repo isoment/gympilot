@@ -3,8 +3,8 @@ import {
   BeforeUpdate,
   Column,
   Entity,
-  JoinColumn,
-  OneToOne,
+  ManyToMany,
+  JoinTable,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
@@ -32,18 +32,15 @@ export class User extends EntityBase {
   @Exclude()
   password: string;
 
-  @Column()
-  role_id: number;
-
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
-  @OneToOne(() => Role)
-  @JoinColumn({ name: 'role_id' })
-  role: Role;
+  @ManyToMany(() => Role, (role) => role.users)
+  @JoinTable()
+  roles: Role[];
 
   @Expose({ name: 'full_name' })
   get fullName() {
@@ -54,12 +51,5 @@ export class User extends EntityBase {
   @BeforeUpdate()
   async setPassword() {
     if (this.password) this.password = await new HashService().make(this.password);
-  }
-
-  @BeforeInsert()
-  async setDefaultRole() {
-    const roleId = this.role_id ? this.role_id : 2;
-
-    this.role_id = roleId;
   }
 }
