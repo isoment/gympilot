@@ -15,6 +15,7 @@ export const appConfig = {
   isDevelopment: env('NODE_ENV') === 'development',
   name: env('APP_NAME'),
   port: Number(env('APP_PORT')),
+  testPort: Number(env('APP_TEST_PORT')),
   routePrefix: env('APP_ROUTE_PREFIX'),
   url: env('APP_URL'),
   appPath: getAppPath(),

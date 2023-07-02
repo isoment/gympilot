@@ -20,7 +20,7 @@ import bodyParser from 'body-parser';
 
 export class App {
   private app: express.Application = express();
-  private port: Number = appConfig.port;
+  private port: number = process.env.NODE_ENV === 'test' ? appConfig.testPort : appConfig.port;
 
   public constructor() {
     this.bootstrap();
