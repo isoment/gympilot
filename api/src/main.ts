@@ -1,14 +1,10 @@
-import http from "http";
+import http from 'http';
 
 export const server = http.createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "application/json" });
-  res.end(
-    JSON.stringify({
-      data: "It Works!",
-    })
-  );
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ data: 'It Works!' }));
 });
 
 server.listen(5000, () => {
-  console.log("Server running on http://localhost:5000/");
+  console.log('Server running on http://localhost:5000/');
 });
