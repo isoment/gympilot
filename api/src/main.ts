@@ -1,10 +1,28 @@
-import http from 'http';
+import { startWebServer } from "./server/server";
 
-export const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({ data: 'It Works!' }));
-});
+async function start() {
+  return Promise.all([startWebServer()]);
+}
 
-server.listen(5000, () => {
-  console.log('Server running on http://localhost:5000/');
-});
+start()
+  .then((response) => {
+    console.log(`Server running on port ${response[0].port}`);
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
+
+// import http from "http";
+
+// export const server = http.createServer((req, res) => {
+//   res.writeHead(200, { "Content-Type": "application/json" });
+//   res.end(
+//     JSON.stringify({
+//       data: "It Works!",
+//     }),
+//   );
+// });
+
+// server.listen(5000, () => {
+//   console.log("Server running on http://localhost:3000/");
+// });
