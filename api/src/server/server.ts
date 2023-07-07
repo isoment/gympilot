@@ -2,6 +2,7 @@ import { AddressInfo } from "net";
 import { Server } from "http";
 import express from "express";
 import defineRoutes from "../routes/routes";
+import { errorHandler } from "../errors/error";
 
 let connection: Server;
 
@@ -31,7 +32,7 @@ async function openConnection(expressApp: express.Application): Promise<AddressI
     // const portToListenTo = configurationProvider.getValue('port');
     // const webServerPort = portToListenTo || 0;
     connection = expressApp.listen(5000, () => {
-      // errorHandler.listenToErrorEvents(connection);
+      errorHandler.listenToErrorEvents(connection);
       resolve(connection.address() as AddressInfo);
     });
   });
@@ -54,7 +55,7 @@ function defineErrorHandlingMiddleware(expressApp: express.Application) {
         }
       }
       // ✅ Best Practice: Pass all error to a centralized error handler so they get treated equally
-      console.log(error);
+      errorHandler.handleError(error);
       res.status(error?.HTTPStatus || 500).end();
     },
   );
