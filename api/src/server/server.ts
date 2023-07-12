@@ -3,10 +3,12 @@ import { Server } from "http";
 import express from "express";
 import defineRoutes from "../routes/routes";
 import { errorHandler } from "../errors/error";
+import { logger } from "../logger/logger";
 
 let connection: Server;
 
 async function startWebServer(): Promise<AddressInfo> {
+  logger.configureLogger();
   const expressApp = express();
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: true }));
@@ -32,6 +34,7 @@ async function openConnection(expressApp: express.Application): Promise<AddressI
     // const portToListenTo = configurationProvider.getValue('port');
     // const webServerPort = portToListenTo || 0;
     connection = expressApp.listen(5000, () => {
+      logger.info("Server started successfully", connection.address());
       errorHandler.listenToErrorEvents(connection);
       resolve(connection.address() as AddressInfo);
     });
