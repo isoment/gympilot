@@ -1,4 +1,5 @@
 import { createLogger, format, transports } from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
 
 interface Logger {
   info(message: string, ...args: unknown[]): void;
@@ -7,9 +8,21 @@ interface Logger {
   warn(message: string, ...args: unknown[]): void;
 }
 
+// We can use this to filter out the none error logs
+const errorFilter = format((info) => {
+  if (info.level === "error") {
+    return info;
+  }
+  return false;
+});
+
 const selectedTransports = [
-  new transports.File({ filename: "error.log", dirname: "storage/logs", level: "error" }),
-  new transports.File({ filename: "combined.log", dirname: "storage/logs" }),
+  new DailyRotateFile({ filename: "combined-%DATE%.log", dirname: "storage/logs" }),
+  new DailyRotateFile({
+    filename: "error-%DATE%.log",
+    dirname: "storage/logs",
+    format: format.combine(errorFilter(), format.timestamp(), format.json()),
+  }),
 ];
 
 export class LoggerWrapper implements Logger {
