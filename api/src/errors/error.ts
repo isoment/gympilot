@@ -1,3 +1,4 @@
+import { logger } from "../logger/logger";
 import * as Http from "http";
 import * as util from "util";
 
@@ -16,12 +17,12 @@ const errorHandler = {
     });
 
     process.on("SIGTERM", async () => {
-      console.log("App received SIGTERM event, try to gracefully close the server");
+      logger.error("App received SIGTERM event, try to gracefully close the server");
       await terminateHttpServerAndExit();
     });
 
     process.on("SIGINT", async () => {
-      console.log("App received SIGINT event, try to gracefully close the server");
+      logger.error("App received SIGINT event, try to gracefully close the server");
       await terminateHttpServerAndExit();
     });
   },
@@ -29,8 +30,9 @@ const errorHandler = {
   handleError: (errorToHandle: unknown) => {
     try {
       const appError: AppError = normalizeError(errorToHandle);
-      console.log(appError.message, appError);
-      metricsExporter.fireMetric("error", { errorName: appError.name }); // fire any custom metric when handling error
+      logger.error(appError.message, appError);
+      // Fire any custom metric when handling error
+      metricsExporter.fireMetric("error", { errorName: appError.name });
       // A common best practice is to crash when an unknown error (non-trusted) is being thrown
       if (!appError.isTrusted) {
         terminateHttpServerAndExit();
@@ -45,14 +47,14 @@ const errorHandler = {
 };
 
 const terminateHttpServerAndExit = async () => {
-  // maybe implement more complex logic here (like using 'http-terminator' library)
+  // Maybe implement more complex logic here (like using 'http-terminator' library)
   if (httpServerRef) {
     await httpServerRef.close();
   }
   process.exit();
 };
 
-// The input might won't be 'AppError' or even 'Error' instance, the output of this function will be - AppError.
+// The input might not be 'AppError' or even 'Error' instance, the output of this function will be - AppError.
 const normalizeError = (errorToHandle: unknown): AppError => {
   if (errorToHandle instanceof AppError) {
     return errorToHandle;
@@ -80,9 +82,8 @@ class AppError extends Error {
 // like Prometheus, DataDog, CloudWatch, etc
 const metricsExporter = {
   fireMetric: async (name: string, labels: object) => {
-    // TODO: use logger instead of conso.log
     // eslint-disable-next-line no-console
-    console.log("In real production code I will really fire metrics", {
+    logger.info("In real production code I will really fire metrics", {
       name,
       labels,
     });
