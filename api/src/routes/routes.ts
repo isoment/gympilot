@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import experimentsController from "../controllers/experimentsController";
 
 export default function defineRoutes(expressApp: express.Application) {
