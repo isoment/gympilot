@@ -4,6 +4,7 @@ import express from "express";
 import defineRoutes from "../routes/routes";
 import { errorHandler } from "../errors/error";
 import { logger } from "../logger/logger";
+import "dotenv/config";
 
 let connection: Server;
 
@@ -31,11 +32,7 @@ async function stopWebServer() {
 async function openConnection(expressApp: express.Application): Promise<AddressInfo> {
   return new Promise((resolve) => {
     // ️️️Best Practice: Allow a dynamic port (port 0 = ephemeral) so multiple webservers can be used in multi-process testing
-    // const portToListenTo = configurationProvider.getValue('port');
-    // const webServerPort = portToListenTo || 0;
-
-    // ️️️Best Practice: Allow a dynamic port (port 0 = ephemeral) so multiple webservers can be used in multi-process testing
-    const port = process.env.NODE_ENV === "test" ? 0 : 5000;
+    const port = process.env.NODE_ENV === "test" ? process.env.TEST_PORT : process.env.PORT;
 
     connection = expressApp.listen(port, () => {
       logger.info("Server started successfully", connection.address());

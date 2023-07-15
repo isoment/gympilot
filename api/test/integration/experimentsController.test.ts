@@ -4,7 +4,6 @@ import axios, { AxiosInstance } from "axios";
 let axiosAPIClient: AxiosInstance;
 
 beforeAll(async () => {
-  console.log(process.env.NODE_ENV);
   const apiConnection = await startWebServer();
   const axiosConfig = {
     baseURL: `http://127.0.0.1:${apiConnection.port}`,
