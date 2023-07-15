@@ -17,10 +17,10 @@ const errorFilter = format((info) => {
 });
 
 const selectedTransports = [
-  new DailyRotateFile({ filename: "combined-%DATE%.log", dirname: "storage/logs" }),
+  new DailyRotateFile({ filename: "%DATE%.log", dirname: "storage/logs/combined" }),
   new DailyRotateFile({
-    filename: "error-%DATE%.log",
-    dirname: "storage/logs",
+    filename: "%DATE%.log",
+    dirname: "storage/logs/error",
     format: format.combine(errorFilter(), format.timestamp(), format.json()),
   }),
 ];

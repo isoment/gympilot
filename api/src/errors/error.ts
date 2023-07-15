@@ -17,12 +17,12 @@ const errorHandler = {
     });
 
     process.on("SIGTERM", async () => {
-      logger.error("App received SIGTERM event, try to gracefully close the server");
+      logger.error("App received SIGTERM event, trying to gracefully close the server.");
       await terminateHttpServerAndExit();
     });
 
     process.on("SIGINT", async () => {
-      logger.error("App received SIGINT event, try to gracefully close the server");
+      logger.error("App received SIGINT event, trying to gracefully close the server");
       await terminateHttpServerAndExit();
     });
   },
