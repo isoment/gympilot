@@ -33,7 +33,11 @@ async function openConnection(expressApp: express.Application): Promise<AddressI
     // ️️️Best Practice: Allow a dynamic port (port 0 = ephemeral) so multiple webservers can be used in multi-process testing
     // const portToListenTo = configurationProvider.getValue('port');
     // const webServerPort = portToListenTo || 0;
-    connection = expressApp.listen(5000, () => {
+
+    // ️️️Best Practice: Allow a dynamic port (port 0 = ephemeral) so multiple webservers can be used in multi-process testing
+    const port = process.env.NODE_ENV === "test" ? 0 : 5000;
+
+    connection = expressApp.listen(port, () => {
       logger.info("Server started successfully", connection.address());
       errorHandler.listenToErrorEvents(connection);
       resolve(connection.address() as AddressInfo);
