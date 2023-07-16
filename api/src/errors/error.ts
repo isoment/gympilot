@@ -6,7 +6,7 @@ let httpServerRef: Http.Server;
 
 const errorHandler = {
   // Listen to the global process-level error events
-  listenToErrorEvents: (httpServer: Http.Server) => {
+  listenToErrorEvents: (httpServer: Http.Server): void => {
     httpServerRef = httpServer;
     process.on("uncaughtException", async (error) => {
       await errorHandler.handleError(error);
@@ -27,7 +27,7 @@ const errorHandler = {
     });
   },
 
-  handleError: (errorToHandle: unknown) => {
+  handleError: (errorToHandle: unknown): void => {
     try {
       const appError: AppError = normalizeError(errorToHandle);
       logger.error(appError.message, appError);
@@ -46,7 +46,7 @@ const errorHandler = {
   },
 };
 
-const terminateHttpServerAndExit = async () => {
+const terminateHttpServerAndExit = async (): Promise<void> => {
   // Maybe implement more complex logic here (like using 'http-terminator' library)
   if (httpServerRef) {
     await httpServerRef.close();

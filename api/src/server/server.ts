@@ -20,7 +20,7 @@ async function startWebServer(): Promise<AddressInfo> {
   return APIAddress;
 }
 
-async function stopWebServer() {
+async function stopWebServer(): Promise<void> {
   return new Promise<void>((resolve) => {
     if (connection !== undefined) {
       connection.close(() => {
@@ -43,7 +43,7 @@ async function openConnection(expressApp: express.Application): Promise<AddressI
   });
 }
 
-function defineErrorHandlingMiddleware(expressApp: express.Application) {
+function defineErrorHandlingMiddleware(expressApp: express.Application): void {
   expressApp.use(
     async (
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
