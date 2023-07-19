@@ -10,8 +10,8 @@ export default function getDbConnection() {
   if (!dbConnection) {
     const name = appConfig.node === "test" ? database.test_database : database.database;
     dbConnection = new Sequelize(name, database.user, database.password, {
-      port: 54320,
-      dialect: "postgres",
+      port: database.port,
+      dialect: "mysql",
       benchmark: true,
       logging: (sql: string, duration?: number) => {
         logger.info(`Sequelize operation was just executed in ${duration} ms with sql: ${sql}`);
