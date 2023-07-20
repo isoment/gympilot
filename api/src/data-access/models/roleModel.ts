@@ -1,35 +1,23 @@
 import getDbConnection from "./databaseConnection";
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
 
-export interface UserModelFields extends Model<InferAttributes<UserModelFields>, InferCreationAttributes<UserModelFields>> {
+export interface RoleModelFields extends Model<InferAttributes<RoleModelFields>, InferCreationAttributes<RoleModelFields>> {
   id: CreationOptional<number>;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
+  name: string;
   created_at: CreationOptional<Date>;
   updated_at: CreationOptional<Date>;
 }
 
-export function getUserModel() {
-  const userModel = getDbConnection().define<UserModelFields>(
-    "User",
+export function getRoleModel() {
+  const roleModel = getDbConnection().define<RoleModelFields>(
+    "Role",
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      first_name: {
-        type: DataTypes.STRING,
-      },
-      last_name: {
-        type: DataTypes.STRING,
-      },
-      email: {
-        type: DataTypes.STRING,
-      },
-      password: {
+      name: {
         type: DataTypes.STRING,
       },
       created_at: {
@@ -43,8 +31,8 @@ export function getUserModel() {
         defaultValue: DataTypes.NOW,
       },
     },
-    { tableName: "users" },
+    { tableName: "roles" },
   );
 
-  return userModel;
+  return roleModel;
 }
