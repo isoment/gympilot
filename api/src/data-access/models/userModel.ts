@@ -1,5 +1,7 @@
 import getDbConnection from "./databaseConnection";
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
+import { getRoleModel } from "./roleModel";
+import { getUserRolesModel } from "./userRolesModel";
 
 export interface UserModelFields extends Model<InferAttributes<UserModelFields>, InferCreationAttributes<UserModelFields>> {
   id: CreationOptional<number>;
@@ -45,6 +47,8 @@ export function getUserModel() {
     },
     { tableName: "users" },
   );
+
+  userModel.belongsToMany(getRoleModel(), { through: getUserRolesModel(), foreignKey: "user_id" });
 
   return userModel;
 }

@@ -1,26 +1,38 @@
 import getDbConnection from "./databaseConnection";
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
 import { getUserModel } from "./userModel";
-import { getUserRolesModel } from "./userRolesModel";
+import { getRoleModel } from "./roleModel";
 
-export interface RoleModelFields extends Model<InferAttributes<RoleModelFields>, InferCreationAttributes<RoleModelFields>> {
+export interface UserRolesModelFields extends Model<InferAttributes<UserRolesModelFields>, InferCreationAttributes<UserRolesModelFields>> {
   id: CreationOptional<number>;
-  name: string;
+  user_id: number;
+  role_id: number;
   created_at: CreationOptional<Date>;
   updated_at: CreationOptional<Date>;
 }
 
-export function getRoleModel() {
-  const roleModel = getDbConnection().define<RoleModelFields>(
-    "Role",
+export function getUserRolesModel() {
+  const userRoleModel = getDbConnection().define<UserRolesModelFields>(
+    "UserRoles",
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      name: {
-        type: DataTypes.STRING,
+      user_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: getUserModel(),
+          key: "id",
+        },
+      },
+      role_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: getRoleModel(),
+          key: "id",
+        },
       },
       created_at: {
         type: DataTypes.DATE,
@@ -33,10 +45,8 @@ export function getRoleModel() {
         defaultValue: DataTypes.NOW,
       },
     },
-    { tableName: "roles" },
+    { tableName: "user_roles" },
   );
 
-  roleModel.belongsToMany(getUserModel(), { through: getUserRolesModel(), foreignKey: "role_id" });
-
-  return roleModel;
+  return userRoleModel;
 }
