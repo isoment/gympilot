@@ -1,7 +1,7 @@
 import getDbConnection from "./databaseConnection";
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
-import { getRoleModel } from "./roleModel";
-import { getUserRolesModel } from "./userRolesModel";
+import roleModel from "./roleModel";
+import userRolesModel from "./userRolesModel";
 
 export interface UserModelFields extends Model<InferAttributes<UserModelFields>, InferCreationAttributes<UserModelFields>> {
   id: CreationOptional<number>;
@@ -13,42 +13,40 @@ export interface UserModelFields extends Model<InferAttributes<UserModelFields>,
   updated_at: CreationOptional<Date>;
 }
 
-export function getUserModel() {
-  const userModel = getDbConnection().define<UserModelFields>(
-    "User",
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      first_name: {
-        type: DataTypes.STRING,
-      },
-      last_name: {
-        type: DataTypes.STRING,
-      },
-      email: {
-        type: DataTypes.STRING,
-      },
-      password: {
-        type: DataTypes.STRING,
-      },
-      created_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-      },
+const userModel = getDbConnection().define<UserModelFields>(
+  "User",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    { tableName: "users" },
-  );
+    first_name: {
+      type: DataTypes.STRING,
+    },
+    last_name: {
+      type: DataTypes.STRING,
+    },
+    email: {
+      type: DataTypes.STRING,
+    },
+    password: {
+      type: DataTypes.STRING,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+      field: "created_at",
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+      field: "updated_at",
+    },
+  },
+  { tableName: "users", createdAt: "created_at", updatedAt: "updated_at" },
+);
 
-  userModel.belongsToMany(getRoleModel(), { through: getUserRolesModel(), foreignKey: "user_id" });
-
-  return userModel;
-}
+export default userModel;

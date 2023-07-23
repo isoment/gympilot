@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 export function env(key: string, defaultValue: null | string = null): string {
   return process.env[key] ?? (defaultValue as string);
 }
