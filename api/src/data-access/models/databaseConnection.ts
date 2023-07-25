@@ -9,7 +9,6 @@ let dbConnection: Sequelize;
 export default function getDbConnection() {
   if (!dbConnection) {
     const name = appConfig.node === "test" ? database.test_database : database.database;
-    console.log(name);
     dbConnection = new Sequelize(name, database.user, database.password, {
       host: database.host,
       port: database.port,

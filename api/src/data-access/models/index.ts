@@ -1,15 +1,15 @@
-import userModel from "./userModel";
-import roleModel from "./roleModel";
-import userRolesModel from "./userRolesModel";
+import User from "./user";
+import Role from "./role";
+import UserRoles from "./userRoles";
 
 /*********************************************************
  *  Here we can define the relationships between models  *
  ********************************************************/
-userModel.belongsToMany(roleModel, { through: userRolesModel, foreignKey: "user_id" });
-roleModel.belongsToMany(userModel, { through: userRolesModel, foreignKey: "role_id" });
+User.belongsToMany(Role, { through: UserRoles, foreignKey: "user_id" });
+Role.belongsToMany(User, { through: UserRoles, foreignKey: "role_id" });
 
 export default {
-  userModel,
-  roleModel,
-  userRolesModel,
+  User,
+  Role,
+  UserRoles,
 };

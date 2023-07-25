@@ -1,4 +1,4 @@
-import models from "../models";
+import model from "../models";
 
 type User = {
   id: number;
@@ -10,7 +10,7 @@ type User = {
 };
 
 export async function getUser(id: number): Promise<User | null> {
-  const user = await models.userModel.findOne({
+  const user = await model.User.findOne({
     where: { id },
     attributes: { exclude: ["password"] },
     nest: true,
