@@ -1,17 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
 import * as userRepository from "../data-access/repositories/userRepository";
 
-const experimentsController = express.Router();
+const authController = express.Router();
 
-experimentsController.get("/", (req: Request, res: Response): void => {
-  res.status(200).json({ test: "Hello World" });
-});
-
-experimentsController.get("/test", (req: Request, res: Response): void => {
-  res.status(200).json({ test: "Test" });
-});
-
-experimentsController.get("/user/:id", async (req: Request, res: Response, next: NextFunction) => {
+authController.get("/login", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await userRepository.getUser(Number(req.params.id));
     if (!user) {
@@ -24,4 +16,4 @@ experimentsController.get("/user/:id", async (req: Request, res: Response, next:
   }
 });
 
-export default experimentsController;
+export default authController;
