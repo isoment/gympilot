@@ -13,7 +13,7 @@ experimentsController.get("/test", (req: Request, res: Response): void => {
 
 experimentsController.get("/user/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await userRepository.getUser(Number(req.params.id));
+    const user = await userRepository.getUser("id", Number(req.params.id));
     if (!user) {
       return res.status(404).send("User not found");
     }
