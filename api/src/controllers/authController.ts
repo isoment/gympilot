@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
-import * as userRepository from "../data-access/repositories/userRepository";
+import { postRegister } from "../requests/authRequests";
+import validateRequest from "../middleware/validateRequest";
 
 const authController = express.Router();
 
@@ -18,7 +19,7 @@ authController.post("/login", async (req: Request, res: Response, next: NextFunc
   }
 });
 
-authController.post("/register", async (req: Request, res: Response, next: NextFunction) => {
+authController.post("/register", [validateRequest(postRegister)], async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Need to validate the request. This includes looking to see if the email address is taken. Password should
     // be 8+ characters etc.
