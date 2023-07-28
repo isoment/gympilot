@@ -11,7 +11,7 @@ export default (request: CallableFunction) => {
     const validateRequest: Joi.ValidationResult<any> = request(req.body);
 
     if (validateRequest.error) {
-      const errors: Record<string, any> = {};
+      const errors: Record<string, string> = {};
 
       validateRequest.error.details.forEach((err: Joi.ValidationErrorItem) => {
         const fieldName = err.path[0];
