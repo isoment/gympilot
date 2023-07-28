@@ -1,16 +1,18 @@
 import express, { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 
-type RequestSchemaFunction<T> = () => Joi.ObjectSchema<T>;
+// A function the returns a Joi schema
+type JoiSchemaFunction<T> = () => Joi.ObjectSchema<T>;
 
 /**
- *  This middleware will accept a function that we pass the request body into. The request
- *  function returns the Joi.ValidationResult object type which we process and return as a
- *  json response with a 422 status if there are any errors.
+ *  This middleware will accept a function that returns a Joi schema. We call the function
+ *  to get the Joi schema and then call validate() passing in the request body. If there
+ *  are validation errors we want to format them nicely and return them in a response.
+ *  If there are no errors we call next().
  */
-export default <T>(requestSchema: RequestSchemaFunction<T>) => {
+export default <T>(joiSchema: JoiSchemaFunction<T>) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const validateRequest: Joi.ValidationResult<T> = requestSchema().validate(req.body);
+    const validateRequest: Joi.ValidationResult<T> = joiSchema().validate(req.body);
 
     if (validateRequest.error) {
       const errors: Record<string, string> = {};
