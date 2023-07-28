@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { postRegister } from "../requests/authRequests";
+import { postRegister } from "../requests/authRequestSchema";
 import validateRequest from "../middleware/validateRequest";
 
 const authController = express.Router();

@@ -4,18 +4,18 @@ import * as userRepository from "../data-access/repositories/userRepository";
 /**
  *  Request body for POST "/api/auth/login"
  */
-export const postLogin = (request: Record<string, any>) => {
+export const postLogin = () => {
   const schema = Joi.object({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
   }).options({ abortEarly: false });
-  return schema.validate(request);
+  return schema;
 };
 
 /**
  *  Request body for POST "/api/auth/register"
  */
-export const postRegister = (request: Record<string, any>) => {
+export const postRegister = () => {
   const schema = Joi.object({
     first_name: Joi.string().required(),
     last_name: Joi.string().required(),
@@ -32,5 +32,5 @@ export const postRegister = (request: Record<string, any>) => {
       return values;
     })
     .options({ abortEarly: false });
-  return schema.validate(request);
+  return schema;
 };
