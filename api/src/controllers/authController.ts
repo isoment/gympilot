@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { postRegister } from "../requests/authRequestSchema";
 import validateRequest from "../middleware/validateRequest";
+import * as userRepository from "../data-access/repositories/userRepository";
 
 const authController = express.Router();
 
@@ -21,8 +22,11 @@ authController.post("/login", async (req: Request, res: Response, next: NextFunc
 
 authController.post("/register", [validateRequest(postRegister)], async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Need to validate the request. This includes looking to see if the email address is taken. Password should
-    // be 8+ characters etc.
+    // We need to check if the email is already in use
+    const user = await userRepository.getUser("email", req.body.email);
+    if (user) {
+      return res.status(422).send("This email is already in use. Please use a different email or try logging in.");
+    }
 
     // Create a new user record.
 

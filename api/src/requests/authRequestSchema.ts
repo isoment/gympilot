@@ -1,5 +1,4 @@
 import Joi from "joi";
-import * as userRepository from "../data-access/repositories/userRepository";
 
 /**
  *  Request body for POST "/api/auth/login"
@@ -28,15 +27,6 @@ export const postRegister = () => {
       "string.max": "Password confirmation cannot be more than {#limit} characters long",
       "any.required": "Password confirmation is required",
     }),
-  })
-    .custom(async (values, helpers) => {
-      const { email } = values;
-      const userExists = await userRepository.getUser("email", email);
-      if (userExists) {
-        return helpers.error("any.invalid");
-      }
-      return values;
-    })
-    .options({ abortEarly: false });
+  }).options({ abortEarly: false });
   return schema;
 };
