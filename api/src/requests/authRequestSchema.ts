@@ -20,8 +20,8 @@ export const postRegister = () => {
     first_name: Joi.string().required(),
     last_name: Joi.string().required(),
     email: Joi.string().required().email(),
-    password: Joi.string().min(5).max(255).required(),
-    password_verify: Joi.string().min(5).max(255).required().valid(Joi.ref("password")).messages({
+    password: Joi.string().min(8).max(255).required(),
+    password_verify: Joi.string().min(8).max(255).required().valid(Joi.ref("password")).messages({
       "any.only": "Passwords do not match",
       "string.empty": "Password confirmation is required",
       "string.min": "Password confirmation must be at least {#limit} characters long",
