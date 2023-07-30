@@ -11,7 +11,7 @@ interface User extends Model {
 }
 
 /**
- * Searches for a user with the given field.
+ * Searches for a user with the given field. Include their roles as well.
  * @param field in the users table to search by
  * @param value value to search
  * @returns Promise<User | null>
@@ -21,7 +21,18 @@ export async function getUser<T extends keyof User>(field: T, value: User[T]): P
   const user = await model.User.findOne({
     where: whereClause,
     attributes: { exclude: ["password"] },
+    include: [
+      {
+        model: model.Role,
+        as: "Roles",
+        // Only include the role name
+        attributes: ["name"],
+        // Exclude the join table
+        through: { attributes: [] },
+      },
+    ],
     nest: true,
   });
+
   return user;
 }
