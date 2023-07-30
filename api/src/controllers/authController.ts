@@ -28,7 +28,7 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
       return res.status(422).send("This email is already in use. Please use a different email or try logging in.");
     }
 
-    // Create a new user record.
+    // Create a new user record. We also need to hash the password.
 
     // Return a JWT token.
     return res.status(200).json("Register");
