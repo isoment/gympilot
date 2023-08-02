@@ -1,9 +1,8 @@
+import { UserWithRoles } from "@base/data-access/repositories/userRepository";
 import { appConfig } from "../config/app";
 import jwt from "jsonwebtoken";
 
-interface TokenPayload {}
-
-const generate = (payload: TokenPayload) => {
+const generate = (payload: UserWithRoles) => {
   const token = jwt.sign(payload, appConfig.jwtPrivateKey);
   return token;
 };

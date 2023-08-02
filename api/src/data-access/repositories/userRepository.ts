@@ -1,7 +1,8 @@
 import model from "../models";
 import { WhereOptions, InferAttributes, Model } from "sequelize";
+import { RoleFields } from "../models/role";
 
-interface User extends Model {
+export interface User extends Model {
   id: number;
   first_name: string;
   last_name: string;
@@ -10,15 +11,20 @@ interface User extends Model {
   updated_at: Date;
 }
 
+export interface UserWithRoles extends User {
+  roles: RoleFields[];
+}
+
 /**
  * Searches for a user with the given field. Include their roles as well.
  * @param field in the users table to search by
  * @param value value to search
  * @returns Promise<User | null>
  */
-export async function getUser<T extends keyof User>(field: T, value: User[T]): Promise<User | null> {
+export async function getUser<T extends keyof User>(field: T, value: User[T]): Promise<UserWithRoles | null> {
   const whereClause: WhereOptions<InferAttributes<User>> = { [field]: value };
-  const user = await model.User.findOne({
+
+  const user = (await model.User.findOne({
     where: whereClause,
     attributes: { exclude: ["password"] },
     include: [
@@ -26,13 +32,13 @@ export async function getUser<T extends keyof User>(field: T, value: User[T]): P
         model: model.Role,
         as: "Roles",
         // Only include the role name
-        attributes: ["name"],
+        attributes: ["name", "created_at"],
         // Exclude the join table
         through: { attributes: [] },
       },
     ],
     nest: true,
-  });
+  })) as UserWithRoles;
 
   return user;
 }
