@@ -28,10 +28,21 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
       return res.status(422).send("This email is already in use. Please use a different email or try logging in.");
     }
 
-    // Create a new user record. We also need to hash the password.
+    // Hash the password
+
+    // Create a new user record with the owner role.
+    const createdUser = await userRepository.createUserWithRole(
+      {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        password: "password",
+      },
+      ["owner", "employee"],
+    );
 
     // Return a JWT token.
-    return res.status(200).json("Register");
+    return res.status(200).json(createdUser);
   } catch (error) {
     res.status(500).send("Internal server error");
     next(error);
