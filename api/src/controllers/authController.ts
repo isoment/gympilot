@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { postRegister } from "../requests/authRequestSchema";
 import validateRequest from "../middleware/validateRequest";
 import * as userRepository from "../data-access/repositories/userRepository";
+import bcrypt from "bcrypt";
 
 const authController = express.Router();
 
@@ -29,6 +30,8 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
     }
 
     // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     // Create a new user record with the owner role.
     const createdUser = await userRepository.createUserWithRole(
@@ -36,13 +39,13 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
-        password: "password",
+        password: hashedPassword,
       },
       ["owner", "employee"],
     );
 
     // Return a JWT token.
-    return res.status(200).json(createdUser);
+    return res.status(200).json("Success");
   } catch (error) {
     res.status(500).send("Internal server error");
     next(error);
