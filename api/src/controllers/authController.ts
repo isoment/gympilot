@@ -4,7 +4,7 @@ import validateRequest from "../middleware/validateRequest";
 import * as userRepository from "../data-access/repositories/userRepository";
 import bcrypt from "bcrypt";
 import authToken from "../services/authToken";
-import { internalError } from "../services/http/responseHelper";
+import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
 import _ from "lodash";
 
@@ -53,7 +53,7 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
 
     if (!createdUser) {
       logger.error("Created user was not found, cannot generate token", _.omit(req.body, ["password", "password_verify"]));
-      return internalError(res, "There was an error during registration");
+      return response.internalError(res, "There was an error during registration");
     }
 
     const user = await userRepository.getUser("id", createdUser.id);
@@ -63,17 +63,14 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
         "User record created during registration but there was an error fetching record",
         _.omit(req.body, ["password", "password_verify"]),
       );
-      return internalError(res, "There was an error during registration");
+      return response.internalError(res, "There was an error during registration");
     }
 
     const jwt = await authToken.generate(user.toJSON());
 
-    return res.header("Authorization", `Bearer ${jwt}`).status(200).json({
-      message: "Registration Successful",
-      data: {},
-    });
+    return response.success(res, "Registration Successful", { Authorization: `Bearer ${jwt}` });
   } catch (error) {
-    internalError(res);
+    response.internalError(res);
     next(error);
   }
 });
