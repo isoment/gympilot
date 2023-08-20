@@ -25,6 +25,12 @@ authController.post("/login", async (req: Request, res: Response, next: NextFunc
   }
 });
 
+/**
+ *  The endpoint to register new users. First we validate the request and ensure that there is no existing
+ *  user with the same email. We create a hash of the password and then create a new user with the desired
+ *  roles. We then want to generate a JWT token and return it in the responses Authorization header as a
+ *  Bearer token.
+ */
 authController.post("/register", [validateRequest(postRegister)], async (req: Request, res: Response, next: NextFunction) => {
   try {
     const existingUser = await userRepository.getUser("email", req.body.email);
@@ -45,28 +51,29 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
       ["owner", "employee"],
     );
 
-    if (createdUser) {
-      const user = await userRepository.getUser("id", createdUser.id);
-
-      if (user) {
-        const jwt = await authToken.generate(user.toJSON());
-
-        return res.header("Authorization", `Bearer ${jwt}`).status(200).json({
-          message: "Registration Successful",
-        });
-      } else {
-        logger.error(
-          "User record created during registration but there was an error fetching record",
-          _.omit(req.body, ["password", "password_verify"]),
-        );
-        return internalError(res, "There was an error during registration");
-      }
-    } else {
+    if (!createdUser) {
       logger.error("Created user was not found, cannot generate token", _.omit(req.body, ["password", "password_verify"]));
       return internalError(res, "There was an error during registration");
     }
+
+    const user = await userRepository.getUser("id", createdUser.id);
+
+    if (!user) {
+      logger.error(
+        "User record created during registration but there was an error fetching record",
+        _.omit(req.body, ["password", "password_verify"]),
+      );
+      return internalError(res, "There was an error during registration");
+    }
+
+    const jwt = await authToken.generate(user.toJSON());
+
+    return res.header("Authorization", `Bearer ${jwt}`).status(200).json({
+      message: "Registration Successful",
+      data: {},
+    });
   } catch (error) {
-    res.status(500).send("Internal server error");
+    internalError(res);
     next(error);
   }
 });
