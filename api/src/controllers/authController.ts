@@ -3,6 +3,7 @@ import { postRegister } from "../requests/authRequestSchema";
 import validateRequest from "../middleware/validateRequest";
 import * as userRepository from "../data-access/repositories/userRepository";
 import bcrypt from "bcrypt";
+import authToken from "../services/authToken";
 
 const authController = express.Router();
 
@@ -24,8 +25,8 @@ authController.post("/login", async (req: Request, res: Response, next: NextFunc
 authController.post("/register", [validateRequest(postRegister)], async (req: Request, res: Response, next: NextFunction) => {
   try {
     // We need to check if the email is already in use
-    const user = await userRepository.getUser("email", req.body.email);
-    if (user) {
+    const existingUser = await userRepository.getUser("email", req.body.email);
+    if (existingUser) {
       return res.status(422).send("This email is already in use. Please use a different email or try logging in.");
     }
 
@@ -44,8 +45,24 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
       ["owner", "employee"],
     );
 
-    // Return a JWT token.
-    return res.status(200).json("Success");
+    if (createdUser) {
+      // Get the newly created user
+      const user = await userRepository.getUser("id", createdUser.id);
+
+      if (user) {
+        // Create a JWT token.
+        const jwt = await authToken.generate(user.toJSON());
+
+        // Return the token using Authorization header
+        return res.header("Authorization", `Bearer ${jwt}`).status(200).json({
+          message: "Registration Successful",
+        });
+      }
+    } else {
+      return res.status(400).json({
+        message: "There was an error during registration",
+      });
+    }
   } catch (error) {
     res.status(500).send("Internal server error");
     next(error);
