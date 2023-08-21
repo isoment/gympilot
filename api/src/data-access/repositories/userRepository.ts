@@ -8,6 +8,7 @@ export interface User extends Model {
   first_name: string;
   last_name: string;
   email: string;
+  password: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -20,14 +21,14 @@ export interface UserWithRoles extends User {
  * Searches for a user with the given field. Include their roles as well.
  * @param field in the users table to search by
  * @param value value to search
+ * @param excludeSensitive will exclude the sensitive values like password by default
  * @returns Promise<User | null>
  */
-export async function getUser<T extends keyof User>(field: T, value: User[T]): Promise<UserWithRoles | null> {
+export async function getUser<T extends keyof User>(field: T, value: User[T], excludeSensitive: boolean = true): Promise<UserWithRoles | null> {
   const whereClause: WhereOptions<InferAttributes<User>> = { [field]: value };
 
-  const user = (await model.User.findOne({
+  const withSensitive = {
     where: whereClause,
-    attributes: { exclude: ["password"] },
     include: [
       {
         model: model.Role,
@@ -39,7 +40,25 @@ export async function getUser<T extends keyof User>(field: T, value: User[T]): P
       },
     ],
     nest: true,
-  })) as UserWithRoles;
+  };
+
+  const withoutSensitive = {
+    where: whereClause,
+    attributes: { exclude: ["password"] },
+    include: [
+      {
+        model: model.Role,
+        as: "Roles",
+        attributes: ["name", "created_at"],
+        through: { attributes: [] },
+      },
+    ],
+    nest: true,
+  };
+
+  const options = excludeSensitive ? withoutSensitive : withSensitive;
+
+  const user = (await model.User.findOne(options)) as UserWithRoles;
 
   return user;
 }

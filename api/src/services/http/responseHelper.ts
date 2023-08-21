@@ -19,6 +19,16 @@ export function success(res: Response, message: string = "Success", headers: Rec
 }
 
 /**
+ * A response with status code 422, useful for validation related errors.
+ */
+export function unprocessableContent(res: Response, message: string = "Unprocessable Content", data: unknown = {}): void {
+  res.status(422).json({
+    message,
+    data,
+  });
+}
+
+/**
  *  A response with status code 500 for general server errors.
  */
 export function internalError(res: Response, message: string = "Internal server error", data: unknown = {}): void {

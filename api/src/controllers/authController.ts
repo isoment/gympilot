@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { postRegister } from "../requests/authRequestSchema";
+import { postLogin, postRegister } from "../requests/authRequestSchema";
 import validateRequest from "../middleware/validateRequest";
 import * as userRepository from "../data-access/repositories/userRepository";
 import bcrypt from "bcrypt";
@@ -10,15 +10,30 @@ import _ from "lodash";
 
 const authController = express.Router();
 
-authController.post("/login", async (req: Request, res: Response, next: NextFunction) => {
+/**
+ *  The endpoint to login a user. The request is validated and must contain an email and password. If there is
+ *  no user with that email an error is returned. If the user is found we need to compare the hashed password
+ *  and if they match return a JWT token.
+ */
+authController.post("/login", [validateRequest(postLogin)], async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Need to validate the request.
+    const user = await userRepository.getUser("email", req.body.email, false);
 
-    // We need to find the user. If they are not found return a response that credentials
-    // do not match.
+    if (!user) {
+      return response.unprocessableContent(res, "These credentials do not match our records");
+    }
 
-    // If the user is found a JWT is issued and returned.
-    return res.status(200).json("Login");
+    const passwordValid = await bcrypt.compare(req.body.password, user.password);
+
+    if (!passwordValid) {
+      return response.unprocessableContent(res, "These credentials do not match our records");
+    }
+
+    const removePassword = _.omit(user.toJSON(), ["password"]);
+
+    const jwt = await authToken.generate(removePassword);
+
+    return response.success(res, "Login Successful", { Authorization: `Bearer ${jwt}` });
   } catch (error) {
     res.status(500).send("Internal server error");
     next(error);
@@ -35,7 +50,7 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
   try {
     const existingUser = await userRepository.getUser("email", req.body.email);
     if (existingUser) {
-      return res.status(422).send("This email is already in use. Please use a different email or try logging in.");
+      return res.status(422).send("This email is already in use, please use a different email or try logging in");
     }
 
     const salt = await bcrypt.genSalt(10);
