@@ -7,6 +7,7 @@ import authToken from "../services/authToken";
 import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
 import _ from "lodash";
+import { v4 as uuid } from "uuid";
 
 const authController = express.Router();
 
@@ -95,6 +96,17 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
  */
 authController.post("/forgot-password", [validateRequest(postForgotPassword)], async (req: Request, res: Response, next: NextFunction) => {
   // This endpoint is used to initiate the password reset process. It accepts the user's email and generates a unique token that is associated with the user's account. The token is then stored in the database, and an email containing a link with the token is sent to the user's email address.
+  try {
+    const user = await userRepository.getUser("email", req.body.email, false);
+    if (!user) {
+      return response.unprocessableContent(res, "The email was not found, please check your address");
+    }
+
+    const token = uuid();
+  } catch (error) {
+    response.internalError(res);
+    next(error);
+  }
 });
 
 /**
@@ -102,6 +114,11 @@ authController.post("/forgot-password", [validateRequest(postForgotPassword)], a
  */
 authController.post("/reset-password/:token", [validateRequest(postResetPassword)], async (req: Request, res: Response, next: NextFunction) => {
   // This endpoint is used to reset the user's password after they have clicked on the password reset link from their email. The :token parameter in the URL identifies the user's account. The user's new password is sent in the request body. The endpoint verifies the token, updates the user's password in the database, and completes the password reset process.
+  try {
+  } catch (error) {
+    response.internalError(res);
+    next(error);
+  }
 });
 
 export default authController;

@@ -5,7 +5,7 @@ export interface PasswordResetFields extends Model<InferAttributes<PasswordReset
   id: CreationOptional<number>;
   email: string;
   token: string;
-  expires: Date;
+  expires: CreationOptional<Date>;
 }
 
 const PasswordReset = getDbConnection().define<PasswordResetFields>(

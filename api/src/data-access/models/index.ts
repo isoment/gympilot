@@ -1,6 +1,7 @@
 import User from "./user";
 import Role from "./role";
 import UserRoles from "./userRoles";
+import PasswordReset from "./passwordReset";
 
 /*********************************************************
  *  Here we can define the relationships between models  *
@@ -12,4 +13,5 @@ export default {
   User,
   Role,
   UserRoles,
+  PasswordReset,
 };
