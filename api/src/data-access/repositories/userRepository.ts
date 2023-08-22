@@ -76,7 +76,7 @@ export interface CreateUserWithRoleParams {
  * @param roles to assign the user
  * @returns Promise<UserWithRoles | null>
  */
-export async function createUserWithRole(params: CreateUserWithRoleParams, roles: string[]): Promise<UserWithRoles | null> {
+export async function createUserWithRole(params: CreateUserWithRoleParams, roles: string[]): Promise<User | null> {
   const user = await model.User.create({
     first_name: params.first_name,
     last_name: params.last_name,
@@ -100,5 +100,5 @@ export async function createUserWithRole(params: CreateUserWithRoleParams, roles
     }
   }
 
-  return user as UserWithRoles;
+  return user as User;
 }
