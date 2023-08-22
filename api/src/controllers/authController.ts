@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { postLogin, postRegister } from "../requests/authRequestSchema";
+import { postLogin, postRegister, postForgotPassword, postResetPassword } from "../requests/authRequestSchema";
 import validateRequest from "../middleware/validateRequest";
 import * as userRepository from "../data-access/repositories/userRepository";
 import bcrypt from "bcrypt";
@@ -88,6 +88,20 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
     response.internalError(res);
     next(error);
   }
+});
+
+/**
+ *  The endpoint to initiate password reset.
+ */
+authController.post("/forgot-password", [validateRequest(postForgotPassword)], async (req: Request, res: Response, next: NextFunction) => {
+  // This endpoint is used to initiate the password reset process. It accepts the user's email and generates a unique token that is associated with the user's account. The token is then stored in the database, and an email containing a link with the token is sent to the user's email address.
+});
+
+/**
+ *  The endpoint to reset a users password.
+ */
+authController.post("/reset-password/:token", [validateRequest(postResetPassword)], async (req: Request, res: Response, next: NextFunction) => {
+  // This endpoint is used to reset the user's password after they have clicked on the password reset link from their email. The :token parameter in the URL identifies the user's account. The user's new password is sent in the request body. The endpoint verifies the token, updates the user's password in the database, and completes the password reset process.
 });
 
 export default authController;
