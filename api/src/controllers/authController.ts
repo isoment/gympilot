@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { postLogin, postRegister, postForgotPassword, postResetPassword } from "../requests/authRequestSchema";
 import validateRequest from "../middleware/validateRequest";
 import * as userRepository from "../data-access/repositories/userRepository";
+import * as passwordResetRepository from "../data-access/repositories/passwordResetRepository";
 import bcrypt from "bcrypt";
 import authToken from "../services/authToken";
 import * as response from "../services/http/responseHelper";
@@ -99,10 +100,20 @@ authController.post("/forgot-password", [validateRequest(postForgotPassword)], a
   try {
     const user = await userRepository.getUser("email", req.body.email, false);
     if (!user) {
-      return response.unprocessableContent(res, "The email was not found, please check your address");
+      return response.unprocessableContent(res, "The email was not found, please ensure it is correct");
     }
 
     const token = uuid();
+    const passwordReset = await passwordResetRepository.createPasswordReset({ email: req.body.email, token: token });
+
+    if (!passwordReset) {
+      logger.error(`There was a failure when creating the password reset record for user: ${req.body.email}`);
+      return response.internalError(res, "There was an error during password reset");
+    }
+
+    // Send email to user.
+
+    return response.success(res, "Reset password email was sent");
   } catch (error) {
     response.internalError(res);
     next(error);

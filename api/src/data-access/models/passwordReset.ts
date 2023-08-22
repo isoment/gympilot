@@ -30,7 +30,7 @@ const PasswordReset = getDbConnection().define<PasswordResetFields>(
       defaultValue: DataTypes.NOW,
     },
   },
-  { tableName: "password_resets" },
+  { tableName: "password_resets", timestamps: false },
 );
 
 export default PasswordReset;
