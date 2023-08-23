@@ -16,7 +16,7 @@ export class Email {
     if (this.#underlyingTransport) {
       this.#underlyingTransport.sendMail(mailOptions, (error: Error | null, info: nodemailer.SentMessageInfo) => {
         if (error) {
-          logger.error(`There was an error sending the ${template} email template to`, mailOptions, error);
+          logger.error(`There was an error sending the ${template} email template`, mailOptions, error);
         } else {
           logger.info(`Email template ${template} sent`, info.response);
         }
