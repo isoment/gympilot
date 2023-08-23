@@ -9,6 +9,7 @@ import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
 import _ from "lodash";
 import { v4 as uuid } from "uuid";
+import { email } from "../services/notification/email/email";
 
 const authController = express.Router();
 
@@ -112,6 +113,7 @@ authController.post("/forgot-password", [validateRequest(postForgotPassword)], a
     }
 
     // Send email to user.
+    email.testEmail();
 
     return response.success(res, "Reset password email was sent");
   } catch (error) {
