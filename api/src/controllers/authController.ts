@@ -111,7 +111,7 @@ authController.post("/forgot-password", [validateRequest(postForgotPassword)], a
     }
 
     // Send email to user.
-    email.testEmail();
+    email.passwordReset(req.body.email, passwordReset.token);
 
     return response.success(res, "Reset password email was sent");
   } catch (error) {

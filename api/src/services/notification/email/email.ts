@@ -1,6 +1,10 @@
+import nodemailer from "nodemailer";
+import ejs from "ejs";
+import fs from "fs";
+import path from "path";
+
 import transporterDev from "./configDev";
 import transporterProd from "./configProd";
-import nodemailer from "nodemailer";
 import { appConfig } from "../../../config/app";
 import { logger } from "../../../logger/logger";
 
@@ -24,15 +28,18 @@ export class Email {
     }
   }
 
-  /**
-   *  Send a test email, just for testing
-   */
-  testEmail() {
+  passwordReset(emailAddress: string, token: string): void {
+    const templatePath = path.join(__dirname, "templates/passwordReset.ejs");
+    const template = fs.readFileSync(templatePath, "utf-8");
+
+    const compiledTemplate = ejs.compile(template);
+    const emailHtml = compiledTemplate({ resetToken: token });
+
     const mailOptions = {
-      from: "app@gympilot.com",
-      to: "user@test.com",
-      subject: "Test Email",
-      text: "This is a test email.",
+      from: "gympilot@gympilot.com",
+      to: emailAddress,
+      subject: "GymPilot | Reset Password",
+      html: emailHtml,
     };
     this.sendEmail("testEmail", mailOptions);
   }
