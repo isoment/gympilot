@@ -8,7 +8,6 @@ import authToken from "../services/authToken";
 import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
 import _ from "lodash";
-import { v4 as uuid } from "uuid";
 import { email } from "../services/notification/email/email";
 
 const authController = express.Router();
@@ -104,8 +103,7 @@ authController.post("/forgot-password", [validateRequest(postForgotPassword)], a
       return response.unprocessableContent(res, "The email was not found, please ensure it is correct");
     }
 
-    const token = uuid();
-    const passwordReset = await passwordResetRepository.createPasswordReset({ email: req.body.email, token: token });
+    const passwordReset = await passwordResetRepository.createPasswordReset({ email: req.body.email });
 
     if (!passwordReset) {
       logger.error(`There was a failure when creating the password reset record for user: ${req.body.email}`);
