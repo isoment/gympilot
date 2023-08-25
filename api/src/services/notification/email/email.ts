@@ -28,18 +28,19 @@ export class Email {
     }
   }
 
-  passwordReset(emailAddress: string, token: string): void {
-    const templatePath = path.join(__dirname, "templates/passwordReset.ejs");
+  renderTemplate(templateName: string, data: { [key: string]: string }): string {
+    const templatePath = path.join(__dirname, `templates/${templateName}.ejs`);
     const template = fs.readFileSync(templatePath, "utf-8");
-
     const compiledTemplate = ejs.compile(template);
-    const emailHtml = compiledTemplate({ resetToken: token });
+    return compiledTemplate(data);
+  }
 
+  passwordReset(emailAddress: string, token: string): void {
     const mailOptions = {
       from: "gympilot@gympilot.com",
       to: emailAddress,
       subject: "GymPilot | Reset Password",
-      html: emailHtml,
+      html: this.renderTemplate("passwordReset", { resetToken: token }),
     };
     this.sendEmail("testEmail", mailOptions);
   }
