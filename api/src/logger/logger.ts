@@ -8,7 +8,7 @@ interface Logger {
   warn(message: string, ...args: unknown[]): void;
 }
 
-// We can use this to filter out the none error logs
+// We can use this to filter out the non error logs
 const errorFilter = format((info) => {
   if (info.level === "error") {
     return info;
