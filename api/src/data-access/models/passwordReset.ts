@@ -1,5 +1,5 @@
-import getDbConnection from "./databaseConnection";
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
+import getDbConnection from "./databaseConnection";
 
 export interface PasswordResetFields extends Model<InferAttributes<PasswordResetFields>, InferCreationAttributes<PasswordResetFields>> {
   id: CreationOptional<number>;

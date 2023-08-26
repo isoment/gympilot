@@ -1,5 +1,5 @@
-import getDbConnection from "./databaseConnection";
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
+import getDbConnection from "./databaseConnection";
 import { RoleFields } from "./role";
 
 export interface UserFields extends Model<InferAttributes<UserFields>, InferCreationAttributes<UserFields>> {

@@ -1,13 +1,14 @@
 import express, { NextFunction, Request, Response } from "express";
+import bcrypt from "bcrypt";
+import _ from "lodash";
+
 import { postLogin, postRegister, postForgotPassword, postResetPassword } from "../requests/authRequestSchema";
 import validateRequest from "../middleware/validateRequest";
 import * as userRepository from "../data-access/repositories/userRepository";
 import * as passwordResetRepository from "../data-access/repositories/passwordResetRepository";
-import bcrypt from "bcrypt";
 import authToken from "../services/authToken";
 import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
-import _ from "lodash";
 import { email } from "../services/notification/email/email";
 import { compareDate } from "../services/dateTime";
 

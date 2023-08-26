@@ -1,4 +1,4 @@
-import { Sequelize, Options } from "sequelize";
+import { Sequelize } from "sequelize";
 import { logger } from "../../logger/logger";
 import database from "../../config/database";
 import { appConfig } from "../../config/app";

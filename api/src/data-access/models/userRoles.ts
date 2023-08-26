@@ -1,5 +1,5 @@
-import getDbConnection from "./databaseConnection";
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
+import getDbConnection from "./databaseConnection";
 import userModel from "./user";
 import roleModel from "./role";
 

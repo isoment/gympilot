@@ -1,6 +1,6 @@
-import { logger } from "../logger/logger";
 import * as Http from "http";
 import * as util from "util";
+import { logger } from "../logger/logger";
 
 let httpServerRef: Http.Server;
 

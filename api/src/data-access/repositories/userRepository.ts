@@ -1,5 +1,6 @@
-import model from "../models";
 import { WhereOptions, InferAttributes, Model } from "sequelize";
+
+import model from "../models";
 import { RoleFields } from "../models/role";
 import { logger } from "../../logger/logger";
 

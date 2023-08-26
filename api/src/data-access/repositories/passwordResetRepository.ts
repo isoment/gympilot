@@ -1,8 +1,9 @@
-import model from "../models";
 import { WhereOptions, InferAttributes, Model } from "sequelize";
+import { v4 as uuid } from "uuid";
+
+import model from "../models";
 import { logger } from "../../logger/logger";
 import { plusHours } from "../../services/dateTime";
-import { v4 as uuid } from "uuid";
 
 interface PasswordReset extends Model {
   id: number;
