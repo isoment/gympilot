@@ -9,6 +9,7 @@ import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
 import _ from "lodash";
 import { email } from "../services/notification/email/email";
+import { compareDate } from "../services/dateTime";
 
 const authController = express.Router();
 
@@ -104,6 +105,12 @@ authController.post("/forgot-password", [validateRequest(postForgotPassword)], a
       return response.unprocessableContent(res, "The email was not found, please ensure it is correct");
     }
 
+    const existingReset = await passwordResetRepository.findPasswordReset("email", req.body.email);
+
+    if (existingReset) {
+      existingReset.destroy();
+    }
+
     const passwordReset = await passwordResetRepository.createPasswordReset({ email: req.body.email });
 
     if (!passwordReset) {
@@ -127,10 +134,15 @@ authController.post("/forgot-password", [validateRequest(postForgotPassword)], a
  */
 authController.post("/reset-password/:token", [validateRequest(postResetPassword)], async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const passwordReset = await passwordResetRepository.findPasswordReset(req.params.token);
+    const passwordReset = await passwordResetRepository.findPasswordReset("token", req.params.token);
 
     if (!passwordReset) {
       return response.unprocessableContent(res, "The password reset token does not match our records");
+    }
+
+    if (compareDate(new Date(), passwordReset.expires) !== -1) {
+      passwordReset.destroy();
+      return response.unprocessableContent(res, "The password reset token has expired");
     }
 
     const salt = await bcrypt.genSalt(10);

@@ -1,5 +1,5 @@
 import model from "../models";
-import { Model } from "sequelize";
+import { WhereOptions, InferAttributes, Model } from "sequelize";
 import { logger } from "../../logger/logger";
 import { plusHours } from "../../services/dateTime";
 import { v4 as uuid } from "uuid";
@@ -11,8 +11,9 @@ interface PasswordReset extends Model {
   expires: Date;
 }
 
-export async function findPasswordReset(token: string): Promise<PasswordReset | null> {
-  const passwordReset = await model.PasswordReset.findOne({ where: { token } });
+export async function findPasswordReset<T extends keyof PasswordReset>(field: T, value: PasswordReset[T]): Promise<PasswordReset | null> {
+  const whereClause: WhereOptions<InferAttributes<PasswordReset>> = { [field]: value };
+  const passwordReset = await model.PasswordReset.findOne({ where: whereClause });
   return passwordReset;
 }
 
