@@ -46,4 +46,5 @@ export class Email {
   }
 }
 
+// The email service can be a singleton, we only need one instance of it.
 export const email = new Email();

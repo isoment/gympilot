@@ -108,8 +108,7 @@ authController.post("/forgot-password", [validateRequest(postForgotPassword)], a
     const existingReset = await passwordResetRepository.findPasswordReset("email", req.body.email);
 
     if (existingReset) {
-      await passwordResetRepository.updatePasswordReset(req.body.email);
-      return response.success(res, "Reset password email was sent");
+      existingReset.destroy();
     }
 
     const passwordReset = await passwordResetRepository.createPasswordReset({ email: req.body.email });

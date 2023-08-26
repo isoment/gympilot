@@ -29,30 +29,35 @@ export class LoggerWrapper implements Logger {
   #underlyingLogger: Logger | null = null;
 
   #getInitializeLogger(): Logger {
-    this.configureLogger();
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (!this.#underlyingLogger) {
+      this.configureLogger();
+    }
     return this.#underlyingLogger!;
   }
 
   configureLogger(): void {
-    const winston = createLogger({
-      level: "info",
-      format: format.combine(
-        format.timestamp({
-          format: "YYYY-MM-DD HH:mm:ss",
-        }),
-        format.errors({ stack: true }),
-        format.splat(),
-        format.json(),
-      ),
-      defaultMeta: { service: "gympilot" },
-      transports: selectedTransports,
-    });
-    this.#underlyingLogger = winston;
+    if (!this.#underlyingLogger) {
+      const winston = createLogger({
+        level: "info",
+        format: format.combine(
+          format.timestamp({
+            format: "YYYY-MM-DD HH:mm:ss",
+          }),
+          format.errors({ stack: true }),
+          format.splat(),
+          format.json(),
+        ),
+        defaultMeta: { service: "gympilot" },
+        transports: selectedTransports,
+      });
+      this.#underlyingLogger = winston;
+    }
   }
 
   resetLogger(): void {
-    this.#underlyingLogger = null;
+    if (this.#underlyingLogger) {
+      this.#underlyingLogger = null;
+    }
   }
 
   info(message: string, ...args: unknown[]): void {
@@ -72,4 +77,5 @@ export class LoggerWrapper implements Logger {
   }
 }
 
+// We can make the logger class a singleton
 export const logger = new LoggerWrapper();
