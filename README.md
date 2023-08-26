@@ -1,10 +1,10 @@
 # GymPilot
 
-GymPilot is your complete gym management solution. It comes with a docker container setup for easy development and deployment. The backend is a Laravel API and the frontent is built with Vue 3 and Typescript. There is an extensive automated test suite as well.
+GymPilot is your complete gym management solution. It comes with a docker container setup for easy development and deployment. The backend is a Node.js Typescript API and the frontent is built with Vue 3 and Typescript. There is an extensive automated test suite as well.
 
 ## Development
 
-Before bringing up the containers create the necessary environment files in the project root and the vue and laravel directories. There are example files included. Then to bring the containers up for development run...
+Before bringing up the containers create the necessary environment files in the project root as well as the 'vue' and 'api' directories. There are example files included. To start the containers for development run...
 
 ```
 docker-compose up -d --build
@@ -30,5 +30,5 @@ db.logs.find()
 You can use mongodb queries to further filter down the logs. For instance we can filter by container name...
 
 ```
-db.logs.find({"container_name: "/laravel"})
+db.logs.find({"container_name: "/api"})
 ```

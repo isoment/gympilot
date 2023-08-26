@@ -1,16 +1,19 @@
 import { AddressInfo } from "net";
 import { Server } from "http";
 import express from "express";
+
+import "dotenv/config";
 import defineRoutes from "../routes/routes";
 import { errorHandler } from "../errors/error";
 import { logger } from "../logger/logger";
-import "dotenv/config";
 import { appConfig } from "../config/app";
+import { email } from "../services/notification/email/email";
 
 let connection: Server;
 
 async function startWebServer(): Promise<AddressInfo> {
   logger.configureLogger();
+  email.configureEmail();
   const expressApp = express();
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: true }));
