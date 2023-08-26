@@ -11,13 +11,13 @@ interface PasswordReset extends Model {
   expires: Date;
 }
 
-interface CreatePasswordResetParams {
-  email: string;
+export async function findPasswordReset(token: string): Promise<PasswordReset | null> {
+  const passwordReset = await model.PasswordReset.findOne({ where: { token } });
+  return passwordReset;
 }
 
-export async function findPasswordReset(email: string): Promise<PasswordReset | null> {
-  const passwordReset = await model.PasswordReset.findOne({ where: { email } });
-  return passwordReset;
+interface CreatePasswordResetParams {
+  email: string;
 }
 
 export async function createPasswordReset(params: CreatePasswordResetParams): Promise<PasswordReset | null> {

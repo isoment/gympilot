@@ -21,7 +21,8 @@ export default <T>(joiSchema: JoiSchemaFunction<T>) => {
         const fieldName = err.path[0];
         const errorMessage = `${err.message.replace(/"/g, "")}`;
         const value = errorMessage.replace(/_/g, " ");
-        errors[fieldName] = value;
+        const capitalizedMessage = value.charAt(0).toUpperCase() + value.slice(1);
+        errors[fieldName] = capitalizedMessage;
       });
 
       return res.status(422).json(errors);

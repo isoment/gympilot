@@ -93,10 +93,11 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
 });
 
 /**
- *  The endpoint to initiate password reset.
+ *  The endpoint to initiate password reset. It accepts the user's email and generates a unique token
+ *  that is associated with the user's account. The token is then stored in the database, and an email
+ *  containing a link with the token is sent to the user's email address.
  */
 authController.post("/forgot-password", [validateRequest(postForgotPassword)], async (req: Request, res: Response, next: NextFunction) => {
-  // This endpoint is used to initiate the password reset process. It accepts the user's email and generates a unique token that is associated with the user's account. The token is then stored in the database, and an email containing a link with the token is sent to the user's email address.
   try {
     const user = await userRepository.getUser("email", req.body.email, false);
     if (!user) {
@@ -110,7 +111,6 @@ authController.post("/forgot-password", [validateRequest(postForgotPassword)], a
       return response.internalError(res, "There was an error during password reset");
     }
 
-    // Send email to user.
     email.passwordReset(req.body.email, passwordReset.token);
 
     return response.success(res, "Reset password email was sent");
@@ -121,11 +121,29 @@ authController.post("/forgot-password", [validateRequest(postForgotPassword)], a
 });
 
 /**
- *  The endpoint to reset a users password.
+ *  The endpoint to reset a users password after they have clicked on the password reset link email link. The
+ *  :token parameter in the URL identifies the user's account. The user's new password is sent in the request body.
+ *  The endpoint verifies the token, updates the user's password in the database, and completes the password reset process.
  */
 authController.post("/reset-password/:token", [validateRequest(postResetPassword)], async (req: Request, res: Response, next: NextFunction) => {
-  // This endpoint is used to reset the user's password after they have clicked on the password reset link from their email. The :token parameter in the URL identifies the user's account. The user's new password is sent in the request body. The endpoint verifies the token, updates the user's password in the database, and completes the password reset process.
   try {
+    const passwordReset = await passwordResetRepository.findPasswordReset(req.params.token);
+
+    if (!passwordReset) {
+      return response.unprocessableContent(res, "The password reset token does not match our records");
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    const updateUser = await userRepository.updateUser("email", passwordReset.email, { password: hashedPassword });
+
+    if (updateUser === 1) {
+      passwordReset.destroy();
+      return response.success(res, "Password reset successfully");
+    } else {
+      return response.internalError(res, "There was an error resetting the password");
+    }
   } catch (error) {
     response.internalError(res);
     next(error);

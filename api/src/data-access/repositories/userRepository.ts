@@ -102,3 +102,22 @@ export async function createUserWithRole(params: CreateUserWithRoleParams, roles
 
   return user as User;
 }
+
+type UserPartialUpdate = Partial<InferAttributes<User>>;
+
+/**
+ * Update a user record in the database, we can search by any of the columns and update one or all values
+ * @param field the column name to search by
+ * @param value the column value to search by
+ * @param data an object of user data to update
+ * @returns number of rows updated
+ */
+export async function updateUser<T extends keyof User>(field: T, value: User[T], data: UserPartialUpdate): Promise<number> {
+  const whereClause: WhereOptions<InferAttributes<User>> = { [field]: value };
+
+  const user = await model.User.update(data, {
+    where: whereClause,
+  });
+
+  return user[0];
+}
