@@ -12,8 +12,10 @@ export class Email {
   #underlyingTransport: nodemailer.Transporter | null = null;
 
   configureEmail(): void {
-    const emailTransport = appConfig.node === "production" ? transporterProd : transporterDev;
-    this.#underlyingTransport = emailTransport;
+    if (!this.#underlyingTransport) {
+      const emailTransport = appConfig.node === "production" ? transporterProd : transporterDev;
+      this.#underlyingTransport = emailTransport;
+    }
   }
 
   sendEmail(template: string, mailOptions: nodemailer.SendMailOptions) {
