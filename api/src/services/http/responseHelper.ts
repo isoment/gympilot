@@ -19,6 +19,16 @@ export function success(res: Response, message: string = "Success", headers: Rec
 }
 
 /**
+ * A response with status code 401 for when a request is unauthorized.
+ */
+export function unauthorized(res: Response, message: string = "Unauthorized", data: unknown = {}): void {
+  res.status(401).json({
+    message,
+    data,
+  });
+}
+
+/**
  * A response with status code 422, useful for validation related errors.
  */
 export function unprocessableContent(res: Response, message: string = "Unprocessable Content", data: unknown = {}): void {

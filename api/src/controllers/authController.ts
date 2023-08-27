@@ -11,6 +11,7 @@ import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
 import { email } from "../services/notification/email/email";
 import { compareDate } from "../services/dateTime";
+import auth from "../middleware/auth";
 
 const authController = express.Router();
 
@@ -161,6 +162,10 @@ authController.post("/reset-password/:token", [validateRequest(postResetPassword
     response.internalError(res);
     next(error);
   }
+});
+
+authController.get("/user", [auth], async (req: Request, res: Response, next: NextFunction) => {
+  return response.success(res, "Success!");
 });
 
 export default authController;
