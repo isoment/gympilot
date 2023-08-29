@@ -8,7 +8,7 @@ import { logger } from "../logger/logger";
  * @param options to set for the token, encryption, expiration etc.
  * @returns Promise<string>
  */
-const generate = async (payload: any, options: jwt.SignOptions = {}): Promise<string> => {
+const accessToken = async (payload: any, options: jwt.SignOptions = {}): Promise<string> => {
   return new Promise<string>((resolve, reject) => {
     jwt.sign(payload, appConfig.jwtPrivateKey, options, (error: Error | null, token?: string) => {
       if (error) {
@@ -22,5 +22,5 @@ const generate = async (payload: any, options: jwt.SignOptions = {}): Promise<st
 };
 
 export default {
-  generate,
+  accessToken,
 };

@@ -36,7 +36,7 @@ authController.post("/login", [validateRequest(postLogin)], async (req: Request,
 
     const removePassword = _.omit(user.toJSON(), ["password"]);
 
-    const jwt = await authToken.generate(removePassword);
+    const jwt = await authToken.accessToken(removePassword, { expiresIn: 300 });
 
     return response.success(res, "Login Successful", { Authorization: `Bearer ${jwt}` });
   } catch (error) {
@@ -86,7 +86,7 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
       return response.internalError(res, "There was an error during registration");
     }
 
-    const jwt = await authToken.generate(user.toJSON());
+    const jwt = await authToken.accessToken(user.toJSON(), { expiresIn: 300 });
 
     return response.success(res, "Registration Successful", { Authorization: `Bearer ${jwt}` });
   } catch (error) {
