@@ -11,7 +11,7 @@ import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
 import { email } from "../services/notification/email/email";
 import { compareDate } from "../services/dateTime";
-import auth from "../middleware/auth";
+import verifyAccessToken from "../middleware/verifyAccessToken";
 
 const authController = express.Router();
 
@@ -36,9 +36,9 @@ authController.post("/login", [validateRequest(postLogin)], async (req: Request,
 
     const removePassword = _.omit(user.toJSON(), ["password"]);
 
-    const jwt = await authToken.accessToken(removePassword, { expiresIn: 300 });
+    const accessToken = await authToken.create(removePassword, { expiresIn: 300 });
 
-    return response.success(res, "Login Successful", { Authorization: `Bearer ${jwt}` });
+    return response.success(res, "Login Successful", { Authorization: `Bearer ${accessToken}` });
   } catch (error) {
     res.status(500).send("Internal server error");
     next(error);
@@ -86,9 +86,9 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
       return response.internalError(res, "There was an error during registration");
     }
 
-    const jwt = await authToken.accessToken(user.toJSON(), { expiresIn: 300 });
+    const accessToken = await authToken.create(user.toJSON(), { expiresIn: 300 });
 
-    return response.success(res, "Registration Successful", { Authorization: `Bearer ${jwt}` });
+    return response.success(res, "Registration Successful", { Authorization: `Bearer ${accessToken}` });
   } catch (error) {
     response.internalError(res);
     next(error);
@@ -164,7 +164,7 @@ authController.post("/reset-password/:token", [validateRequest(postResetPassword
   }
 });
 
-authController.get("/user", [auth], async (req: Request, res: Response, next: NextFunction) => {
+authController.get("/user", [verifyAccessToken], async (req: Request, res: Response, next: NextFunction) => {
   return response.success(res, "Success!");
 });
 
