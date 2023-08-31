@@ -164,6 +164,15 @@ authController.post("/reset-password/:token", [validateRequest(postResetPassword
   }
 });
 
+authController.post("/refresh-token", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Here we need to check the refresh token and if it is valid generate a new access token and return it.
+  } catch (error) {
+    response.internalError(res);
+    next(error);
+  }
+});
+
 authController.get("/user", [verifyAccessToken], async (req: Request, res: Response, next: NextFunction) => {
   return response.success(res, "Success!");
 });
