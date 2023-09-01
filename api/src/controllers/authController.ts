@@ -12,6 +12,7 @@ import { logger } from "../logger/logger";
 import { email } from "../services/notification/email/email";
 import { compareDate } from "../services/dateTime";
 import verifyAccessToken from "../middleware/verifyAccessToken";
+import { appConfig } from "../config/app";
 
 const authController = express.Router();
 
@@ -36,9 +37,10 @@ authController.post("/login", [validateRequest(postLogin)], async (req: Request,
 
     const removePassword = _.omit(user.toJSON(), ["password"]);
 
-    const accessToken = await authToken.create(removePassword, { expiresIn: 300 });
+    const accessToken = await authToken.create(removePassword, { expiresIn: appConfig.accessTokenExp });
+    const refreshToken = await authToken.create({}, { expiresIn: appConfig.refreshTokenExp });
 
-    return response.success(res, "Login Successful", { Authorization: `Bearer ${accessToken}` });
+    return response.success(res, "Login Successful", { Authorization: `Bearer ${accessToken}` }, { refresh_token: refreshToken });
   } catch (error) {
     res.status(500).send("Internal server error");
     next(error);
@@ -87,8 +89,9 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
     }
 
     const accessToken = await authToken.create(user.toJSON(), { expiresIn: 300 });
+    const refreshToken = await authToken.create({}, { expiresIn: appConfig.refreshTokenExp });
 
-    return response.success(res, "Registration Successful", { Authorization: `Bearer ${accessToken}` });
+    return response.success(res, "Registration Successful", { Authorization: `Bearer ${accessToken}` }, { refresh_token: refreshToken });
   } catch (error) {
     response.internalError(res);
     next(error);
@@ -167,6 +170,9 @@ authController.post("/reset-password/:token", [validateRequest(postResetPassword
 authController.post("/refresh-token", async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Here we need to check the refresh token and if it is valid generate a new access token and return it.
+    const refreshToken = req.body.refresh_token;
+    console.log(refreshToken);
+    return response.success(res, "Success!");
   } catch (error) {
     response.internalError(res);
     next(error);
