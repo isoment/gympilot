@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import * as response from "../services/http/responseHelper";
-import { appConfig } from "../config/app";
 import { logger } from "../logger/logger";
 import authToken from "../services/authToken";
 

@@ -38,9 +38,11 @@ authController.post("/login", [validateRequest(postLogin)], async (req: Request,
     const removePassword = _.omit(user.toJSON(), ["password"]);
 
     const accessToken = await authToken.create(removePassword, { expiresIn: appConfig.accessTokenExp });
-    const refreshToken = await authToken.create({}, { expiresIn: appConfig.refreshTokenExp });
+    const refreshToken = await authToken.create({ id: user.id }, { expiresIn: appConfig.refreshTokenExp });
 
-    return response.success(res, "Login Successful", { Authorization: `Bearer ${accessToken}` }, { refresh_token: refreshToken });
+    res.cookie("refresh_token", refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+
+    return response.success(res, "Login Successful", { Authorization: `Bearer ${accessToken}` });
   } catch (error) {
     res.status(500).send("Internal server error");
     next(error);
@@ -88,10 +90,12 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
       return response.internalError(res, "There was an error during registration");
     }
 
-    const accessToken = await authToken.create(user.toJSON(), { expiresIn: 300 });
-    const refreshToken = await authToken.create({}, { expiresIn: appConfig.refreshTokenExp });
+    const accessToken = await authToken.create(user.toJSON(), { expiresIn: appConfig.accessTokenExp });
+    const refreshToken = await authToken.create({ id: user.id }, { expiresIn: appConfig.refreshTokenExp });
 
-    return response.success(res, "Registration Successful", { Authorization: `Bearer ${accessToken}` }, { refresh_token: refreshToken });
+    res.cookie("refresh_token", refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+
+    return response.success(res, "Registration Successful", { Authorization: `Bearer ${accessToken}` });
   } catch (error) {
     response.internalError(res);
     next(error);
@@ -171,7 +175,7 @@ authController.post("/refresh-token", async (req: Request, res: Response, next: 
   try {
     // Here we need to check the refresh token and if it is valid generate a new access token and return it.
     const refreshToken = req.body.refresh_token;
-    console.log(refreshToken);
+
     return response.success(res, "Success!");
   } catch (error) {
     response.internalError(res);
