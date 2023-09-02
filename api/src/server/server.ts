@@ -1,6 +1,7 @@
 import { AddressInfo } from "net";
 import { Server } from "http";
 import express from "express";
+import cookieParser from "cookie-parser";
 
 import "dotenv/config";
 import defineRoutes from "../routes/routes";
@@ -17,6 +18,7 @@ async function startWebServer(): Promise<AddressInfo> {
   const expressApp = express();
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(cookieParser());
   defineRoutes(expressApp);
   defineErrorHandlingMiddleware(expressApp);
   const APIAddress = await openConnection(expressApp);
