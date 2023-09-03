@@ -9,12 +9,14 @@ import { errorHandler } from "../errors/error";
 import { logger } from "../logger/logger";
 import { appConfig } from "../config/app";
 import { email } from "../services/notification/email/email";
+import { memoryStore } from "../data-access/memory-store/memoryStore";
 
 let connection: Server;
 
 async function startWebServer(): Promise<AddressInfo> {
   logger.configureLogger();
   email.configureEmail();
+  memoryStore.configureMemoryStore();
   const expressApp = express();
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: true }));

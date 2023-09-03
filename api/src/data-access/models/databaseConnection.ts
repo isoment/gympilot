@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import { logger } from "../../logger/logger";
-import database from "../../config/database";
+import { dataAccessConfig } from "../../config/dataAccess";
 import { appConfig } from "../../config/app";
 
 // ️️️Best Practice: Keep a singleton DB connection pool in a process
@@ -8,10 +8,10 @@ let dbConnection: Sequelize;
 
 export default function getDbConnection() {
   if (!dbConnection) {
-    const name = appConfig.node === "test" ? database.test_database : database.database;
-    dbConnection = new Sequelize(name, database.user, database.password, {
-      host: database.host,
-      port: database.port,
+    const name = appConfig.node === "test" ? dataAccessConfig.testDatabase : dataAccessConfig.database;
+    dbConnection = new Sequelize(name, dataAccessConfig.dbUser, dataAccessConfig.dbPassword, {
+      host: dataAccessConfig.dbHost,
+      port: dataAccessConfig.dbPort,
       dialect: "mysql",
       benchmark: true,
       logging: (sql: string, duration?: number) => {
