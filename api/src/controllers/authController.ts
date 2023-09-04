@@ -6,6 +6,7 @@ import { postLogin, postRegister, postForgotPassword, postResetPassword } from "
 import validateRequest from "../middleware/validateRequest";
 import * as userRepository from "../data-access/repositories/userRepository";
 import * as passwordResetRepository from "../data-access/repositories/passwordResetRepository";
+import * as refreshTokenStore from "../data-access/memory-store/refreshTokenStore";
 import authToken from "../services/authToken";
 import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
@@ -39,6 +40,8 @@ authController.post("/login", [validateRequest(postLogin)], async (req: Request,
 
     const accessToken = await authToken.create(payload, { expiresIn: appConfig.accessTokenExp });
     const refreshToken = await authToken.create(payload, { expiresIn: appConfig.refreshTokenExp });
+
+    await refreshTokenStore.set(user.id, refreshToken, appConfig.refreshTokenExp);
 
     res.cookie("refresh_token", refreshToken, { httpOnly: true, maxAge: appConfig.refreshTokenExp * 1000 });
 
@@ -93,6 +96,8 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
     const payload = user.toJSON();
     const accessToken = await authToken.create(payload, { expiresIn: appConfig.accessTokenExp });
     const refreshToken = await authToken.create(payload, { expiresIn: appConfig.refreshTokenExp });
+
+    await refreshTokenStore.set(user.id, refreshToken, appConfig.refreshTokenExp);
 
     res.cookie("refresh_token", refreshToken, { httpOnly: true, maxAge: appConfig.refreshTokenExp * 1000 });
 
