@@ -42,7 +42,6 @@ async function openConnection(expressApp: express.Application): Promise<AddressI
   return new Promise((resolve) => {
     // If the application is in test mode use a dynamic port 0 so multiple webservers can be used in multi-process testing
     const port = appConfig.node === "test" ? appConfig.testPort : appConfig.port;
-
     connection = expressApp.listen(port, () => {
       logger.info("Server started successfully", connection.address());
       errorHandler.listenToErrorEvents(connection);

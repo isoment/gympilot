@@ -208,9 +208,9 @@ authController.post("/refresh-token", async (req: Request, res: Response, next: 
     const removeExpIat = _.omit(payload, ["exp", "iat"]);
 
     // Check to see if the refresh token exists in in memory store
-    const tokenFromStore = refreshTokenStore.get(removeExpIat.id);
+    const tokenFromStore = await refreshTokenStore.get(removeExpIat.id);
     if (!tokenFromStore || refreshToken !== tokenFromStore) {
-      return response.unauthorized(res, "The refresh token is invalid, not found in store");
+      return response.unauthorized(res, "The refresh token is invalid");
     }
 
     const accessToken = await authToken.create(removeExpIat, { expiresIn: appConfig.accessTokenExp });
