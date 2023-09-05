@@ -41,6 +41,12 @@ authController.post("/login", [validateRequest(postLogin)], async (req: Request,
     const accessToken = await authToken.create(payload, { expiresIn: appConfig.accessTokenExp });
     const refreshToken = await authToken.create(payload, { expiresIn: appConfig.refreshTokenExp });
 
+    // Check to see if there is a refresh token in memory store, if there is remove it.
+    const existingToken = await refreshTokenStore.get(user.id);
+    if (existingToken) {
+      await refreshTokenStore.remove(user.id);
+    }
+
     await refreshTokenStore.set(user.id, refreshToken, appConfig.refreshTokenExp);
 
     res.cookie("refresh_token", refreshToken, { httpOnly: true, maxAge: appConfig.refreshTokenExp * 1000 });
@@ -191,24 +197,23 @@ authController.post("/refresh-token", async (req: Request, res: Response, next: 
 
     const refreshToken = cookies.refresh_token;
 
-    // We can store a record of the tokens in the DB/redis and verify that it exists. That way we can revoke a refresh
-    // token or remove it when a user logs out. If we do this we need to store the refresh token in the register and
-    // login endpoints
-
-    let payload;
+    let payload: any;
     try {
       payload = await authToken.verify(refreshToken);
     } catch (error) {
       return response.unauthorized(res, "The refresh token is invalid");
     }
 
-    // We can compare the user id in the token to the user id in the DB/redis record if we implement it server side
-
     // If there are no issues we will generate a new access token
-    const removeExpIat = _.omit(payload as object, ["exp", "iat"]);
-    const accessToken = await authToken.create(removeExpIat, { expiresIn: appConfig.accessTokenExp });
+    const removeExpIat = _.omit(payload, ["exp", "iat"]);
 
-    console.log(accessToken);
+    // Check to see if the refresh token exists in in memory store
+    const tokenFromStore = refreshTokenStore.get(removeExpIat.id);
+    if (!tokenFromStore || refreshToken !== tokenFromStore) {
+      return response.unauthorized(res, "The refresh token is invalid, not found in store");
+    }
+
+    const accessToken = await authToken.create(removeExpIat, { expiresIn: appConfig.accessTokenExp });
 
     if (!accessToken) {
       logger.error("There was an error generating access token from refresh token", payload);
