@@ -16,7 +16,7 @@ let connection: Server;
 async function startWebServer(): Promise<AddressInfo> {
   logger.configureLogger();
   email.configureEmail();
-  memoryStore.configureMemoryStore();
+  await memoryStore.configureMemoryStore();
   const expressApp = express();
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: true }));
@@ -28,8 +28,9 @@ async function startWebServer(): Promise<AddressInfo> {
 }
 
 async function stopWebServer(): Promise<void> {
-  return new Promise<void>((resolve) => {
+  return new Promise<void>(async (resolve) => {
     if (connection !== undefined) {
+      await memoryStore.close();
       connection.close(() => {
         resolve();
       });

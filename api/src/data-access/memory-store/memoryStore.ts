@@ -29,6 +29,12 @@ export class MemoryStore {
       this.#underlyingStore = redis;
     }
   }
+
+  async close(): Promise<void> {
+    if (this.#underlyingStore) {
+      await this.#underlyingStore.quit();
+    }
+  }
 }
 
 export const memoryStore = new MemoryStore();
