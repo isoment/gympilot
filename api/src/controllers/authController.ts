@@ -227,6 +227,39 @@ authController.post("/refresh-token", async (req: Request, res: Response, next: 
   }
 });
 
+/**
+ *  The endpoint to log a user out. We do this by deleting the refresh token from the memory store and unsetting the
+ *  cookie. We also want to remove the access token on the frontend.
+ */
+authController.post("/logout", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const cookies = req.cookies;
+
+    if (!cookies?.refresh_token) {
+      console.log("No cookie");
+      return response.success(res, "Logout successful");
+    }
+
+    const refreshToken = cookies.refresh_token;
+
+    res.cookie("refresh_token", "", { expires: new Date(0), httpOnly: true });
+
+    let payload: any;
+    try {
+      payload = await authToken.verify(refreshToken);
+    } catch (error) {
+      return response.success(res, "Logout successful");
+    }
+
+    await refreshTokenStore.remove(payload.id);
+
+    return response.success(res, "Logout successful");
+  } catch (error) {
+    response.internalError(res);
+    next(error);
+  }
+});
+
 authController.get("/user", [verifyAccessToken], async (req: Request, res: Response, next: NextFunction) => {
   return response.success(res, "Success!");
 });
