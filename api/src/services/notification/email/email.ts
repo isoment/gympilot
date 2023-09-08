@@ -11,7 +11,7 @@ import { logger } from "../../../logger/logger";
 export class Email {
   #underlyingTransport: nodemailer.Transporter | null = null;
 
-  configureEmail(): void {
+  configure(): void {
     if (!this.#underlyingTransport) {
       const emailTransport = appConfig.node === "production" ? transporterProd : transporterDev;
       this.#underlyingTransport = emailTransport;

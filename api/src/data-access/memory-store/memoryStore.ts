@@ -6,14 +6,14 @@ import { logger } from "../../logger/logger";
 export class MemoryStore {
   #underlyingStore: Redis | null = null;
 
-  getStore(): Redis {
+  get(): Redis {
     if (!this.#underlyingStore) {
-      this.configureMemoryStore();
+      this.configure();
     }
     return this.#underlyingStore!;
   }
 
-  async configureMemoryStore(): Promise<void> {
+  async configure(): Promise<void> {
     if (!this.#underlyingStore) {
       const database = appConfig.node === "test" ? dataAccessConfig.redisTestDb : dataAccessConfig.redisDB;
       const redis = new Redis({

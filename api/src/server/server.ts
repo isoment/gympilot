@@ -15,10 +15,10 @@ import { database } from "../data-access/models/database";
 let connection: Server;
 
 async function startWebServer(): Promise<AddressInfo> {
-  logger.configureLogger();
-  email.configureEmail();
+  logger.configure();
+  email.configure();
   database.configure();
-  await memoryStore.configureMemoryStore();
+  await memoryStore.configure();
   const expressApp = express();
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: true }));
