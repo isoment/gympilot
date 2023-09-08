@@ -10,12 +10,14 @@ import { logger } from "../logger/logger";
 import { appConfig } from "../config/app";
 import { email } from "../services/notification/email/email";
 import { memoryStore } from "../data-access/memory-store/memoryStore";
+import { database } from "../data-access/models/database";
 
 let connection: Server;
 
 async function startWebServer(): Promise<AddressInfo> {
   logger.configureLogger();
   email.configureEmail();
+  database.configure();
   await memoryStore.configureMemoryStore();
   const expressApp = express();
   expressApp.use(express.json());
@@ -30,6 +32,7 @@ async function startWebServer(): Promise<AddressInfo> {
 async function stopWebServer(): Promise<void> {
   return new Promise<void>(async (resolve) => {
     if (connection !== undefined) {
+      await database.close();
       await memoryStore.close();
       connection.close(() => {
         resolve();
