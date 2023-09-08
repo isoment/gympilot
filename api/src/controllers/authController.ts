@@ -236,7 +236,6 @@ authController.post("/logout", async (req: Request, res: Response, next: NextFun
     const cookies = req.cookies;
 
     if (!cookies?.refresh_token) {
-      console.log("No cookie");
       return response.success(res, "Logout successful");
     }
 
