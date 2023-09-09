@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from "axios";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
+import databaseSetup from "../../testing/databaseSetup";
 
 const endpoint = "/api/auth/register";
 let axiosAPIClient: AxiosInstance;
@@ -18,6 +19,14 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await stopWebServer();
+});
+
+beforeEach(async () => {
+  await databaseSetup.migrate();
+});
+
+afterEach(async () => {
+  await databaseSetup.rollback();
 });
 
 describe("POST /api/auth/register", () => {
