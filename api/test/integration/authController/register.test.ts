@@ -2,14 +2,18 @@ import axios, { AxiosInstance } from "axios";
 import _ from "lodash";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
+import { database } from "../../../src/data-access/models/database";
 import model from "../../../src/data-access/models";
 import databaseSetup from "../../testing/databaseSetup";
+import { Transaction } from "sequelize";
 
 const endpoint = "/api/auth/register";
 let axiosAPIClient: AxiosInstance;
+let transaction: Transaction;
 
 beforeAll(async () => {
   const apiConnection = await startWebServer();
+  await databaseSetup.migrate();
   const axiosConfig = {
     baseURL: `http://127.0.0.1:${apiConnection.port}`,
     // Don't throw HTTP exceptions. Delegate to the tests to decide which error is acceptable
@@ -19,15 +23,16 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await databaseSetup.rollback();
   await stopWebServer();
 });
 
 beforeEach(async () => {
-  await databaseSetup.migrate();
+  transaction = await database.get().transaction();
 });
 
 afterEach(async () => {
-  await databaseSetup.rollback();
+  await transaction.rollback();
 });
 
 describe("POST /api/auth/register", () => {
@@ -84,7 +89,6 @@ describe("POST /api/auth/register", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    console.log(response);
     expect(response.data).toHaveProperty("password_verify");
   });
 
