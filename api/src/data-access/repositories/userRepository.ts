@@ -15,7 +15,7 @@ export interface User extends Model {
 }
 
 export interface UserWithRoles extends User {
-  roles: RoleFields[];
+  Roles: RoleFields[];
 }
 
 /**

@@ -10,7 +10,7 @@ export interface UserFields extends Model<InferAttributes<UserFields>, InferCrea
   password: string;
   created_at: CreationOptional<Date>;
   updated_at: CreationOptional<Date>;
-  roles?: RoleFields[];
+  Roles?: RoleFields[];
 }
 
 const User = database.get().define<UserFields>(

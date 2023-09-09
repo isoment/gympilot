@@ -2,14 +2,14 @@ import axios, { AxiosInstance } from "axios";
 import _ from "lodash";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
-import { database } from "../../../src/data-access/models/database";
 import model from "../../../src/data-access/models";
 import databaseSetup from "../../testing/databaseSetup";
-import { Transaction } from "sequelize";
+import roleHelper from "../..//testing/helpers/roles";
+import * as userRepository from "../../../src/data-access/repositories/userRepository";
+import authToken from "../../../src/services/authToken";
 
 const endpoint = "/api/auth/register";
 let axiosAPIClient: AxiosInstance;
-let transaction: Transaction;
 
 beforeAll(async () => {
   const apiConnection = await startWebServer();
@@ -23,16 +23,17 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await databaseSetup.rollback();
   await stopWebServer();
 });
 
 beforeEach(async () => {
-  transaction = await database.get().transaction();
+  await roleHelper.createRoles();
 });
 
 afterEach(async () => {
-  await transaction.rollback();
+  await model.User.destroy({ where: {} });
+  await model.Role.destroy({ where: {} });
+  await model.UserRoles.destroy({ where: {} });
 });
 
 describe("POST /api/auth/register", () => {
@@ -99,9 +100,50 @@ describe("POST /api/auth/register", () => {
       email: "user22@test.com",
       password: "password",
     });
-
     const response = await axiosAPIClient.post(endpoint, createRequestBody());
-
     expect(response.status).toBe(422);
+  });
+
+  it("creates a user with the correct roles", async () => {
+    const requestBody = createRequestBody();
+    const response = await axiosAPIClient.post(endpoint, requestBody);
+
+    const user = await userRepository.getUser("email", requestBody.email);
+
+    const expectedRoles = ["owner", "employee"];
+    const actualRoles = [];
+
+    for (const role of user!.Roles) {
+      actualRoles.push(role.name);
+    }
+
+    expect(response.status).toBe(200);
+    expect(user).toBeTruthy();
+    expect(expectedRoles).toEqual(actualRoles);
+  });
+
+  it("returns a valid jwt access token in the authorization response header with a users information", async () => {
+    const requestBody = createRequestBody();
+    const response = await axiosAPIClient.post(endpoint, requestBody);
+
+    const user = await userRepository.getUser("email", requestBody.email);
+
+    if (!user) fail("No user found");
+
+    const authorizationHeader = response.headers["authorization"];
+    const [, token] = authorizationHeader.split(" ");
+
+    const decodedJWT: any = await authToken.verify(token);
+
+    expect(response.status).toBe(200);
+    expect(decodedJWT).toBeTruthy();
+    expect(decodedJWT.id).toBe(user.id);
+    expect(decodedJWT.first_name).toBe(user.first_name);
+    expect(decodedJWT.last_name).toBe(user.last_name);
+    expect(decodedJWT.email).toBe(user.email);
+    expect(decodedJWT.exp).toBeTruthy();
+    expect(decodedJWT.Roles).toHaveLength(2);
+    expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
+    expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
   });
 });
