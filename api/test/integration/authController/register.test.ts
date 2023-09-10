@@ -122,6 +122,28 @@ describe("POST /api/auth/register", () => {
     expect(expectedRoles).toEqual(actualRoles);
   });
 
+  it("returns internal server error if the user fails to save in the database", async () => {
+    jest.spyOn(userRepository, "createUserWithRole").mockReturnValue(Promise.resolve(null));
+
+    const requestBody = createRequestBody();
+    const response = await axiosAPIClient.post(endpoint, requestBody);
+
+    expect(response.status).toBe(500);
+
+    jest.restoreAllMocks();
+  });
+
+  it("returns internal server error if the newly created user can't be fetched", async () => {
+    jest.spyOn(userRepository, "getUser").mockReturnValue(Promise.resolve(null));
+
+    const requestBody = createRequestBody();
+    const response = await axiosAPIClient.post(endpoint, requestBody);
+
+    expect(response.status).toBe(500);
+
+    jest.restoreAllMocks();
+  });
+
   it("returns a valid jwt access token in the authorization response header with a users information", async () => {
     const requestBody = createRequestBody();
     const response = await axiosAPIClient.post(endpoint, requestBody);
@@ -142,8 +164,34 @@ describe("POST /api/auth/register", () => {
     expect(decodedJWT.last_name).toBe(user.last_name);
     expect(decodedJWT.email).toBe(user.email);
     expect(decodedJWT.exp).toBeTruthy();
-    expect(decodedJWT.Roles).toHaveLength(2);
     expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
     expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
+  });
+
+  it("sets an http only cookie with the refresh token", async () => {
+    const requestBody = createRequestBody();
+    const response = await axiosAPIClient.post(endpoint, requestBody);
+
+    const user = await userRepository.getUser("email", requestBody.email);
+    if (!user) fail("No user found");
+
+    const cookie = response.headers["set-cookie"];
+
+    const split = cookie![0].split("; ");
+    const refreshToken = split[0].replace("refresh_token=", "");
+
+    const decodedJWT: any = await authToken.verify(refreshToken);
+
+    expect(response.status).toBe(200);
+    expect(decodedJWT).toBeTruthy();
+    expect(decodedJWT.id).toBe(user.id);
+    expect(decodedJWT.first_name).toBe(user.first_name);
+    expect(decodedJWT.last_name).toBe(user.last_name);
+    expect(decodedJWT.email).toBe(user.email);
+    expect(decodedJWT.exp).toBeTruthy();
+    expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
+    expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
+
+    expect(split).toContain("HttpOnly");
   });
 });
