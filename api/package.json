@@ -7,7 +7,7 @@
     "dev": "NODE_ENV=development ./node_modules/.bin/nodemon --exec './node_modules/.bin/ts-node' src/main.ts",
     "start": "npm run build && NODE_ENV=production node ./dist/main.js",
     "build": "tsc",
-    "test": "NODE_ENV=test jest",
+    "test": "NODE_ENV=test jest --runInBand",
     "db:migrate": "npx sequelize db:migrate --migrations-path ./src/data-access/migrations --config ./src/data-access/config/config.js",
     "db:migrate:rollback": "npx sequelize db:migrate:undo:all --config ./src/data-access/config/config.js --migrations-path ./src/data-access/migrations",
     "db:create:migration": "npx sequelize migration:generate --migrations-path ./src/data-access/migrations --name",

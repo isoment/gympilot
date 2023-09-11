@@ -1,10 +1,12 @@
 import axios, { AxiosInstance } from "axios";
 import _ from "lodash";
+import bcrypt from "bcrypt";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
 import databaseSetup from "../../testing/databaseSetup";
 import roleHelper from "../..//testing/helpers/roles";
+import userHelper from "../..//testing/helpers/users";
 import * as userRepository from "../../../src/data-access/repositories/userRepository";
 import authToken from "../../../src/services/authToken";
 
@@ -13,10 +15,9 @@ let axiosAPIClient: AxiosInstance;
 
 beforeAll(async () => {
   const apiConnection = await startWebServer();
-  await databaseSetup.migrate();
+  // await databaseSetup.migrate();
   const axiosConfig = {
     baseURL: `http://127.0.0.1:${apiConnection.port}`,
-    // Don't throw HTTP exceptions. Delegate to the tests to decide which error is acceptable
     validateStatus: () => true,
   };
   axiosAPIClient = axios.create(axiosConfig);
@@ -57,7 +58,6 @@ describe("POST /api/auth/login", () => {
       email: "a_string",
     });
     const response = await axiosAPIClient.post(endpoint, body);
-    console.log(response);
     expect(response.status).toBe(422);
     expect(response.data).toHaveProperty("email");
   });
@@ -85,5 +85,67 @@ describe("POST /api/auth/login", () => {
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
     expect(response.data).toHaveProperty("password");
+  });
+
+  it("returns a 422 response status code if the user is not found", async () => {
+    const body = createRequestBody();
+    const user = await userRepository.getUser("email", body.email);
+    const response = await axiosAPIClient.post(endpoint, body);
+    expect(user).toBeNull();
+    expect(response.status).toBe(422);
+  });
+
+  it("returns a 422 response status code if the provided password does not match the users", async () => {
+    const user = await userHelper.createUser();
+
+    const body = createRequestBody({ email: user?.email, password: "wrongPassword" });
+    const response = await axiosAPIClient.post(endpoint, body);
+    expect(response.status).toBe(422);
+  });
+
+  it("returns a valid jwt access token in the authorization response header with a users information", async () => {
+    const user = await userHelper.createUser();
+
+    const body = createRequestBody({ email: user?.email, password: "password123" });
+    const response = await axiosAPIClient.post(endpoint, body);
+
+    const authorizationHeader = response.headers["authorization"];
+    const [, token] = authorizationHeader.split(" ");
+
+    const decodedJWT: any = await authToken.verify(token);
+
+    expect(response.status).toBe(200);
+    expect(decodedJWT).toBeTruthy();
+    expect(decodedJWT.id).toBe(user!.id);
+    expect(decodedJWT.first_name).toBe(user!.first_name);
+    expect(decodedJWT.last_name).toBe(user!.last_name);
+    expect(decodedJWT.email).toBe(user!.email);
+    expect(decodedJWT.exp).toBeTruthy();
+    expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
+    expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
+  });
+
+  it("sets an http only cookie with the refresh token", async () => {
+    const user = await userHelper.createUser();
+
+    const body = createRequestBody({ email: user?.email, password: "password123" });
+    const response = await axiosAPIClient.post(endpoint, body);
+
+    const cookie = response.headers["set-cookie"];
+
+    const split = cookie![0].split("; ");
+    const refreshToken = split[0].replace("refresh_token=", "");
+
+    const decodedJWT: any = await authToken.verify(refreshToken);
+
+    expect(response.status).toBe(200);
+    expect(decodedJWT).toBeTruthy();
+    expect(decodedJWT.id).toBe(user!.id);
+    expect(decodedJWT.first_name).toBe(user!.first_name);
+    expect(decodedJWT.last_name).toBe(user!.last_name);
+    expect(decodedJWT.email).toBe(user!.email);
+    expect(decodedJWT.exp).toBeTruthy();
+    expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
+    expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
   });
 });

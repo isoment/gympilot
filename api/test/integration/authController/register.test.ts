@@ -13,7 +13,7 @@ let axiosAPIClient: AxiosInstance;
 
 beforeAll(async () => {
   const apiConnection = await startWebServer();
-  await databaseSetup.migrate();
+  // await databaseSetup.migrate();
   const axiosConfig = {
     baseURL: `http://127.0.0.1:${apiConnection.port}`,
     // Don't throw HTTP exceptions. Delegate to the tests to decide which error is acceptable
@@ -168,8 +168,6 @@ describe("POST /api/auth/register", () => {
 
     const user = await userRepository.getUser("email", requestBody.email);
 
-    if (!user) fail("No user found");
-
     const authorizationHeader = response.headers["authorization"];
     const [, token] = authorizationHeader.split(" ");
 
@@ -177,10 +175,10 @@ describe("POST /api/auth/register", () => {
 
     expect(response.status).toBe(200);
     expect(decodedJWT).toBeTruthy();
-    expect(decodedJWT.id).toBe(user.id);
-    expect(decodedJWT.first_name).toBe(user.first_name);
-    expect(decodedJWT.last_name).toBe(user.last_name);
-    expect(decodedJWT.email).toBe(user.email);
+    expect(decodedJWT.id).toBe(user!.id);
+    expect(decodedJWT.first_name).toBe(user!.first_name);
+    expect(decodedJWT.last_name).toBe(user!.last_name);
+    expect(decodedJWT.email).toBe(user!.email);
     expect(decodedJWT.exp).toBeTruthy();
     expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
     expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
@@ -191,7 +189,6 @@ describe("POST /api/auth/register", () => {
     const response = await axiosAPIClient.post(endpoint, requestBody);
 
     const user = await userRepository.getUser("email", requestBody.email);
-    if (!user) fail("No user found");
 
     const cookie = response.headers["set-cookie"];
 
@@ -202,10 +199,10 @@ describe("POST /api/auth/register", () => {
 
     expect(response.status).toBe(200);
     expect(decodedJWT).toBeTruthy();
-    expect(decodedJWT.id).toBe(user.id);
-    expect(decodedJWT.first_name).toBe(user.first_name);
-    expect(decodedJWT.last_name).toBe(user.last_name);
-    expect(decodedJWT.email).toBe(user.email);
+    expect(decodedJWT.id).toBe(user!.id);
+    expect(decodedJWT.first_name).toBe(user!.first_name);
+    expect(decodedJWT.last_name).toBe(user!.last_name);
+    expect(decodedJWT.email).toBe(user!.email);
     expect(decodedJWT.exp).toBeTruthy();
     expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
     expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
