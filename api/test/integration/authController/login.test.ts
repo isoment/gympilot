@@ -129,6 +129,22 @@ describe("POST /api/auth/login", () => {
     expect(refreshToken).toBe(refreshTokenFromStore);
   });
 
+  it("replaces any existing refresh token in the memory store with a new one", async () => {
+    const user = await userHelper.createUser();
+
+    // Create an old token in the store with a long expiration time.
+    await refreshTokenStore.set(user!.id, "string-represents-old-token", 9999999);
+    const oldToken = await refreshTokenStore.get(user!.id);
+
+    const body = createRequestBody({ email: user?.email, password: "password123" });
+    const response = await axiosAPIClient.post(endpoint, body);
+
+    const newToken = await refreshTokenStore.get(user!.id);
+
+    // The new token should not be the old one.
+    expect(newToken).not.toBe(oldToken);
+  });
+
   it("returns a valid jwt access token in the authorization response header with a users information", async () => {
     const user = await userHelper.createUser();
 
