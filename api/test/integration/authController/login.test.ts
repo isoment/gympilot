@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from "axios";
 import _ from "lodash";
-import bcrypt from "bcrypt";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
@@ -9,6 +8,7 @@ import roleHelper from "../..//testing/helpers/roles";
 import userHelper from "../..//testing/helpers/users";
 import * as userRepository from "../../../src/data-access/repositories/userRepository";
 import authToken from "../../../src/services/authToken";
+import { memoryStore } from "../../../src/data-access/memory-store/memoryStore";
 
 const endpoint = "/api/auth/login";
 let axiosAPIClient: AxiosInstance;
@@ -35,6 +35,7 @@ afterEach(async () => {
   await model.User.destroy({ where: {} });
   await model.Role.destroy({ where: {} });
   await model.UserRoles.destroy({ where: {} });
+  await memoryStore.get().flushdb();
 });
 
 describe("POST /api/auth/login", () => {
