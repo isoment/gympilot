@@ -9,6 +9,7 @@ import userHelper from "../..//testing/helpers/users";
 import * as userRepository from "../../../src/data-access/repositories/userRepository";
 import authToken from "../../../src/services/authToken";
 import { memoryStore } from "../../../src/data-access/memory-store/memoryStore";
+import * as refreshTokenStore from "../../../src/data-access/memory-store/refreshTokenStore";
 
 const endpoint = "/api/auth/login";
 let axiosAPIClient: AxiosInstance;
@@ -102,6 +103,30 @@ describe("POST /api/auth/login", () => {
     const body = createRequestBody({ email: user?.email, password: "wrongPassword" });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
+  });
+
+  it("saves the refresh token to the memory store", async () => {
+    const user = await userHelper.createUser();
+
+    const body = createRequestBody({ email: user?.email, password: "password123" });
+    const response = await axiosAPIClient.post(endpoint, body);
+
+    // Decode the access token from the response to get the user id
+    const authorizationHeader = response.headers["authorization"];
+    const [, token] = authorizationHeader.split(" ");
+    const decodedJWT: any = await authToken.verify(token);
+
+    // Get the refresh token from the response
+    const cookie = response.headers["set-cookie"];
+    const split = cookie![0].split("; ");
+    const refreshToken = split[0].replace("refresh_token=", "");
+
+    // There should be a refresh token in the memory store
+    const refreshTokenFromStore = await refreshTokenStore.get(decodedJWT.id);
+
+    expect(response.status).toBe(200);
+    expect(refreshTokenFromStore).toBeTruthy();
+    expect(refreshToken).toBe(refreshTokenFromStore);
   });
 
   it("returns a valid jwt access token in the authorization response header with a users information", async () => {
