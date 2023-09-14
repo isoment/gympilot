@@ -5,8 +5,8 @@ import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
 import roleHelper from "../..//testing/helpers/roles";
 import userHelper from "../..//testing/helpers/users";
-import * as userRepository from "../../../src/data-access/repositories/userRepository";
-import authToken from "../../../src/services/authToken";
+import * as passwordResetRepository from "../../../src/data-access/repositories/passwordResetRepository";
+import { email } from "../../../src/services/notification/email/email";
 
 const endpoint = "/api/auth/forgot-password";
 let axiosAPIClient: AxiosInstance;
@@ -66,5 +66,39 @@ describe("POST /api/auth/forgot-password", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
+  });
+
+  it("creates a record in password resets table and sends an email", async () => {
+    const emailSpy = jest.spyOn(email, "passwordReset");
+
+    await userHelper.createUser();
+
+    const body = createRequestBody({
+      email: "dudley@dingleberry.com",
+    });
+
+    const response = await axiosAPIClient.post(endpoint, body);
+
+    const createdRecord = await passwordResetRepository.findPasswordReset("email", body.email);
+
+    expect(response.status).toBe(200);
+    expect(createdRecord).toBeTruthy();
+
+    expect(emailSpy).toHaveBeenCalledTimes(1);
+    expect(emailSpy).toHaveBeenCalledWith(body.email, createdRecord!.token);
+  });
+
+  it("returns an internal server error if there is an error creating the password reset record", async () => {
+    jest.spyOn(passwordResetRepository, "createPasswordReset").mockReturnValue(Promise.resolve(null));
+
+    await userHelper.createUser();
+
+    const body = createRequestBody({
+      email: "dudley@dingleberry.com",
+    });
+
+    const response = await axiosAPIClient.post(endpoint, body);
+
+    expect(response.status).toBe(500);
   });
 });

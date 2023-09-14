@@ -3,7 +3,6 @@ import _ from "lodash";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
-import databaseSetup from "../../testing/databaseSetup";
 import roleHelper from "../..//testing/helpers/roles";
 import userHelper from "../..//testing/helpers/users";
 import * as userRepository from "../../../src/data-access/repositories/userRepository";
