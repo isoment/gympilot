@@ -70,5 +70,13 @@ describe("POST /api/auth/reset-password", () => {
     expect(response.data).toHaveProperty("password");
   });
 
-  // Max length, add to other tests as well
+  it("requires the password to be under 256 characters", async () => {
+    const body = createRequestBody({
+      password: "a".repeat(256),
+    });
+    const resetToken = "123faketoken";
+    const response = await axiosAPIClient.post(endpoint + resetToken, body);
+    expect(response.status).toBe(422);
+    expect(response.data).toHaveProperty("password");
+  });
 });

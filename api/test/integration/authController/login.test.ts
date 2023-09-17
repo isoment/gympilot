@@ -88,6 +88,15 @@ describe("POST /api/auth/login", () => {
     expect(response.data).toHaveProperty("password");
   });
 
+  it("requires the password to be less than 256 characters", async () => {
+    const body = createRequestBody({
+      password: "a".repeat(256),
+    });
+    const response = await axiosAPIClient.post(endpoint, body);
+    expect(response.status).toBe(422);
+    expect(response.data).toHaveProperty("password");
+  });
+
   it("returns a 422 response status code if the user is not found", async () => {
     const body = createRequestBody();
     const user = await userRepository.getUser("email", body.email);

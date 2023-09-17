@@ -6,7 +6,7 @@ import Joi from "joi";
 export const postLogin = () => {
   const schema = Joi.object({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required().min(8).max(255),
   }).options({ abortEarly: false });
   return schema;
 };

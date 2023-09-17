@@ -96,6 +96,15 @@ describe("POST /api/auth/register", () => {
     expect(response.data).toHaveProperty("password");
   });
 
+  it("requires the password to be less than 256 characters", async () => {
+    const body = createRequestBody({
+      password: "a".repeat(256),
+    });
+    const response = await axiosAPIClient.post(endpoint, body);
+    expect(response.status).toBe(422);
+    expect(response.data).toHaveProperty("password");
+  });
+
   it("requires a password verify field", async () => {
     const body = _.omit(createRequestBody(), "password_verify");
     const response = await axiosAPIClient.post(endpoint, body);
