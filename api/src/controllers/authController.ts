@@ -162,7 +162,7 @@ authController.post("/reset-password/:token", [validateRequest(postResetPassword
     }
 
     if (compareDate(new Date(), passwordReset.expires) !== -1) {
-      passwordReset.destroy();
+      await passwordReset.destroy();
       return response.unprocessableContent(res, "The password reset token has expired");
     }
 
