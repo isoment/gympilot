@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import bcrypt from "bcrypt";
-import _, { update } from "lodash";
+import _ from "lodash";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
@@ -140,5 +140,27 @@ describe("POST /api/auth/reset-password", () => {
     expect(response.status).toBe(200);
     expect(updatedUser!.updated_at).not.toEqual(user!.updated_at);
     expect(passwordValid).toBeTruthy();
+  });
+
+  it("returns an internal error when the users password fails to update", async () => {
+    // The updateUser method returns 0 if no records are updated
+    jest.spyOn(userRepository, "updateUser").mockReturnValue(Promise.resolve(0));
+
+    const user = await userHelper.createUser({ password: "password" });
+
+    const existingPasswordReset = await passwordResetRepository.createPasswordReset({ email: user!.email });
+
+    const body = createRequestBody({
+      password: "password123456",
+      password_verify: "password123456",
+    });
+
+    const response = await axiosAPIClient.post(endpoint + existingPasswordReset!.token, body);
+
+    // The password reset record should still exists
+    const passwordReset = await passwordResetRepository.findPasswordReset("token", existingPasswordReset!.token);
+
+    expect(response.status).toBe(500);
+    expect(passwordReset).toBeTruthy();
   });
 });
