@@ -215,11 +215,6 @@ authController.post("/refresh-token", async (req: Request, res: Response, next: 
 
     const accessToken = await authToken.create(removeExpIat, { expiresIn: appConfig.accessTokenExp });
 
-    if (!accessToken) {
-      logger.error("There was an error generating access token from refresh token", payload);
-      response.internalError(res);
-    }
-
     return response.success(res, "Access token generated successfully", { Authorization: `Bearer ${accessToken}` });
   } catch (error) {
     response.internalError(res);

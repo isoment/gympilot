@@ -36,6 +36,7 @@ afterEach(async () => {
   await model.Role.destroy({ where: {} });
   await model.UserRoles.destroy({ where: {} });
   await memoryStore.get().flushdb();
+  jest.restoreAllMocks();
 });
 
 describe("POST /api/auth/register", () => {
@@ -158,8 +159,6 @@ describe("POST /api/auth/register", () => {
     const response = await axiosAPIClient.post(endpoint, requestBody);
 
     expect(response.status).toBe(500);
-
-    jest.restoreAllMocks();
   });
 
   it("returns internal server error if the newly created user can't be fetched", async () => {
@@ -169,8 +168,6 @@ describe("POST /api/auth/register", () => {
     const response = await axiosAPIClient.post(endpoint, requestBody);
 
     expect(response.status).toBe(500);
-
-    jest.restoreAllMocks();
   });
 
   it("saves the refresh token to the memory store", async () => {

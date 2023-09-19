@@ -36,6 +36,7 @@ afterEach(async () => {
   await model.Role.destroy({ where: {} });
   await model.UserRoles.destroy({ where: {} });
   await model.PasswordReset.destroy({ where: {} });
+  jest.restoreAllMocks();
 });
 
 describe("POST /api/auth/reset-password", () => {
