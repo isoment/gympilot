@@ -24,9 +24,15 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
+
+    await queryInterface.addIndex("password_resets", ["email"]);
+    await queryInterface.addIndex("password_resets", ["token"]);
   },
 
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeIndex("password_resets", ["email"]);
+    await queryInterface.removeIndex("password_resets", ["token"]);
+
     await queryInterface.dropTable("password_resets");
   },
 };
