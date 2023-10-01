@@ -6,6 +6,7 @@ import roleHelper from "../..//testing/helpers/roles";
 import userHelper from "../../testing/helpers/users";
 import authToken from "../../../src/services/authToken";
 import * as refreshTokenStore from "../../../src/data-access/memory-store/refreshTokenStore";
+import databaseSetup from "../../../test/testing/databaseSetup";
 
 const endpoint = "/api/auth/logout";
 let axiosAPIClient: AxiosInstance;

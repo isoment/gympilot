@@ -9,7 +9,7 @@ import { memoryStore } from "./memoryStore";
  * @returns Promise<boolean>
  */
 export async function set(id: number, token: string, expiration: number): Promise<boolean> {
-  const redis = memoryStore.get();
+  const redis = await memoryStore.get();
   const key = `user:${id}:refreshToken`;
   try {
     await redis.set(key, token, "EX", expiration);
@@ -26,7 +26,7 @@ export async function set(id: number, token: string, expiration: number): Promis
  * @returns Promise<string | null>
  */
 export async function get(id: number): Promise<string | null> {
-  const redis = memoryStore.get();
+  const redis = await memoryStore.get();
   const key = `user:${id}:refreshToken`;
   try {
     const refreshToken = await redis.get(key);
@@ -41,7 +41,7 @@ export async function get(id: number): Promise<string | null> {
  * Delete the users refresh token from the memory store
  */
 export async function remove(id: number): Promise<boolean> {
-  const redis = memoryStore.get();
+  const redis = await memoryStore.get();
   const key = `user:${id}:refreshToken`;
   try {
     const deleteCount = await redis.del(key);

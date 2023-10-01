@@ -9,6 +9,7 @@ import userHelper from "../..//testing/helpers/users";
 import * as passwordResetRepository from "../../../src/data-access/repositories/passwordResetRepository";
 import * as userRepository from "../../../src/data-access/repositories/userRepository";
 import { minusHours } from "../../../src/services/dateTime";
+import databaseSetup from "../../../test/testing/databaseSetup";
 
 const endpoint = "/api/auth/reset-password/";
 let axiosAPIClient: AxiosInstance;

@@ -8,6 +8,7 @@ import * as userRepository from "../../../src/data-access/repositories/userRepos
 import authToken from "../../../src/services/authToken";
 import { memoryStore } from "../../../src/data-access/memory-store/memoryStore";
 import * as refreshTokenStore from "../../../src/data-access/memory-store/refreshTokenStore";
+import databaseSetup from "../../../test/testing/databaseSetup";
 
 const endpoint = "/api/auth/register";
 let axiosAPIClient: AxiosInstance;
@@ -35,7 +36,8 @@ afterEach(async () => {
   await model.User.destroy({ where: {} });
   await model.Role.destroy({ where: {} });
   await model.UserRoles.destroy({ where: {} });
-  await memoryStore.get().flushdb();
+  const store = await memoryStore.get();
+  store.flushdb();
   jest.restoreAllMocks();
 });
 

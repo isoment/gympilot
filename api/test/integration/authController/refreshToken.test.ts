@@ -6,6 +6,7 @@ import roleHelper from "../..//testing/helpers/roles";
 import authToken from "../../../src/services/authToken";
 import userHelper from "../../testing/helpers/users";
 import * as refreshTokenStore from "../../../src/data-access/memory-store/refreshTokenStore";
+import databaseSetup from "../../../test/testing/databaseSetup";
 
 const endpoint = "/api/auth/refresh-token";
 let axiosAPIClient: AxiosInstance;

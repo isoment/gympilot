@@ -6,9 +6,9 @@ import { logger } from "../../logger/logger";
 export class MemoryStore {
   #underlyingStore: Redis | null = null;
 
-  get(): Redis {
+  async get(): Promise<Redis> {
     if (!this.#underlyingStore) {
-      this.configure();
+      await this.configure();
     }
     return this.#underlyingStore!;
   }

@@ -7,6 +7,7 @@ import roleHelper from "../..//testing/helpers/roles";
 import userHelper from "../..//testing/helpers/users";
 import * as passwordResetRepository from "../../../src/data-access/repositories/passwordResetRepository";
 import { email } from "../../../src/services/notification/email/email";
+import databaseSetup from "../../../test/testing/databaseSetup";
 
 const endpoint = "/api/auth/forgot-password";
 let axiosAPIClient: AxiosInstance;
