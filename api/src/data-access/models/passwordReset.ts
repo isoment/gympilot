@@ -1,5 +1,5 @@
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
-import getDbConnection from "./databaseConnection";
+import { database } from "./database";
 
 export interface PasswordResetFields extends Model<InferAttributes<PasswordResetFields>, InferCreationAttributes<PasswordResetFields>> {
   id: CreationOptional<number>;
@@ -8,7 +8,7 @@ export interface PasswordResetFields extends Model<InferAttributes<PasswordReset
   expires: CreationOptional<Date>;
 }
 
-const PasswordReset = getDbConnection().define<PasswordResetFields>(
+const PasswordReset = database.get().define<PasswordResetFields>(
   "PasswordReset",
   {
     id: {

@@ -28,14 +28,14 @@ const selectedTransports = [
 export class LoggerWrapper implements Logger {
   #underlyingLogger: Logger | null = null;
 
-  #getInitializeLogger(): Logger {
+  #get(): Logger {
     if (!this.#underlyingLogger) {
-      this.configureLogger();
+      this.configure();
     }
     return this.#underlyingLogger!;
   }
 
-  configureLogger(): void {
+  configure(): void {
     if (!this.#underlyingLogger) {
       const winston = createLogger({
         level: "info",
@@ -54,26 +54,26 @@ export class LoggerWrapper implements Logger {
     }
   }
 
-  resetLogger(): void {
+  reset(): void {
     if (this.#underlyingLogger) {
       this.#underlyingLogger = null;
     }
   }
 
   info(message: string, ...args: unknown[]): void {
-    this.#getInitializeLogger().info(message, args);
+    this.#get().info(message, args);
   }
 
   error(message: string, ...args: unknown[]): void {
-    this.#getInitializeLogger().error(message, args);
+    this.#get().error(message, args);
   }
 
   debug(message: string, ...args: unknown[]): void {
-    this.#getInitializeLogger().debug(message, args);
+    this.#get().debug(message, args);
   }
 
   warn(message: string, ...args: unknown[]): void {
-    this.#getInitializeLogger().warn(message, args);
+    this.#get().warn(message, args);
   }
 }
 

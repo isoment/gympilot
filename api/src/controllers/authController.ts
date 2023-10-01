@@ -6,11 +6,14 @@ import { postLogin, postRegister, postForgotPassword, postResetPassword } from "
 import validateRequest from "../middleware/validateRequest";
 import * as userRepository from "../data-access/repositories/userRepository";
 import * as passwordResetRepository from "../data-access/repositories/passwordResetRepository";
+import * as refreshTokenStore from "../data-access/memory-store/refreshTokenStore";
 import authToken from "../services/authToken";
 import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
 import { email } from "../services/notification/email/email";
 import { compareDate } from "../services/dateTime";
+import verifyAccessToken from "../middleware/verifyAccessToken";
+import { appConfig } from "../config/app";
 
 const authController = express.Router();
 
@@ -33,11 +36,22 @@ authController.post("/login", [validateRequest(postLogin)], async (req: Request,
       return response.unprocessableContent(res, "These credentials do not match our records");
     }
 
-    const removePassword = _.omit(user.toJSON(), ["password"]);
+    const payload = _.omit(user.toJSON(), ["password"]);
 
-    const jwt = await authToken.generate(removePassword);
+    const accessToken = await authToken.create(payload, { expiresIn: appConfig.accessTokenExp });
+    const refreshToken = await authToken.create(payload, { expiresIn: appConfig.refreshTokenExp });
 
-    return response.success(res, "Login Successful", { Authorization: `Bearer ${jwt}` });
+    // Check to see if there is a refresh token in memory store, if there is remove it.
+    const existingToken = await refreshTokenStore.get(user.id);
+    if (existingToken) {
+      await refreshTokenStore.remove(user.id);
+    }
+
+    await refreshTokenStore.set(user.id, refreshToken, appConfig.refreshTokenExp);
+
+    res.cookie("refresh_token", refreshToken, { httpOnly: true, maxAge: appConfig.refreshTokenExp * 1000 });
+
+    return response.success(res, "Login Successful", { Authorization: `Bearer ${accessToken}` });
   } catch (error) {
     res.status(500).send("Internal server error");
     next(error);
@@ -85,9 +99,15 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
       return response.internalError(res, "There was an error during registration");
     }
 
-    const jwt = await authToken.generate(user.toJSON());
+    const payload = user.toJSON();
+    const accessToken = await authToken.create(payload, { expiresIn: appConfig.accessTokenExp });
+    const refreshToken = await authToken.create(payload, { expiresIn: appConfig.refreshTokenExp });
 
-    return response.success(res, "Registration Successful", { Authorization: `Bearer ${jwt}` });
+    await refreshTokenStore.set(user.id, refreshToken, appConfig.refreshTokenExp);
+
+    res.cookie("refresh_token", refreshToken, { httpOnly: true, maxAge: appConfig.refreshTokenExp * 1000 });
+
+    return response.success(res, "Registration Successful", { Authorization: `Bearer ${accessToken}` });
   } catch (error) {
     response.internalError(res);
     next(error);
@@ -142,7 +162,7 @@ authController.post("/reset-password/:token", [validateRequest(postResetPassword
     }
 
     if (compareDate(new Date(), passwordReset.expires) !== -1) {
-      passwordReset.destroy();
+      await passwordReset.destroy();
       return response.unprocessableContent(res, "The password reset token has expired");
     }
 
@@ -161,6 +181,81 @@ authController.post("/reset-password/:token", [validateRequest(postResetPassword
     response.internalError(res);
     next(error);
   }
+});
+
+/**
+ *  The endpoint to grant a new access token when a valid refresh token is provided. The refresh token
+ *  is stored in an httpOnly cookie for security. We will parse the cookie to get the token.
+ */
+authController.post("/refresh-token", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const cookies = req.cookies;
+
+    if (!cookies?.refresh_token) {
+      return response.unauthorized(res, "Missing refresh token cookie");
+    }
+
+    const refreshToken = cookies.refresh_token;
+
+    let payload: any;
+    try {
+      payload = await authToken.verify(refreshToken);
+    } catch (error) {
+      return response.unauthorized(res, "The refresh token is invalid");
+    }
+
+    // If there are no issues we will generate a new access token
+    const removeExpIat = _.omit(payload, ["exp", "iat"]);
+
+    // Check to see if the refresh token exists in in memory store
+    const tokenFromStore = await refreshTokenStore.get(removeExpIat.id);
+    if (!tokenFromStore || refreshToken !== tokenFromStore) {
+      return response.unauthorized(res, "The refresh token is invalid");
+    }
+
+    const accessToken = await authToken.create(removeExpIat, { expiresIn: appConfig.accessTokenExp });
+
+    return response.success(res, "Access token generated successfully", { Authorization: `Bearer ${accessToken}` });
+  } catch (error) {
+    response.internalError(res);
+    next(error);
+  }
+});
+
+/**
+ *  The endpoint to log a user out. We do this by deleting the refresh token from the memory store and unsetting the
+ *  cookie. We also want to remove the access token on the frontend.
+ */
+authController.post("/logout", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const cookies = req.cookies;
+
+    if (!cookies?.refresh_token) {
+      return response.success(res, "Logout successful");
+    }
+
+    const refreshToken = cookies.refresh_token;
+
+    res.cookie("refresh_token", "", { expires: new Date(0), httpOnly: true });
+
+    let payload: any;
+    try {
+      payload = await authToken.verify(refreshToken);
+    } catch (error) {
+      return response.success(res, "Logout successful");
+    }
+
+    await refreshTokenStore.remove(payload.id);
+
+    return response.success(res, "Logout successful");
+  } catch (error) {
+    response.internalError(res);
+    next(error);
+  }
+});
+
+authController.get("/user", [verifyAccessToken], async (req: Request, res: Response, next: NextFunction) => {
+  return response.success(res, "Success!");
 });
 
 export default authController;

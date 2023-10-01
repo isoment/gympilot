@@ -1,10 +1,10 @@
 import nodemailer from "nodemailer";
-import notificationConfig from "../../../config/notification";
+import { notificationConfig } from "../../../config/notification";
 
 const transporterProd = nodemailer.createTransport({
-  host: notificationConfig.email_host,
-  port: notificationConfig.email_port,
-  secure: notificationConfig.email_secure,
+  host: notificationConfig.emailHost,
+  port: notificationConfig.emailPort,
+  secure: notificationConfig.emailSecure,
 });
 
 export default transporterProd;

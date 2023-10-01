@@ -1,5 +1,5 @@
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
-import getDbConnection from "./databaseConnection";
+import { database } from "./database";
 import userModel from "./user";
 import roleModel from "./role";
 
@@ -11,7 +11,7 @@ export interface UserRolesFields extends Model<InferAttributes<UserRolesFields>,
   updated_at: CreationOptional<Date>;
 }
 
-const UserRole = getDbConnection().define<UserRolesFields>(
+const UserRole = database.get().define<UserRolesFields>(
   "UserRoles",
   {
     id: {

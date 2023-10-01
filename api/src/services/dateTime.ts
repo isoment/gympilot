@@ -1,4 +1,4 @@
-import { addHours, parseISO, compareAsc } from "date-fns";
+import { addHours, parseISO, compareAsc, subHours } from "date-fns";
 
 /**
  * Convert a timestamp of the given format to Date object
@@ -15,6 +15,13 @@ export const dateTimeStampToDate = (timeStamp: string): Date => {
  */
 export const plusHours = (date: Date, hours: number): Date => {
   return addHours(date, hours);
+};
+
+/**
+ * Remove a given amount of hours from a Date.
+ */
+export const minusHours = (date: Date, hours: number): Date => {
+  return subHours(date, hours);
 };
 
 /**
