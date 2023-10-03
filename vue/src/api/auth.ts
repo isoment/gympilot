@@ -7,10 +7,6 @@ import axios, { AxiosPromise } from "axios";
 
 const baseURL = process.env.VUE_APP_API_URL;
 
-export const APIAuthCsrf = (): AxiosPromise => {
-  return axios.get(`${baseURL}/sanctum/csrf-cookie`);
-};
-
 export const APIAuthLoadUser = (): AxiosPromise => {
   return axios.get(`${baseURL}/api/user`);
 };

@@ -14,10 +14,6 @@ import { useRoute } from "vue-router";
 jest.mock("vue-router");
 const useRouteMock = useRoute as jest.Mock;
 
-import { APIAuthCsrf } from "@/api/auth";
-jest.mock("@/api/auth");
-const APIAuthCsrfMock = APIAuthCsrf as jest.Mock;
-
 import { APIAuthLogin } from "@/api/auth";
 jest.mock("@/api/auth");
 const APIAuthLoginMock = APIAuthLogin as jest.Mock;
@@ -60,20 +56,6 @@ describe("LoginView", () => {
   });
 
   describe("the login form logic works correctly", () => {
-    it("calls the APIAuthCsrf method to get the csrf token from the api", async () => {
-      useStoreMock.mockReturnValue({ dispatch: jest.fn() });
-      useRouteMock.mockReturnValue({ push: jest.fn() });
-      APIAuthCsrfMock.mockResolvedValue({});
-      const wrapper = shallowMount(
-        LoginView,
-        createConfig({ attachTo: document.body })
-      );
-      const submitFormButton = wrapper.find("[data-test='submit-button']");
-      await submitFormButton.trigger("click");
-      expect(APIAuthCsrfMock).toHaveBeenCalled();
-      wrapper.unmount();
-    });
-
     it("calls the APIAuthLogin method with the correct values from the login form", async () => {
       useStoreMock.mockReturnValue({ dispatch: jest.fn() });
       useRouteMock.mockReturnValue({ push: jest.fn() });

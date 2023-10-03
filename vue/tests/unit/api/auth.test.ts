@@ -1,7 +1,6 @@
 import axios from "axios";
 jest.mock("axios");
 import {
-  APIAuthCsrf,
   APIAuthLoadUser,
   APIAuthLogin,
   APIAuthLogout,
@@ -12,14 +11,6 @@ const getMock = axios.get as jest.Mock;
 const baseURL = process.env.VUE_APP_API_URL;
 
 describe("auth", () => {
-  // Test the axios request for the csrf token
-  describe("APIAuthCsrf", () => {
-    it("makes a csrf token request to the correct endpoint", async () => {
-      await APIAuthCsrf();
-      expect(axios.get).toHaveBeenCalledWith(`${baseURL}/sanctum/csrf-cookie`);
-    });
-  });
-
   // Test the axios request to get teh user details
   describe("APIAuthLoadUser", () => {
     it("fetches the user details from the correct endpoint", async () => {

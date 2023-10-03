@@ -88,7 +88,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { key } from "@/store";
 import { AxiosError } from "axios";
-import { APIAuthLogin, APIAuthCsrf } from "@/api/auth";
+import { APIAuthLogin } from "@/api/auth";
 import { LOGIN_USER } from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
@@ -115,7 +115,6 @@ export default defineComponent({
 
     const login = async () => {
       try {
-        await APIAuthCsrf();
         const response = await APIAuthLogin(loginForm.value);
         if (response.status === 200) {
           store.dispatch(LOGIN_USER);
