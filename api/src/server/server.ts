@@ -2,12 +2,14 @@ import { AddressInfo } from "net";
 import { Server } from "http";
 import express from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import "dotenv/config";
 import defineRoutes from "../routes/routes";
 import { errorHandler } from "../errors/error";
 import { logger } from "../logger/logger";
 import { appConfig } from "../config/app";
+import { corsOptions } from "../config/cors";
 import { email } from "../services/notification/email/email";
 import { memoryStore } from "../data-access/memory-store/memoryStore";
 import { database } from "../data-access/models/database";
@@ -20,6 +22,32 @@ async function startWebServer(): Promise<AddressInfo> {
   database.configure();
   await memoryStore.configure();
   const expressApp = express();
+
+  // expressApp.options("*", cors());
+  // expressApp.use(
+  //   cors({
+  //     origin: "*",
+  //   }),
+  // );
+  // expressApp.use(cors(corsOptions));
+  // expressApp.use(
+  //   cors({
+  //     origin: "http://localhost:8080", // Replace with the actual origin of your Vue.js app
+  //     credentials: true, // If you need to support cookies or sessions
+  //   }),
+  // );
+
+  // expressApp.use("*", cors());
+
+  expressApp.use(
+    cors({
+      origin: "http://localhost:8080", // Allow requests from your Vue.js frontend
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      allowedHeaders: ["Content-Type", "Authorization", "x-requested-with"],
+      credentials: true,
+    }),
+  );
+
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: true }));
   expressApp.use(cookieParser());

@@ -14,15 +14,15 @@ export const APIAuthLoadUser = (): AxiosPromise => {
 export const APIAuthLogin = (params: {
   [key: string]: string;
 }): AxiosPromise => {
-  return axios.post(`${baseURL}/api/login`, params);
+  return axios.post(`${baseURL}/api/auth/login`, params);
 };
 
 export const APIAuthRegister = (params: {
   [key: string]: string;
 }): AxiosPromise => {
-  return axios.post(`${baseURL}/api/register`, params);
+  return axios.post(`${baseURL}/api/auth/register`, params);
 };
 
 export const APIAuthLogout = (): AxiosPromise => {
-  return axios.post(`${baseURL}/api/logout`);
+  return axios.post(`${baseURL}/api/auth/logout`);
 };
