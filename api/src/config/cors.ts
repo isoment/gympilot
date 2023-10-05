@@ -1,14 +1,14 @@
 import { CorsOptions } from "cors";
+import { appConfig } from "./app";
 
-const allowedOrigins = ["http://localhost", "http://localhost:8080", "127.0.0.1", "127.0.0.1:8080"];
+const allowedOriginsDev = ["http://localhost", "http://localhost:8080", "127.0.0.1", "127.0.0.1:8080"];
+const allowedOriginsProd = ["http://localhost"];
+
+const devEnv = appConfig.node === "development" || appConfig.node === "test";
 
 export const corsOptions: CorsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    // Check if the origin is in the allowedOrigins array or if it's undefined (for same-origin requests)
-    if (allowedOrigins.indexOf(origin!) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: devEnv ? allowedOriginsDev : allowedOriginsProd,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization", "x-requested-with"],
+  credentials: true,
 };

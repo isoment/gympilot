@@ -22,32 +22,7 @@ async function startWebServer(): Promise<AddressInfo> {
   database.configure();
   await memoryStore.configure();
   const expressApp = express();
-
-  // expressApp.options("*", cors());
-  // expressApp.use(
-  //   cors({
-  //     origin: "*",
-  //   }),
-  // );
-  // expressApp.use(cors(corsOptions));
-  // expressApp.use(
-  //   cors({
-  //     origin: "http://localhost:8080", // Replace with the actual origin of your Vue.js app
-  //     credentials: true, // If you need to support cookies or sessions
-  //   }),
-  // );
-
-  // expressApp.use("*", cors());
-
-  expressApp.use(
-    cors({
-      origin: "http://localhost:8080", // Allow requests from your Vue.js frontend
-      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      allowedHeaders: ["Content-Type", "Authorization", "x-requested-with"],
-      credentials: true,
-    }),
-  );
-
+  expressApp.use(cors(corsOptions));
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: true }));
   expressApp.use(cookieParser());
