@@ -1,8 +1,9 @@
 import { CorsOptions } from "cors";
 import { appConfig } from "./app";
+import { env } from "../utils/env";
 
-const allowedOriginsDev = ["http://localhost", "http://localhost:8080", "127.0.0.1", "127.0.0.1:8080"];
-const allowedOriginsProd = ["http://localhost"];
+const allowedOriginsDev = env("CORS_DOMAINS_DEV").split(",");
+const allowedOriginsProd = env("CORS_DOMAINS").split(",");
 
 const devEnv = appConfig.node === "development" || appConfig.node === "test";
 
