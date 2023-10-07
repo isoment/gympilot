@@ -8,7 +8,7 @@ import axios, { AxiosPromise } from "axios";
 const baseURL = process.env.VUE_APP_API_URL;
 
 export const APIAuthLoadUser = (): AxiosPromise => {
-  return axios.get(`${baseURL}/api/user`);
+  return axios.get(`${baseURL}/api/auth/user`);
 };
 
 export const APIAuthLogin = (params: {

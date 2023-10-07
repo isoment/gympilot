@@ -11,5 +11,6 @@ export const corsOptions: CorsOptions = {
   origin: devEnv ? allowedOriginsDev : allowedOriginsProd,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: ["Content-Type", "Authorization", "x-requested-with"],
+  exposedHeaders: ["Authorization"],
   credentials: true,
 };

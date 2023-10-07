@@ -20,16 +20,9 @@
               :icon="['fa', 'user']"
               data-test="email-input"
             />
-            <div
-              v-if="loginValidationError"
-              class="mt-2 ml-1 text-xs text-left text-red-400"
-              data-test="validation-error"
-            >
-              {{ loginValidationError }}
-            </div>
           </div>
           <!-- Password -->
-          <div class="w-full mt-5 mb-8">
+          <div class="w-full mt-5">
             <TextInput
               v-model="loginForm.password"
               placeholder="Password"
@@ -38,8 +31,15 @@
               data-test="password-input"
             />
           </div>
+          <div
+            v-if="loginError"
+            class="mt-4 mb-3 ml-1 text-xs text-left text-red-400"
+            data-test="validation-error"
+          >
+            {{ loginError }}
+          </div>
           <!-- Forgot Password -->
-          <div>
+          <div class="mt-7">
             <a
               href="#"
               class="font-light transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
@@ -111,31 +111,36 @@ export default defineComponent({
      *  Logic for login *
      *******************/
     const loadingLoginAPI = ref(false);
-    const loginValidationError = ref("");
+    const loginError = ref("");
 
     const login = async () => {
       try {
         const response = await APIAuthLogin(loginForm.value);
-        if (response.status === 200) {
-          store.dispatch(LOGIN_USER);
+        if (response.status !== 200) {
+          loginError.value = "Error logging in";
+        }
+        const accessToken = response.headers["authorization"];
+        if (accessToken) {
+          store.dispatch(LOGIN_USER, accessToken);
           router.push({ name: "home" });
+        } else {
+          loginError.value = "Error logging in";
         }
       } catch (error) {
         if ((error as AxiosError)?.response?.status === 422) {
-          loginValidationError.value =
-            "These credentials do not match our records";
+          loginError.value = "These credentials do not match our records";
         }
       }
     };
 
     const attemptLogin = async () => {
       loadingLoginAPI.value = true;
-      loginValidationError.value = "";
+      loginError.value = "";
       await login();
       loadingLoginAPI.value = false;
     };
 
-    return { loginForm, attemptLogin, loadingLoginAPI, loginValidationError };
+    return { loginForm, attemptLogin, loadingLoginAPI, loginError };
   },
 });
 </script>

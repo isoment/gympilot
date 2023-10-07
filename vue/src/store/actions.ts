@@ -1,3 +1,4 @@
+import jwt_decode from "jwt-decode";
 import { Commit, Dispatch } from "vuex";
 import {
   LOAD_STORED_STATE,
@@ -36,13 +37,21 @@ const actions = {
    *  Login the user by setting the local storage and loading the user
    *  details from the API.
    */
-  [LOGIN_USER](context: Context): void {
+  [LOGIN_USER](context: Context, payload: string): void {
     storageSetLogin("true");
-    context.dispatch(LOAD_USER);
+
+    // We need to decode the token access token and store the user info
+    const accessToken = payload.split(" ")[1];
+    const user = jwt_decode(accessToken);
+    console.log("USER");
+    console.log(user);
+
+    // context.dispatch(LOAD_USER);
     context.commit(SET_LOGGED_IN, true);
   },
 
   /**
+   *  **DEPRECATED**
    *  Load the user details from the API and save to state.
    */
   [LOAD_USER]: async (context: Context) => {
