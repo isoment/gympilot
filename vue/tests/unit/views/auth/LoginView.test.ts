@@ -89,7 +89,12 @@ describe("LoginView", () => {
         useStoreMock.mockReturnValue({ dispatch });
         const push = jest.fn();
         useRouteMock.mockReturnValue({ push });
-        APIAuthLoginMock.mockResolvedValue({ status: 200 });
+        APIAuthLoginMock.mockResolvedValue({
+          status: 200,
+          headers: {
+            authorization: "Bearer fakeToken123",
+          },
+        });
 
         const wrapper = mount(
           LoginView,
@@ -106,7 +111,10 @@ describe("LoginView", () => {
         await submitFormButton.trigger("click");
 
         await flushPromises();
-        expect(dispatch).toHaveBeenCalledWith("LOGIN_USER");
+        expect(dispatch).toHaveBeenCalledWith(
+          "LOGIN_USER",
+          "Bearer fakeToken123"
+        );
         wrapper.unmount();
       });
     });

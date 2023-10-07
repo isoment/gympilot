@@ -20,10 +20,12 @@ describe("mutations", () => {
     it("sets the user state to an object with user details", () => {
       const user = {
         id: 1,
-        name: "Test User",
+        first_name: "Test",
+        last_name: "User",
         email: "test@test.com",
         created_at: "Date",
         updated_at: "Date",
+        Roles: [{ name: "owner" }],
       };
       const initialState = createState({ user: {} });
       mutations.SET_USER(initialState, user);

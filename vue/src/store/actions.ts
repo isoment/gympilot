@@ -2,7 +2,6 @@ import jwt_decode from "jwt-decode";
 import { Commit, Dispatch } from "vuex";
 import {
   LOAD_STORED_STATE,
-  LOAD_USER,
   LOGIN_USER,
   LOGOUT_USER,
   SET_LOGGED_IN,
@@ -14,7 +13,8 @@ import {
   storageSetLogin,
   storageSetUser,
 } from "../utils/localStorageHelpers";
-import { APIAuthLogout, APIAuthLoadUser } from "../api/auth";
+import { APIAuthLogout } from "../api/auth";
+import { LoadUser } from "@/api/types";
 
 interface Context {
   commit: Commit;
@@ -42,11 +42,11 @@ const actions = {
 
     // We need to decode the token access token and store the user info
     const accessToken = payload.split(" ")[1];
-    const user = jwt_decode(accessToken);
-    console.log("USER");
-    console.log(user);
+    const user = jwt_decode(accessToken) as Partial<LoadUser>;
 
-    // context.dispatch(LOAD_USER);
+    storageSetUser(user);
+    context.commit(SET_USER, user);
+
     context.commit(SET_LOGGED_IN, true);
   },
 
@@ -54,16 +54,16 @@ const actions = {
    *  **DEPRECATED**
    *  Load the user details from the API and save to state.
    */
-  [LOAD_USER]: async (context: Context) => {
-    try {
-      const response = await APIAuthLoadUser();
-      const user = response.data;
-      storageSetUser(user);
-      context.commit(SET_USER, user);
-    } catch (error) {
-      context.dispatch(LOGOUT_USER);
-    }
-  },
+  // [LOAD_USER]: async (context: Context) => {
+  //   try {
+  //     const response = await APIAuthLoadUser();
+  //     const user = response.data;
+  //     storageSetUser(user);
+  //     context.commit(SET_USER, user);
+  //   } catch (error) {
+  //     context.dispatch(LOGOUT_USER);
+  //   }
+  // },
 
   /**
    *  Logout a user.

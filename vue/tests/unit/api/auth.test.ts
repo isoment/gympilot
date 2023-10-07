@@ -1,35 +1,30 @@
 import axios from "axios";
 jest.mock("axios");
-import {
-  APIAuthLoadUser,
-  APIAuthLogin,
-  APIAuthLogout,
-  APIAuthRegister,
-} from "@/api/auth";
+import { APIAuthLogin, APIAuthLogout, APIAuthRegister } from "@/api/auth";
 const getMock = axios.get as jest.Mock;
 
 const baseURL = process.env.VUE_APP_API_URL;
 
 describe("auth", () => {
-  // Test the axios request to get teh user details
-  describe("APIAuthLoadUser", () => {
-    it("fetches the user details from the correct endpoint", async () => {
-      await APIAuthLoadUser();
-      expect(axios.get).toHaveBeenCalledWith(`${baseURL}/api/user`);
-    });
+  /* DEPRECATED */
+  // describe("APIAuthLoadUser", () => {
+  //   it("fetches the user details from the correct endpoint", async () => {
+  //     await APIAuthLoadUser();
+  //     expect(axios.get).toHaveBeenCalledWith(`${baseURL}/api/user`);
+  //   });
 
-    it("gets the user details from the response", async () => {
-      const user = {
-        id: 1,
-        name: "Fake User",
-        email: "test@test.com",
-      };
+  //   it("gets the user details from the response", async () => {
+  //     const user = {
+  //       id: 1,
+  //       name: "Fake User",
+  //       email: "test@test.com",
+  //     };
 
-      getMock.mockResolvedValue(user);
-      const response = await APIAuthLoadUser();
-      expect(response).toEqual(user);
-    });
-  });
+  //     getMock.mockResolvedValue(user);
+  //     const response = await APIAuthLoadUser();
+  //     expect(response).toEqual(user);
+  //   });
+  // });
 
   // Test the axios request for user login
   describe("APIAuthLogin", () => {
@@ -39,7 +34,10 @@ describe("auth", () => {
         password: "password",
       };
       await APIAuthLogin(data);
-      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/login`, data);
+      expect(axios.post).toHaveBeenCalledWith(
+        `${baseURL}/api/auth/login`,
+        data
+      );
     });
   });
 
@@ -52,7 +50,10 @@ describe("auth", () => {
         password: "password",
       };
       await APIAuthRegister(data);
-      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/register`, data);
+      expect(axios.post).toHaveBeenCalledWith(
+        `${baseURL}/api/auth/register`,
+        data
+      );
     });
   });
 
@@ -60,7 +61,7 @@ describe("auth", () => {
   describe("APIAuthLogout", () => {
     it("makes a post request to the correct logout endpoint", async () => {
       await APIAuthLogout();
-      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/logout`);
+      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/auth/logout`);
     });
   });
 });
