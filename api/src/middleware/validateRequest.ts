@@ -25,7 +25,7 @@ export default <T>(joiSchema: JoiSchemaFunction<T>) => {
         errors[fieldName] = capitalizedMessage;
       });
 
-      return res.status(422).json(errors);
+      return res.status(422).json({ errors });
     }
 
     next();

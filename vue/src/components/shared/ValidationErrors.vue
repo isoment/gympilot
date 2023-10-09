@@ -19,7 +19,7 @@ export default defineComponent({
     // key in the object represents the validation field and the value is an
     // array of all the validation errors.
     errors: {
-      type: Object as PropType<{ [key: string]: string[] }>,
+      type: Object as PropType<{ [key: string]: string }>,
       required: true,
     },
     // We want to see if a given field has a validation error in the api response.
@@ -37,7 +37,7 @@ export default defineComponent({
     const renderError = (): string | void => {
       if (Object.prototype.hasOwnProperty.call(props.errors, props.field)) {
         const validationFieldArray = props.errors[props.field as keyof {}];
-        return validationFieldArray[0];
+        return validationFieldArray;
       }
     };
 

@@ -20,6 +20,11 @@
               :icon="['fa', 'user']"
               data-test="email-input"
             />
+            <ValidationErrors
+              :errors="loginValidationErrors"
+              field="email"
+              class="mt-2 text-left"
+            />
           </div>
           <!-- Password -->
           <div class="w-full mt-5">
@@ -30,13 +35,11 @@
               type="password"
               data-test="password-input"
             />
-          </div>
-          <div
-            v-if="loginError"
-            class="mt-4 mb-3 ml-1 text-xs text-left text-red-400"
-            data-test="validation-error"
-          >
-            {{ loginError }}
+            <ValidationErrors
+              :errors="loginValidationErrors"
+              field="password"
+              class="mt-2 text-left"
+            />
           </div>
           <!-- Forgot Password -->
           <div class="mt-7">
@@ -89,14 +92,20 @@ import { useStore } from "vuex";
 import { key } from "@/store";
 import { AxiosError } from "axios";
 import { APIAuthLogin } from "@/api/auth";
-import { LOGIN_USER } from "@/store/constants";
+import { LOGIN_USER, ADD_TOAST } from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
+import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+
+interface LoginValidationErrors {
+  email?: string;
+  password?: string;
+}
 
 export default defineComponent({
   name: "LoginView",
 
-  components: { GuestTopNavbar, TextInput },
+  components: { GuestTopNavbar, TextInput, ValidationErrors },
 
   setup() {
     const router = useRouter();
@@ -111,36 +120,43 @@ export default defineComponent({
      *  Logic for login *
      *******************/
     const loadingLoginAPI = ref(false);
-    const loginError = ref("");
+    const loginValidationErrors = ref<LoginValidationErrors>({});
 
     const login = async () => {
       try {
         const response = await APIAuthLogin(loginForm.value);
-        if (response.status !== 200) {
-          loginError.value = "Error logging in";
-        }
         const accessToken = response.headers["authorization"];
         if (accessToken) {
           store.dispatch(LOGIN_USER, accessToken);
           router.push({ name: "home" });
         } else {
-          loginError.value = "Error logging in";
+          store.dispatch(ADD_TOAST, {
+            type: "error",
+            message: "Invalid access token",
+          });
         }
-      } catch (error) {
+      } catch (error: any) {
         if ((error as AxiosError)?.response?.status === 422) {
-          loginError.value = "These credentials do not match our records";
+          if (error.response.data.errors) {
+            loginValidationErrors.value = error.response.data.errors;
+          } else {
+            store.dispatch(ADD_TOAST, {
+              type: "error",
+              message: error.response.data.message,
+            });
+          }
         }
       }
     };
 
     const attemptLogin = async () => {
       loadingLoginAPI.value = true;
-      loginError.value = "";
+      loginValidationErrors.value = {};
       await login();
       loadingLoginAPI.value = false;
     };
 
-    return { loginForm, attemptLogin, loadingLoginAPI, loginError };
+    return { loginForm, attemptLogin, loadingLoginAPI, loginValidationErrors };
   },
 });
 </script>

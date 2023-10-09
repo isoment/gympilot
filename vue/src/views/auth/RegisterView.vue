@@ -21,11 +21,11 @@
               data-test="name-input"
               :icon="['fa', 'user']"
             />
-            <ValidationErrors
+            <!-- <ValidationErrors
               :errors="registerValidationErrors"
               field="name"
               class="mt-2 text-left"
-            />
+            /> -->
           </div>
           <!-- Email -->
           <div class="w-full mb-6">
@@ -36,11 +36,11 @@
               data-test="email-input"
               :icon="['fa', 'envelope-square']"
             />
-            <ValidationErrors
+            <!-- <ValidationErrors
               :errors="registerValidationErrors"
               field="email"
               class="mt-2 text-left"
-            />
+            /> -->
           </div>
           <!-- Password -->
           <div class="w-full mb-6">
@@ -51,11 +51,11 @@
               data-test="password-input"
               :icon="['fa', 'lock']"
             />
-            <ValidationErrors
+            <!-- <ValidationErrors
               :errors="registerValidationErrors"
               field="password"
               class="mt-2 text-left"
-            />
+            /> -->
           </div>
           <!-- Confirm Password -->
           <div class="w-full mb-10">
@@ -66,11 +66,11 @@
               data-test="password-confirm-input"
               :icon="['fa', 'lock']"
             />
-            <ValidationErrors
+            <!-- <ValidationErrors
               :errors="registerValidationErrors"
               field="password-confirmation"
               class="mt-2 text-left"
-            />
+            /> -->
           </div>
           <!-- Button -->
           <div class="mt-4">
@@ -114,7 +114,7 @@ import { useStore } from "vuex";
 import { key } from "@/store";
 import { AxiosError } from "axios";
 import { APIAuthRegister } from "@/api/auth";
-import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+// import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import { LOGIN_USER, ADD_TOAST } from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
@@ -130,7 +130,7 @@ export default defineComponent({
   name: "RegisterView",
 
   components: {
-    ValidationErrors,
+    // ValidationErrors,
     GuestTopNavbar,
     TextInput,
   },
