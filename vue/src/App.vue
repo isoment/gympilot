@@ -1,16 +1,7 @@
 <template>
-  <!-- <SimpleNav /> -->
   <router-view />
+  <toasts-list></toasts-list>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-// import SimpleNav from "./components/navigation/SimpleNav.vue";
-
-export default defineComponent({
-  // components: { SimpleNav },
-});
-</script>
 
 <style>
 #app {

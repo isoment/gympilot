@@ -115,7 +115,7 @@ import { key } from "@/store";
 import { AxiosError } from "axios";
 import { APIAuthRegister } from "@/api/auth";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
-import { LOGIN_USER } from "@/store/constants";
+import { LOGIN_USER, ADD_TOAST } from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
 
@@ -161,7 +161,11 @@ export default defineComponent({
         }
       } catch (error: any) {
         if ((error as AxiosError)?.response?.status === 422) {
-          registerValidationErrors.value = error.response.data.errors;
+          store.dispatch(ADD_TOAST, {
+            type: "error",
+            message: "There was an error",
+          });
+          // registerValidationErrors.value = error.response.data.errors;
         }
       }
     };

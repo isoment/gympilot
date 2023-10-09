@@ -1,6 +1,6 @@
 import { LoadUser } from "@/api/types";
-import { SET_LOGGED_IN, SET_USER } from "./constants";
-import { GlobalState } from "./types";
+import { SET_TOAST, UNSET_TOAST, SET_LOGGED_IN, SET_USER } from "./constants";
+import { GlobalState, Toast } from "./types";
 
 const mutations = {
   [SET_LOGGED_IN](state: GlobalState, isLoggedIn: boolean) {
@@ -9,6 +9,19 @@ const mutations = {
 
   [SET_USER](state: GlobalState, user: LoadUser) {
     state.user = user;
+  },
+
+  [SET_TOAST](state: GlobalState, toast: Toast) {
+    state.toasts.push({
+      ...toast,
+      id: (Math.random().toString(36) + Date.now().toString(36)).substring(2),
+    });
+  },
+
+  [UNSET_TOAST](state: GlobalState, toastToRemove: Toast) {
+    state.toasts = state.toasts.filter((toast) => {
+      return toast.id !== toastToRemove.id;
+    });
   },
 };
 

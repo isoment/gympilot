@@ -1,11 +1,15 @@
 import jwt_decode from "jwt-decode";
 import { Commit, Dispatch } from "vuex";
 import {
+  ADD_TOAST,
   LOAD_STORED_STATE,
   LOGIN_USER,
   LOGOUT_USER,
+  REMOVE_TOAST,
   SET_LOGGED_IN,
+  SET_TOAST,
   SET_USER,
+  UNSET_TOAST,
 } from "./constants";
 import {
   storageGetIsLoggedIn,
@@ -15,6 +19,7 @@ import {
 } from "../utils/localStorageHelpers";
 import { APIAuthLogout } from "../api/auth";
 import { LoadUser } from "@/api/types";
+import { Toast } from "./types";
 
 interface Context {
   commit: Commit;
@@ -74,6 +79,14 @@ const actions = {
     context.commit(SET_USER, {});
     storageSetLogin("false");
     storageSetUser({});
+  },
+
+  [ADD_TOAST](context: Context, payload: Toast): void {
+    context.commit(SET_TOAST, payload);
+  },
+
+  [REMOVE_TOAST](context: Context, payload: Toast): void {
+    context.commit(UNSET_TOAST, payload);
   },
 };
 

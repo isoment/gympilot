@@ -35,6 +35,8 @@ import {
   faXmark,
   faMagnifyingGlass,
   faDumbbell,
+  faCircleExclamation,
+  faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faUser);
 library.add(faLock);
@@ -49,11 +51,18 @@ library.add(faXmark);
 library.add(faMagnifyingGlass);
 library.add(faBell as IconDefinition);
 library.add(faDumbbell);
+library.add(faCircleExclamation);
+library.add(faCircleCheck);
+
+/****************************
+ * Import custom components *
+ ***************************/
+import ToastsList from "./components/toasts/ToastsList.vue";
 
 /*********************************************************************
  *  Create the Vue application instance, creating global components, *
  *  use necessary libraries and mount the root element.              *
- *********************************************************************/
+ ********************************************************************/
 createApp({
   extends: App,
   beforeCreate() {
@@ -63,5 +72,6 @@ createApp({
   .use(store, key)
   .use(router)
   .component("font-awesome-icon", FontAwesomeIcon)
+  .component("toasts-list", ToastsList)
   .directive("click-outside", OnClickOutside)
   .mount("#app");
