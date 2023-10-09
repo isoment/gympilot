@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="renderError()"
-    class="my-1 text-xs italic text-red-400"
+    class="my-1 text-xs font-semibold text-red-400"
     data-test="error-display"
   >
     {{ renderError() }}

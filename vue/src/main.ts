@@ -37,6 +37,7 @@ import {
   faDumbbell,
   faCircleExclamation,
   faCircleCheck,
+  faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faUser);
 library.add(faLock);
@@ -53,6 +54,7 @@ library.add(faBell as IconDefinition);
 library.add(faDumbbell);
 library.add(faCircleExclamation);
 library.add(faCircleCheck);
+library.add(faUserTie);
 
 /****************************
  * Import custom components *

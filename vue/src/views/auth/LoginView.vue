@@ -23,7 +23,7 @@
             <ValidationErrors
               :errors="loginValidationErrors"
               field="email"
-              class="mt-2 text-left"
+              class="mt-2 -mb-2 text-left"
             />
           </div>
           <!-- Password -->
@@ -38,7 +38,7 @@
             <ValidationErrors
               :errors="loginValidationErrors"
               field="password"
-              class="mt-2 text-left"
+              class="mt-2 -mb-2 text-left"
             />
           </div>
           <!-- Forgot Password -->

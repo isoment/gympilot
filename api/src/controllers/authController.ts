@@ -53,7 +53,7 @@ authController.post("/login", [validateRequest(postLogin)], async (req: Request,
 
     return response.success(res, "Login Successful", { Authorization: `Bearer ${accessToken}` });
   } catch (error) {
-    res.status(500).send("Internal server error");
+    response.internalError(res);
     next(error);
   }
 });
@@ -68,7 +68,7 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
   try {
     const existingUser = await userRepository.getUser("email", req.body.email);
     if (existingUser) {
-      return res.status(422).send("This email is already in use, please use a different email or try logging in");
+      return response.unprocessableContent(res, "This email is already in use, please use a different email or try logging in");
     }
 
     const salt = await bcrypt.genSalt(10);
