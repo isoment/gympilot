@@ -13,8 +13,8 @@ const mutations = {
 
   [SET_TOAST](state: GlobalState, toast: Toast) {
     state.toasts.push({
-      ...toast,
       id: (Math.random().toString(36) + Date.now().toString(36)).substring(2),
+      ...toast,
     });
   },
 

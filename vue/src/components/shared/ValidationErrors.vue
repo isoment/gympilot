@@ -14,15 +14,15 @@ import { defineComponent, PropType } from "vue";
 export default defineComponent({
   name: "ValidationErrors",
 
+  /**
+   *  The errors prop contains the validation errors. The key is the form field and
+   *  the value is the error. The field prop controls which error to display.
+   */
   props: {
-    // We pass in an object with the validation errors the api returns, each
-    // key in the object represents the validation field and the value is an
-    // array of all the validation errors.
     errors: {
       type: Object as PropType<{ [key: string]: string }>,
       required: true,
     },
-    // We want to see if a given field has a validation error in the api response.
     field: {
       type: String,
       required: true,

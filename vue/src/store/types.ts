@@ -1,7 +1,7 @@
 import { LoadUser } from "@/api/types";
 
 export interface Toast {
-  id: string;
+  id?: string;
   type: string;
   message: string;
 }
