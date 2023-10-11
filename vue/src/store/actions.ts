@@ -56,21 +56,6 @@ const actions = {
   },
 
   /**
-   *  **DEPRECATED**
-   *  Load the user details from the API and save to state.
-   */
-  // [LOAD_USER]: async (context: Context) => {
-  //   try {
-  //     const response = await APIAuthLoadUser();
-  //     const user = response.data;
-  //     storageSetUser(user);
-  //     context.commit(SET_USER, user);
-  //   } catch (error) {
-  //     context.dispatch(LOGOUT_USER);
-  //   }
-  // },
-
-  /**
    *  Logout a user.
    */
   [LOGOUT_USER]: async (context: Context) => {
@@ -88,6 +73,21 @@ const actions = {
   [REMOVE_TOAST](context: Context, payload: Toast): void {
     context.commit(UNSET_TOAST, payload);
   },
+
+  /**
+   *  **DEPRECATED**
+   *  Load the user details from the API and save to state.
+   */
+  // [LOAD_USER]: async (context: Context) => {
+  //   try {
+  //     const response = await APIAuthLoadUser();
+  //     const user = response.data;
+  //     storageSetUser(user);
+  //     context.commit(SET_USER, user);
+  //   } catch (error) {
+  //     context.dispatch(LOGOUT_USER);
+  //   }
+  // },
 };
 
 export default actions;

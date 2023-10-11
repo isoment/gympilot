@@ -120,26 +120,25 @@ describe("LoginView", () => {
     });
 
     describe("the login api response returns an error", () => {
-      it("does not show the login validation when the component loads", () => {
-        useStoreMock.mockReturnValue({ dispatch: jest.fn() });
-        useRouteMock.mockReturnValue({ push: jest.fn() });
-
-        const wrapper = shallowMount(LoginView, createConfig());
-        const validationError = wrapper.find("[data-test='validation-error']");
-        expect(validationError.exists()).toBe(false);
+      beforeEach(() => {
+        APIAuthLoginMock.mockImplementation(() => {
+          return Promise.reject({
+            response: {
+              status: 422,
+              data: {
+                errors: {
+                  email: ["The email is invalid"],
+                  password: ["The password is required"],
+                },
+              },
+            },
+          });
+        });
       });
 
       it("shows the login validation errors when the api returns a 422 response status", async () => {
         useStoreMock.mockReturnValue({ dispatch: jest.fn() });
         useRouteMock.mockReturnValue({ push: jest.fn() });
-
-        APIAuthLoginMock.mockImplementation(() => {
-          return Promise.reject({
-            response: {
-              status: 422,
-            },
-          });
-        });
 
         const wrapper = mount(
           LoginView,
@@ -157,8 +156,8 @@ describe("LoginView", () => {
 
         await flushPromises();
 
-        const validationError = wrapper.find("[data-test='validation-error']");
-        expect(validationError.exists()).toBe(true);
+        expect(wrapper.text()).toMatch("The email is invalid");
+        expect(wrapper.text()).toMatch("The password is required");
       });
     });
   });

@@ -55,8 +55,11 @@ describe("RegisterView", () => {
         createConfig({ attachTo: document.body })
       );
 
-      const nameInput = wrapper.find("[data-test='name-input']");
-      await nameInput.setValue("Test User");
+      const firstNameInput = wrapper.find("[data-test='first-name-input']");
+      await firstNameInput.setValue("Test");
+
+      const lastNameInput = wrapper.find("[data-test='last-name-input']");
+      await lastNameInput.setValue("User");
 
       const emailInput = wrapper.find("[data-test='email-input']");
       await emailInput.setValue("test@test.com");
@@ -75,10 +78,11 @@ describe("RegisterView", () => {
       await flushPromises();
 
       expect(APIAuthRegisterMock).toHaveBeenCalledWith({
-        name: "Test User",
+        first_name: "Test",
+        last_name: "User",
         email: "test@test.com",
         password: "password",
-        password_confirmation: "password",
+        password_verify: "password",
       });
       wrapper.unmount();
     });
@@ -97,8 +101,11 @@ describe("RegisterView", () => {
         createConfig({ attachTo: document.body })
       );
 
-      const nameInput = wrapper.find("[data-test='name-input']");
-      await nameInput.setValue("Test User");
+      const firstNameInput = wrapper.find("[data-test='first-name-input']");
+      await firstNameInput.setValue("Test");
+
+      const lastNameInput = wrapper.find("[data-test='last-name-input']");
+      await lastNameInput.setValue("User");
 
       const emailInput = wrapper.find("[data-test='email-input']");
       await emailInput.setValue("test@test.com");
@@ -129,7 +136,8 @@ describe("RegisterView", () => {
             status: 422,
             data: {
               errors: {
-                name: ["The name is required"],
+                first_name: ["The first name is required"],
+                last_name: ["The last name is required"],
                 email: ["The email is invalid"],
                 password: ["The password is required"],
               },
@@ -148,8 +156,11 @@ describe("RegisterView", () => {
         createConfig({ attachTo: document.body })
       );
 
-      const nameInput = wrapper.find("[data-test='name-input']");
-      await nameInput.setValue("Test User");
+      const firstNameInput = wrapper.find("[data-test='first-name-input']");
+      await firstNameInput.setValue("Test");
+
+      const lastNameInput = wrapper.find("[data-test='last-name-input']");
+      await lastNameInput.setValue("User");
 
       const emailInput = wrapper.find("[data-test='email-input']");
       await emailInput.setValue("test@test.com");
@@ -167,7 +178,8 @@ describe("RegisterView", () => {
 
       await flushPromises();
 
-      expect(wrapper.text()).toMatch("The name is required");
+      expect(wrapper.text()).toMatch("The first name is required");
+      expect(wrapper.text()).toMatch("The last name is required");
       expect(wrapper.text()).toMatch("The email is invalid");
       expect(wrapper.text()).toMatch("The password is required");
     });
