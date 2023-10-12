@@ -10,4 +10,9 @@ describe("state", () => {
     const initialState = state();
     expect(initialState.user).toEqual({});
   });
+
+  it("stores toasts state for displaying notification toasts", () => {
+    const initialState = state();
+    expect(initialState.toasts).toEqual([]);
+  });
 });

@@ -65,6 +65,15 @@ describe("actions", () => {
       expect(storageSetLoginSpy).toHaveBeenCalledWith("true");
     });
 
+    it("sets the user to logged in in the store", () => {
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      actions.LOGIN_USER(context, accessToken);
+      expect(commit).toHaveBeenCalledWith("SET_LOGGED_IN", true);
+    });
+
     /* DEPRECATED */
     // it("calls an action to load the user from the api", () => {
     //   const commit = jest.fn();
@@ -74,15 +83,6 @@ describe("actions", () => {
     //   actions.LOGIN_USER(context, accessToken);
     //   expect(dispatch).toHaveBeenCalledWith("LOAD_USER");
     // });
-
-    it("sets the user to logged in in the store", () => {
-      const commit = jest.fn();
-      const dispatch = jest.fn();
-      const context = { commit, dispatch };
-
-      actions.LOGIN_USER(context, accessToken);
-      expect(commit).toHaveBeenCalledWith("SET_LOGGED_IN", true);
-    });
   });
 
   describe("LOGOUT_USER", () => {
@@ -127,6 +127,39 @@ describe("actions", () => {
 
       await actions.LOGOUT_USER(context);
       expect(storageSetUserSpy).toHaveBeenCalledWith({});
+    });
+  });
+
+  describe("ADD_TOAST", () => {
+    it("commits a SET_TOAST mutation", () => {
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      const toast = {
+        type: "error",
+        message: "Test message",
+      };
+
+      actions.ADD_TOAST(context, toast);
+      expect(commit).toHaveBeenCalledWith("SET_TOAST", toast);
+    });
+  });
+
+  describe("REMOVE_TOAST", () => {
+    it("commits a UNSET_TOAST mutation", () => {
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      const toast = {
+        id: "38Fjia108ayhkjakDY2808aiJFsd",
+        type: "error",
+        message: "Test message",
+      };
+
+      actions.REMOVE_TOAST(context, toast);
+      expect(commit).toHaveBeenCalledWith("UNSET_TOAST", toast);
     });
   });
 
