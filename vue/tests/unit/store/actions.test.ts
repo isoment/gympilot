@@ -1,10 +1,9 @@
 import actions from "@/store/actions";
+import { testJWT } from "../../setup/testJWT";
+
 import axios from "axios";
 jest.mock("axios");
 const getMock = axios.get as jest.Mock;
-
-const accessToken =
-  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3RfbmFtZSI6IkR1ZGxleSIsImxhc3RfbmFtZSI6IkRpbmdsZWJlcnJ5IiwiZW1haWwiOiJkdWRsZXlkQHRlc3QuY29tIiwiY3JlYXRlZF9hdCI6IjIwMjMtMTAtMDdUMjA6Mjg6MjYuMDAwWiIsInVwZGF0ZWRfYXQiOiIyMDIzLTEwLTA3VDIwOjI4OjI2LjAwMFoiLCJSb2xlcyI6W3sibmFtZSI6Im93bmVyIiwiY3JlYXRlZF9hdCI6IjIwMjMtMTAtMDdUMjA6Mjg6MTUuMDAwWiJ9LHsibmFtZSI6ImVtcGxveWVlIiwiY3JlYXRlZF9hdCI6IjIwMjMtMTAtMDdUMjA6Mjg6MTUuMDAwWiJ9XSwiaWF0IjoxNjk2NzEwNTA2LCJleHAiOjE2OTY3MTA4MDZ9.qmAUMUXj0LXueUAmUqG-IeR8LSfXqDORTZikDOPwYL0";
 
 describe("actions", () => {
   afterEach(() => {
@@ -61,7 +60,7 @@ describe("actions", () => {
       const dispatch = jest.fn();
       const context = { commit, dispatch };
 
-      actions.LOGIN_USER(context, accessToken);
+      actions.LOGIN_USER(context, testJWT);
       expect(storageSetLoginSpy).toHaveBeenCalledWith("true");
     });
 
@@ -70,7 +69,7 @@ describe("actions", () => {
       const dispatch = jest.fn();
       const context = { commit, dispatch };
 
-      actions.LOGIN_USER(context, accessToken);
+      actions.LOGIN_USER(context, testJWT);
       expect(commit).toHaveBeenCalledWith("SET_LOGGED_IN", true);
     });
 

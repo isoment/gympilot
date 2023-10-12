@@ -5,7 +5,9 @@
     role="alert"
   >
     <div class="flex items-center justify-between">
-      <span class="pr-3 text-lg">{{ toast.message }}</span>
+      <span class="pr-3 text-lg" data-test="toast-message">{{
+        toast.message
+      }}</span>
       <span class="px-1">
         <font-awesome-icon
           :icon="toastIcon"
