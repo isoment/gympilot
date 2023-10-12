@@ -8,6 +8,3 @@ export const SET_TOAST = "SET_TOAST";
 export const UNSET_TOAST = "UNSET_TOAST";
 export const ADD_TOAST = "ADD_TOAST";
 export const REMOVE_TOAST = "REMOVE_TOAST";
-
-/* DEPRECATED */
-// export const LOAD_USER = "LOAD_USER";
