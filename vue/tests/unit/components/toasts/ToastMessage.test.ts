@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import ToastMessage from "@/components/toasts/ToastMessage.vue";
+import { REMOVE_TOAST } from "@/store/constants";
 
 import { useStore } from "vuex";
 jest.mock("vuex");
@@ -29,5 +30,19 @@ describe("ToastMessage", () => {
     const wrapper = mount(ToastMessage, createConfig());
     const message = wrapper.find("[data-test='toast-message']");
     expect(message.text()).toBe(toast.message);
+  });
+
+  it("dispatches the REMOVE_TOAST action removing the toast from the vuex store", () => {
+    jest.useFakeTimers();
+
+    const dispatch = jest.fn();
+    useStoreMock.mockReturnValue({ dispatch });
+
+    mount(ToastMessage, createConfig());
+
+    jest.runOnlyPendingTimers();
+
+    expect(dispatch).toHaveBeenCalledWith(REMOVE_TOAST, toast);
+    jest.useRealTimers();
   });
 });
