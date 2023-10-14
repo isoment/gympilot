@@ -1,5 +1,12 @@
 import { LoadUser } from "@/api/types";
-import { SET_TOAST, UNSET_TOAST, SET_LOGGED_IN, SET_USER } from "./constants";
+import {
+  SET_TOAST,
+  UNSET_TOAST,
+  SET_LOGGED_IN,
+  SET_USER,
+  SET_ACCESS_TOKEN,
+  UNSET_ACCESS_TOKEN,
+} from "./constants";
 import { GlobalState, Toast } from "./types";
 
 const mutations = {
@@ -9,6 +16,14 @@ const mutations = {
 
   [SET_USER](state: GlobalState, user: LoadUser) {
     state.user = user;
+  },
+
+  [SET_ACCESS_TOKEN](state: GlobalState, token: string) {
+    state.accessToken = token;
+  },
+
+  [UNSET_ACCESS_TOKEN](state: GlobalState) {
+    state.accessToken = null;
   },
 
   [SET_TOAST](state: GlobalState, toast: Toast) {

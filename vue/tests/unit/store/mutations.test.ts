@@ -33,6 +33,26 @@ describe("mutations", () => {
     });
   });
 
+  describe("SET_ACCESS_TOKEN", () => {
+    it("sets the users access token", () => {
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+      const initialState = createState({ accessToken: null });
+      mutations.SET_ACCESS_TOKEN(initialState, token);
+      expect(initialState.accessToken).toBe(token);
+    });
+  });
+
+  describe("UNSET_ACCESS_TOKEN", () => {
+    it("unsets the access token returning it to null value", () => {
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+      const initialState = createState({ accessToken: token });
+      mutations.UNSET_ACCESS_TOKEN(initialState);
+      expect(initialState.accessToken).toBe(null);
+    });
+  });
+
   describe("SET_TOAST", () => {
     it("adds a toast to the toasts state", () => {
       const toast = {

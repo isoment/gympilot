@@ -9,5 +9,6 @@ export interface Toast {
 export interface GlobalState {
   isLoggedIn: boolean;
   user: Partial<LoadUser>;
+  accessToken: string | null;
   toasts: Toast[];
 }
