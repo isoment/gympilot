@@ -1,21 +1,20 @@
-import axios, { AxiosPromise } from "axios";
-
-const baseURL = process.env.VUE_APP_API_URL;
+import { AxiosPromise } from "axios";
+import client from "@/http/client";
 
 export const APIAuthLogin = (params: {
   [key: string]: string;
 }): AxiosPromise => {
-  return axios.post(`${baseURL}/api/auth/login`, params);
+  return client.post(`/api/auth/login`, params);
 };
 
 export const APIAuthRegister = (params: {
   [key: string]: string;
 }): AxiosPromise => {
-  return axios.post(`${baseURL}/api/auth/register`, params);
+  return client.post(`/api/auth/register`, params);
 };
 
 export const APIAuthLogout = (): AxiosPromise => {
-  return axios.post(`${baseURL}/api/auth/logout`);
+  return client.post(`/api/auth/logout`);
 };
 
 /* DEPRECATED */

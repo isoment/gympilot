@@ -7,15 +7,6 @@ import router from "./router";
 import store, { key } from "./store";
 import { OnClickOutside } from "@vueuse/components";
 
-/*********************************
- * Import axios and set defaults *
- ********************************/
-import axios from "axios";
-axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-// axios.defaults.headers.common["Content-Type"] = "application/json";
-// axios.defaults.headers.common["Accept"] = "application/json";
-axios.defaults.withCredentials = true;
-
 /***************************************************
  * Import the font awesome library modules we need *
  **************************************************/
