@@ -1,5 +1,6 @@
 import mutations from "@/store/mutations";
 import { createState } from "./utils";
+import { testJWT } from "../../setup/testJWT";
 
 describe("mutations", () => {
   describe("SET_LOGGED_IN", () => {
@@ -35,19 +36,15 @@ describe("mutations", () => {
 
   describe("SET_ACCESS_TOKEN", () => {
     it("sets the users access token", () => {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
       const initialState = createState({ accessToken: null });
-      mutations.SET_ACCESS_TOKEN(initialState, token);
-      expect(initialState.accessToken).toBe(token);
+      mutations.SET_ACCESS_TOKEN(initialState, testJWT);
+      expect(initialState.accessToken).toBe(testJWT);
     });
   });
 
   describe("UNSET_ACCESS_TOKEN", () => {
     it("unsets the access token returning it to null value", () => {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-      const initialState = createState({ accessToken: token });
+      const initialState = createState({ accessToken: testJWT });
       mutations.UNSET_ACCESS_TOKEN(initialState);
       expect(initialState.accessToken).toBe(null);
     });

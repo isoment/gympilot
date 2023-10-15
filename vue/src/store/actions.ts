@@ -6,9 +6,11 @@ import {
   LOGIN_USER,
   LOGOUT_USER,
   REMOVE_TOAST,
+  SET_ACCESS_TOKEN,
   SET_LOGGED_IN,
   SET_TOAST,
   SET_USER,
+  UNSET_ACCESS_TOKEN,
   UNSET_TOAST,
 } from "./constants";
 import {
@@ -51,7 +53,7 @@ const actions = {
 
     storageSetUser(user);
     context.commit(SET_USER, user);
-
+    context.commit(SET_ACCESS_TOKEN, accessToken);
     context.commit(SET_LOGGED_IN, true);
   },
 
@@ -61,6 +63,7 @@ const actions = {
   [LOGOUT_USER]: async (context: Context) => {
     await APIAuthLogout();
     context.commit(SET_LOGGED_IN, false);
+    context.commit(UNSET_ACCESS_TOKEN);
     context.commit(SET_USER, {});
     storageSetLogin("false");
     storageSetUser({});

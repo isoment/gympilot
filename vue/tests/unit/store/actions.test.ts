@@ -73,6 +73,17 @@ describe("actions", () => {
       expect(commit).toHaveBeenCalledWith("SET_LOGGED_IN", true);
     });
 
+    it("sets the access token in the store", () => {
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      actions.LOGIN_USER(context, testJWT);
+
+      const removeBearer = testJWT.split(" ")[1];
+      expect(commit).toHaveBeenCalledWith("SET_ACCESS_TOKEN", removeBearer);
+    });
+
     /* DEPRECATED */
     // it("calls an action to load the user from the api", () => {
     //   const commit = jest.fn();
@@ -126,6 +137,15 @@ describe("actions", () => {
 
       await actions.LOGOUT_USER(context);
       expect(storageSetUserSpy).toHaveBeenCalledWith({});
+    });
+
+    it("unsets the access token in the store", async () => {
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      await actions.LOGOUT_USER(context);
+      expect(commit).toHaveBeenCalledWith("UNSET_ACCESS_TOKEN");
     });
   });
 
