@@ -1,9 +1,7 @@
-import axios from "axios";
-jest.mock("axios");
 import { APIAuthLogin, APIAuthLogout, APIAuthRegister } from "@/api/auth";
-const getMock = axios.get as jest.Mock;
 
-const baseURL = process.env.VUE_APP_API_URL;
+import client from "@/http/client";
+jest.mock("@/http/client");
 
 describe("auth", () => {
   /* DEPRECATED */
@@ -29,39 +27,36 @@ describe("auth", () => {
   // Test the axios request for user login
   describe("APIAuthLogin", () => {
     it("makes a post request to the correct login endpoint", async () => {
+      const postMock = jest.spyOn(client, "post");
       const data = {
         email: "test@test.com",
         password: "password",
       };
       await APIAuthLogin(data);
-      expect(axios.post).toHaveBeenCalledWith(
-        `${baseURL}/api/auth/login`,
-        data
-      );
+      expect(postMock).toHaveBeenCalledWith(`/api/auth/login`, data);
     });
   });
 
   // Test the axios request for user registration
   describe("APIAuthRegister", () => {
     it("makes a post request to the correct register endpoint", async () => {
+      const postMock = jest.spyOn(client, "post");
       const data = {
         name: "Test User",
         email: "test@test.com",
         password: "password",
       };
       await APIAuthRegister(data);
-      expect(axios.post).toHaveBeenCalledWith(
-        `${baseURL}/api/auth/register`,
-        data
-      );
+      expect(postMock).toHaveBeenCalledWith(`/api/auth/register`, data);
     });
   });
 
   // Test the axios request for user logout
   describe("APIAuthLogout", () => {
     it("makes a post request to the correct logout endpoint", async () => {
+      const postMock = jest.spyOn(client, "post");
       await APIAuthLogout();
-      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/auth/logout`);
+      expect(postMock).toHaveBeenCalledWith(`/api/auth/logout`);
     });
   });
 });
