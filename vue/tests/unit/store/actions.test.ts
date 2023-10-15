@@ -1,9 +1,8 @@
 import actions from "@/store/actions";
 import { testJWT } from "../../setup/testJWT";
 
-import axios from "axios";
-jest.mock("axios");
-const getMock = axios.get as jest.Mock;
+import client from "@/http/client";
+jest.mock("@/http/client");
 
 describe("actions", () => {
   afterEach(() => {
@@ -97,6 +96,7 @@ describe("actions", () => {
 
   describe("LOGOUT_USER", () => {
     it("makes an api call to logout the user", async () => {
+      jest.spyOn(client, "post");
       const actual = jest.requireActual("@/api/auth");
       const APIAuthLogoutSpy = jest.spyOn(actual, "APIAuthLogout");
       const commit = jest.fn();
