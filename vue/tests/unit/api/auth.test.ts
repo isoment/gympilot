@@ -1,4 +1,9 @@
-import { APIAuthLogin, APIAuthLogout, APIAuthRegister } from "@/api/auth";
+import {
+  APIAuthLogin,
+  APIAuthLogout,
+  APIAuthRefreshToken,
+  APIAuthRegister,
+} from "@/api/auth";
 
 import client from "@/http/client";
 jest.mock("@/http/client");
@@ -24,7 +29,6 @@ describe("auth", () => {
   //   });
   // });
 
-  // Test the axios request for user login
   describe("APIAuthLogin", () => {
     it("makes a post request to the correct login endpoint", async () => {
       const postMock = jest.spyOn(client, "post");
@@ -33,11 +37,10 @@ describe("auth", () => {
         password: "password",
       };
       await APIAuthLogin(data);
-      expect(postMock).toHaveBeenCalledWith(`/api/auth/login`, data);
+      expect(postMock).toHaveBeenCalledWith("/api/auth/login", data);
     });
   });
 
-  // Test the axios request for user registration
   describe("APIAuthRegister", () => {
     it("makes a post request to the correct register endpoint", async () => {
       const postMock = jest.spyOn(client, "post");
@@ -47,16 +50,23 @@ describe("auth", () => {
         password: "password",
       };
       await APIAuthRegister(data);
-      expect(postMock).toHaveBeenCalledWith(`/api/auth/register`, data);
+      expect(postMock).toHaveBeenCalledWith("/api/auth/register", data);
     });
   });
 
-  // Test the axios request for user logout
   describe("APIAuthLogout", () => {
     it("makes a post request to the correct logout endpoint", async () => {
       const postMock = jest.spyOn(client, "post");
       await APIAuthLogout();
-      expect(postMock).toHaveBeenCalledWith(`/api/auth/logout`);
+      expect(postMock).toHaveBeenCalledWith("/api/auth/logout");
+    });
+  });
+
+  describe("APIAuthRefreshToken", () => {
+    it("makes a post request to the correct refresh token endpoint", async () => {
+      const postMock = jest.spyOn(client, "post");
+      await APIAuthRefreshToken();
+      expect(postMock).toHaveBeenCalledWith("/api/auth/refresh-token");
     });
   });
 });

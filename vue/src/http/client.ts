@@ -1,15 +1,13 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import store from "../store";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+axios.defaults.withCredentials = true;
 // axios.defaults.headers.common["Content-Type"] = "application/json";
 // axios.defaults.headers.common["Accept"] = "application/json";
-axios.defaults.withCredentials = true;
-
-const baseURL = process.env.VUE_APP_API_URL;
 
 const client = axios.create({
-  baseURL: baseURL,
+  baseURL: process.env.VUE_APP_API_URL,
 });
 
 client.interceptors.request.use(
@@ -27,6 +25,15 @@ client.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
+  }
+);
+
+client.interceptors.response.use(
+  (response: AxiosResponse<any, any>): AxiosResponse<any, any> => {
+    return response;
+  },
+  (error) => {
+    Promise.reject(error);
   }
 );
 

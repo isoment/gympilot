@@ -12,6 +12,7 @@ import {
   SET_USER,
   UNSET_ACCESS_TOKEN,
   UNSET_TOAST,
+  REFRESH_TOKEN,
 } from "./constants";
 import {
   storageGetIsLoggedIn,
@@ -40,10 +41,6 @@ const actions = {
     context.commit(SET_USER, userDetails);
   },
 
-  /**
-   *  Login the user by setting the local storage and loading the user
-   *  details from the API.
-   */
   [LOGIN_USER](context: Context, payload: string): void {
     storageSetLogin("true");
 
@@ -57,16 +54,18 @@ const actions = {
     context.commit(SET_LOGGED_IN, true);
   },
 
-  /**
-   *  Logout a user.
-   */
-  [LOGOUT_USER]: async (context: Context) => {
+  [LOGOUT_USER]: async (context: Context): Promise<void> => {
     await APIAuthLogout();
     context.commit(SET_LOGGED_IN, false);
     context.commit(UNSET_ACCESS_TOKEN);
     context.commit(SET_USER, {});
     storageSetLogin("false");
     storageSetUser({});
+  },
+
+  [REFRESH_TOKEN]: async (context: Context): Promise<void> => {
+    // Make a call to the refresh token endpoint to get a new access token
+    console.log(context);
   },
 
   [ADD_TOAST](context: Context, payload: Toast): void {
