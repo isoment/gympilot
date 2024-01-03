@@ -20,7 +20,7 @@ import {
   storageSetLogin,
   storageSetUser,
 } from "../utils/localStorageHelpers";
-import { APIAuthLogout } from "../api/auth";
+import { APIAuthLogout, APIAuthRefreshToken } from "../api/auth";
 import { LoadUser } from "@/api/types";
 import { Toast } from "./types";
 
@@ -63,9 +63,11 @@ const actions = {
     storageSetUser({});
   },
 
+  /**
+   *  If the request to the refresh token endpoint is successful
+   */
   [REFRESH_TOKEN]: async (context: Context): Promise<void> => {
-    // Make a call to the refresh token endpoint to get a new access token
-    console.log(context);
+    await APIAuthRefreshToken();
   },
 
   [ADD_TOAST](context: Context, payload: Toast): void {
