@@ -9,4 +9,9 @@ export const authRoutes = [
     name: "register",
     component: () => import("@/views/auth/RegisterView.vue"),
   },
+  {
+    path: "/protected-endpoint-test",
+    name: "protected-endpoint-test",
+    component: () => import("@/views/auth/ProtectedEndpointTest.vue"),
+  },
 ];

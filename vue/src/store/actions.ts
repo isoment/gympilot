@@ -67,7 +67,12 @@ const actions = {
    *  If the request to the refresh token endpoint is successful
    */
   [REFRESH_TOKEN]: async (context: Context): Promise<void> => {
-    await APIAuthRefreshToken();
+    const response = await APIAuthRefreshToken();
+    const accessToken = response?.headers["authorization"];
+
+    if (accessToken) {
+      context.dispatch(LOGIN_USER, accessToken);
+    }
   },
 
   [ADD_TOAST](context: Context, payload: Toast): void {

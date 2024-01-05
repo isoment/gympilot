@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import store from "../store";
-import { REFRESH_TOKEN } from "@/store/constants";
+import { LOGOUT_USER, REFRESH_TOKEN } from "@/store/constants";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 axios.defaults.withCredentials = true;
@@ -41,15 +41,22 @@ client.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      // We want to logout the user and redirect/display a modal since the refresh token has
-      // expired.
+      // We want to logout the user and display a modal since the refresh token has expired.
       if (url === "/api/auth/refresh-token") {
         console.log("Refresh Token Expired");
+        store.dispatch(LOGOUT_USER);
       } else {
         try {
           store.dispatch(REFRESH_TOKEN);
-        } catch (refreshError) {
-          console.log("FAILURE");
+          // Retry the original request after refreshing the token
+          const newAccessToken = store.state.accessToken;
+          if (newAccessToken) {
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            return axios(originalRequest);
+          }
+        } catch (error) {
+          console.log("Error getting new access token");
+          store.dispatch(LOGOUT_USER);
         }
       }
     }
