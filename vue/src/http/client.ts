@@ -2,10 +2,9 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import store from "../store";
 import { LOGOUT_USER, REFRESH_TOKEN } from "@/store/constants";
 
+axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 axios.defaults.withCredentials = true;
-// axios.defaults.headers.common["Content-Type"] = "application/json";
-// axios.defaults.headers.common["Accept"] = "application/json";
 
 const client = axios.create({
   baseURL: process.env.VUE_APP_API_URL,

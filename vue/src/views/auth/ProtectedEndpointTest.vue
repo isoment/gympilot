@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import client from "@/http/client";
 
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
@@ -28,6 +28,10 @@ export default defineComponent({
   components: { GuestTopNavbar },
 
   setup() {
+    onMounted(() => {
+      callProtectedRoute();
+    });
+
     const callProtectedRoute = async () => {
       try {
         await client.get("/api/auth/user");

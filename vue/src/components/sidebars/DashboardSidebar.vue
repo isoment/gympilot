@@ -187,9 +187,8 @@ export default defineComponent({
      *  When a link is clicked we want to emit a linkClicked event.
      */
     const linkClicked = (event: PointerEvent): void => {
-      if (event.target && "pathname" in event.target) {
-        const targetElement = event.target;
-        emit("linkClicked", { clicked: true, path: targetElement.pathname });
+      if (event.target instanceof HTMLAnchorElement) {
+        emit("linkClicked", { clicked: true, path: event.target.pathname });
       }
     };
 
