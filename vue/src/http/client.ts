@@ -31,7 +31,7 @@ client.interceptors.response.use(
   (response: AxiosResponse<any, any>): AxiosResponse<any, any> => {
     return response;
   },
-  async (error) => {
+  (error) => {
     const originalRequest = error.config;
     const { url } = error.config;
 
@@ -60,7 +60,7 @@ client.interceptors.response.use(
       }
     }
 
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 );
 
