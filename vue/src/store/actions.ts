@@ -64,7 +64,8 @@ const actions = {
   },
 
   /**
-   *  If the request to the refresh token endpoint is successful
+   *  If the request to the refresh token endpoint is successful we want
+   *  to call the login action setting the new access token
    */
   [REFRESH_TOKEN]: async (context: Context): Promise<void> => {
     const response = await APIAuthRefreshToken();

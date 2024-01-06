@@ -79,6 +79,13 @@
               >Sign up</router-link
             >
           </div>
+          <div class="mt-6 text-center text-gray-500">
+            <router-link
+              :to="{ name: 'protected-endpoint-test' }"
+              class="text-emerald-500"
+              >Protected Endpoint Test</router-link
+            >
+          </div>
         </div>
       </form>
     </div>
