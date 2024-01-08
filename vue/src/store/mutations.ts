@@ -6,6 +6,7 @@ import {
   SET_USER,
   SET_ACCESS_TOKEN,
   UNSET_ACCESS_TOKEN,
+  SET_SESSION_EXPIRED_LAST_ROUTE,
 } from "./constants";
 import { GlobalState, Toast } from "./types";
 
@@ -37,6 +38,10 @@ const mutations = {
     state.toasts = state.toasts.filter((toast) => {
       return toast.id !== toastToRemove.id;
     });
+  },
+
+  [SET_SESSION_EXPIRED_LAST_ROUTE](state: GlobalState, route: string | null) {
+    state.sessionExpiredLastRoute = route;
   },
 };
 

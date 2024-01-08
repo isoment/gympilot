@@ -11,4 +11,5 @@ export interface GlobalState {
   user: Partial<LoadUser>;
   accessToken: string | null;
   toasts: Toast[];
+  sessionExpiredLastRoute: string | null;
 }

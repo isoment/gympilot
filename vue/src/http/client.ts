@@ -1,7 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import store from "../store";
 import router from "@/router";
-import { LOGOUT_USER, REFRESH_TOKEN } from "@/store/constants";
+import {
+  ADD_TOAST,
+  LOGOUT_USER,
+  REFRESH_TOKEN,
+  SET_SESSION_EXPIRED_LAST_ROUTE,
+} from "@/store/constants";
 
 const client = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -46,10 +51,17 @@ client.interceptors.response.use(
       // If the refresh token has expired we want to logout the user and redirect to the
       // login. If not we want to get a new access token and retry the request.
       if (url === "/api/auth/refresh-token") {
-        console.log("Refresh Token Expired");
+        store.commit(
+          SET_SESSION_EXPIRED_LAST_ROUTE,
+          router.currentRoute.value.fullPath
+        );
         try {
           store.dispatch(LOGOUT_USER);
         } finally {
+          store.dispatch(ADD_TOAST, {
+            type: "error",
+            message: "Session Expired",
+          });
           router.push({ name: "login" });
         }
       } else {

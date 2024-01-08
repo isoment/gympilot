@@ -6,6 +6,7 @@ const state = (): GlobalState => {
     user: {},
     accessToken: null,
     toasts: [],
+    sessionExpiredLastRoute: null,
   };
 };
 
