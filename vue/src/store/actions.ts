@@ -13,12 +13,16 @@ import {
   UNSET_ACCESS_TOKEN,
   UNSET_TOAST,
   REFRESH_TOKEN,
+  ADD_SESSION_EXPIRED_LAST_ROUTE,
+  SET_SESSION_EXPIRED_LAST_ROUTE,
 } from "./constants";
 import {
   storageGetIsLoggedIn,
   storageGetUser,
   storageSetLogin,
   storageSetUser,
+  storageSetLastRoute,
+  storageGetLastRoute,
 } from "../utils/localStorageHelpers";
 import { APIAuthLogout, APIAuthRefreshToken } from "../api/auth";
 import { LoadUser } from "@/api/types";
@@ -31,14 +35,15 @@ interface Context {
 
 const actions = {
   /**
-   *  Check the local storage to see if a user is logged in. Also set
-   *  the user if there is a user object in local storage.
+   *  Here we will get data from local storage and populate the store.
    */
   [LOAD_STORED_STATE](context: Context): void {
     const userIsLoggedIn = storageGetIsLoggedIn();
     context.commit(SET_LOGGED_IN, userIsLoggedIn);
     const userDetails = storageGetUser();
     context.commit(SET_USER, userDetails);
+    const lastRoute = storageGetLastRoute();
+    context.commit(SET_SESSION_EXPIRED_LAST_ROUTE, lastRoute);
   },
 
   [LOGIN_USER](context: Context, payload: string): void {
@@ -98,6 +103,11 @@ const actions = {
   //     context.dispatch(LOGOUT_USER);
   //   }
   // },
+
+  [ADD_SESSION_EXPIRED_LAST_ROUTE](context: Context, payload: string): void {
+    context.commit(SET_SESSION_EXPIRED_LAST_ROUTE, payload);
+    storageSetLastRoute(payload);
+  },
 };
 
 export default actions;

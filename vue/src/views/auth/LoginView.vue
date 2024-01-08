@@ -99,7 +99,11 @@ import { useStore } from "vuex";
 import { key } from "@/store";
 import { AxiosError } from "axios";
 import { APIAuthLogin } from "@/api/auth";
-import { LOGIN_USER, ADD_TOAST } from "@/store/constants";
+import {
+  LOGIN_USER,
+  ADD_TOAST,
+  UNSET_SESSION_EXPIRED_LAST_ROUTE,
+} from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
@@ -135,7 +139,9 @@ export default defineComponent({
         const accessToken = response.headers["authorization"];
         if (accessToken) {
           store.dispatch(LOGIN_USER, accessToken);
-          router.push({ name: "home" });
+          const route = store.state.sessionExpiredLastRoute ?? "/";
+          router.push(route);
+          store.commit(UNSET_SESSION_EXPIRED_LAST_ROUTE);
         } else {
           store.dispatch(ADD_TOAST, {
             type: "error",

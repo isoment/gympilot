@@ -7,6 +7,7 @@ import {
   SET_ACCESS_TOKEN,
   UNSET_ACCESS_TOKEN,
   SET_SESSION_EXPIRED_LAST_ROUTE,
+  UNSET_SESSION_EXPIRED_LAST_ROUTE,
 } from "./constants";
 import { GlobalState, Toast } from "./types";
 
@@ -40,8 +41,12 @@ const mutations = {
     });
   },
 
-  [SET_SESSION_EXPIRED_LAST_ROUTE](state: GlobalState, route: string | null) {
+  [SET_SESSION_EXPIRED_LAST_ROUTE](state: GlobalState, route: string) {
     state.sessionExpiredLastRoute = route;
+  },
+
+  [UNSET_SESSION_EXPIRED_LAST_ROUTE](state: GlobalState) {
+    state.sessionExpiredLastRoute = null;
   },
 };
 

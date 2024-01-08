@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import store from "../store";
 import router from "@/router";
 import {
+  ADD_SESSION_EXPIRED_LAST_ROUTE,
   ADD_TOAST,
   LOGOUT_USER,
   REFRESH_TOKEN,
@@ -46,15 +47,12 @@ client.interceptors.response.use(
 
     // If a 401 is returned that means the access token is expired and we need to attempt
     // a refresh. If the refresh returns a 401 response as well we want to log the user out.
+    // If the access token was successfully refreshed we will retry the request
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      // If the refresh token has expired we want to logout the user and redirect to the
-      // login. If not we want to get a new access token and retry the request.
       if (url === "/api/auth/refresh-token") {
-        store.commit(
-          SET_SESSION_EXPIRED_LAST_ROUTE,
-          router.currentRoute.value.fullPath
-        );
+        const lastRoute = router.currentRoute.value.fullPath;
+        store.dispatch(ADD_SESSION_EXPIRED_LAST_ROUTE, lastRoute);
         try {
           store.dispatch(LOGOUT_USER);
         } finally {
