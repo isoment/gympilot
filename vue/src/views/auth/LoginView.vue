@@ -47,9 +47,11 @@
               href="#"
               class="font-light transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
               data-test="forgot-password-link"
+              @click="openPasswordResetModal"
             >
               Forgot Your Password?
             </a>
+            <SingleModal v-model="showPasswordResetModal"></SingleModal>
           </div>
           <!-- Button -->
           <div class="mt-4">
@@ -107,6 +109,7 @@ import {
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+import SingleModal from "@/components/modals/SingleModal.vue";
 
 interface LoginValidationErrors {
   email?: string;
@@ -116,20 +119,20 @@ interface LoginValidationErrors {
 export default defineComponent({
   name: "LoginView",
 
-  components: { GuestTopNavbar, TextInput, ValidationErrors },
+  components: { GuestTopNavbar, TextInput, ValidationErrors, SingleModal },
 
   setup() {
     const router = useRouter();
     const store = useStore(key);
 
+    /********************
+     *  Logic for login *
+     *******************/
     const loginForm = ref({
       email: "",
       password: "",
     });
 
-    /********************
-     *  Logic for login *
-     *******************/
     const loadingLoginAPI = ref(false);
     const loginValidationErrors = ref<LoginValidationErrors>({});
 
@@ -169,7 +172,24 @@ export default defineComponent({
       loadingLoginAPI.value = false;
     };
 
-    return { loginForm, attemptLogin, loadingLoginAPI, loginValidationErrors };
+    /*****************************
+     *  Logic for Password Reset *
+     *****************************/
+
+    const showPasswordResetModal = ref(false);
+
+    const openPasswordResetModal = () => {
+      showPasswordResetModal.value = true;
+    };
+
+    return {
+      loginForm,
+      attemptLogin,
+      loadingLoginAPI,
+      loginValidationErrors,
+      showPasswordResetModal,
+      openPasswordResetModal,
+    };
   },
 });
 </script>

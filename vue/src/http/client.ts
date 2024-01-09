@@ -6,7 +6,6 @@ import {
   ADD_TOAST,
   LOGOUT_USER,
   REFRESH_TOKEN,
-  SET_SESSION_EXPIRED_LAST_ROUTE,
 } from "@/store/constants";
 
 const client = axios.create({
