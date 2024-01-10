@@ -23,13 +23,13 @@
         <form class="mt-2">
           <div class="w-full mb-6">
             <TextInput
-              v-model="email"
+              v-model="form.email"
               placeholder="Email"
               :icon="['fa', 'user']"
               data-test="email-input"
             />
             <ValidationErrors
-              :errors="validationError"
+              :errors="validationErrors"
               field="email"
               class="mt-2 -mb-2 text-left"
             />
@@ -41,6 +41,7 @@
       <button
         type="button"
         class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+        @click="attemptRequestPasswordReset()"
       >
         Send Password Reset
       </button>
@@ -50,9 +51,14 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { AxiosError } from "axios";
+import { useStore } from "vuex";
+import { key } from "@/store";
+import { ADD_TOAST } from "@/store/constants";
 import { DialogTitle } from "@headlessui/vue";
-import TextInput from "../inputs/TextInput.vue";
-import ValidationErrors from "../shared/ValidationErrors.vue";
+import TextInput from "@/components/inputs/TextInput.vue";
+import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+import { APIAuthForgotPassword } from "@/api/auth";
 
 interface ResetValidationErrors {
   email?: string;
@@ -67,15 +73,46 @@ export default defineComponent({
     ValidationErrors,
   },
 
-  props: {},
+  emits: ["close:forgot:password:modal"],
 
-  emits: ["update:modelValue"],
+  setup(_, { emit }) {
+    const store = useStore(key);
 
-  setup() {
-    const email = ref("");
-    const validationError = ref<ResetValidationErrors>({});
+    const form = ref({ email: "" });
+    const validationErrors = ref<ResetValidationErrors>({});
 
-    return { validationError, email };
+    const requestPasswordReset = async () => {
+      try {
+        await APIAuthForgotPassword(form.value);
+        store.dispatch(ADD_TOAST, {
+          type: "success",
+          message: "Password reset instructions sent.",
+        });
+        emit("close:forgot:password:modal");
+      } catch (error: any) {
+        if ((error as AxiosError)?.response?.status === 422) {
+          if (error.response.data.errors) {
+            validationErrors.value = error.response.data.errors;
+            return;
+          } else if (error.response.data.message) {
+            validationErrors.value = { email: error.response.data.message };
+            return;
+          }
+        }
+        store.dispatch(ADD_TOAST, {
+          type: "error",
+          message: "There was an error resetting password",
+        });
+        emit("close:forgot:password:modal");
+      }
+    };
+
+    const attemptRequestPasswordReset = async () => {
+      validationErrors.value = {};
+      await requestPasswordReset();
+    };
+
+    return { validationErrors, form, attemptRequestPasswordReset };
   },
 });
 </script>

@@ -52,7 +52,9 @@
               Forgot Your Password?
             </a>
             <SingleModal v-model="showPasswordResetModal">
-              <ForgotPassword></ForgotPassword>
+              <ForgotPassword
+                @close:forgot:password:modal="closePasswordResetModal"
+              ></ForgotPassword>
             </SingleModal>
           </div>
           <!-- Button -->
@@ -191,6 +193,10 @@ export default defineComponent({
       showPasswordResetModal.value = true;
     };
 
+    const closePasswordResetModal = () => {
+      showPasswordResetModal.value = false;
+    };
+
     return {
       loginForm,
       attemptLogin,
@@ -198,6 +204,7 @@ export default defineComponent({
       loginValidationErrors,
       showPasswordResetModal,
       openPasswordResetModal,
+      closePasswordResetModal,
     };
   },
 });

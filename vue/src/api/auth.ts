@@ -21,6 +21,12 @@ export const APIAuthRefreshToken = (): AxiosPromise => {
   return client.post("/api/auth/refresh-token");
 };
 
+export const APIAuthForgotPassword = (params: {
+  [key: string]: string;
+}): AxiosPromise => {
+  return client.post("/api/auth/forgot-password", params);
+};
+
 /* DEPRECATED */
 // export const APIAuthLoadUser = (): AxiosPromise => {
 //   return axios.get(`${baseURL}/api/auth/user`);
