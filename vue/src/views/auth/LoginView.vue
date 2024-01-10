@@ -51,7 +51,9 @@
             >
               Forgot Your Password?
             </a>
-            <SingleModal v-model="showPasswordResetModal"></SingleModal>
+            <SingleModal v-model="showPasswordResetModal">
+              <ForgotPassword></ForgotPassword>
+            </SingleModal>
           </div>
           <!-- Button -->
           <div class="mt-4">
@@ -110,6 +112,7 @@ import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import SingleModal from "@/components/modals/SingleModal.vue";
+import ForgotPassword from "@/components/auth/ForgotPassword.vue";
 
 interface LoginValidationErrors {
   email?: string;
@@ -119,7 +122,13 @@ interface LoginValidationErrors {
 export default defineComponent({
   name: "LoginView",
 
-  components: { GuestTopNavbar, TextInput, ValidationErrors, SingleModal },
+  components: {
+    GuestTopNavbar,
+    TextInput,
+    ValidationErrors,
+    SingleModal,
+    ForgotPassword,
+  },
 
   setup() {
     const router = useRouter();
