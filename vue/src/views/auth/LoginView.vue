@@ -11,7 +11,7 @@
           </font-awesome-icon>
         </div>
         <div class="px-12 pb-10">
-          <h2 class="mt-4 mb-5 text-lg font-bold text-gray-600">Sign in</h2>
+          <h2 class="mt-4 mb-5 text-lg font-bold text-slate-800">Sign in</h2>
           <!-- Email -->
           <div class="w-full mb-6">
             <TextInput

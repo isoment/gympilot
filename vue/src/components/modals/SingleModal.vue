@@ -74,7 +74,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const open = ref(props.modelValue);
 
-    // Watch for changes in props.modelValue and update the local open ref
+    // Watch for changes in props.modelValue and update the local state
     watch(
       () => props.modelValue,
       (newValue) => {
