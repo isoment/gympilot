@@ -72,10 +72,13 @@ import { defineComponent, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { key } from "@/store";
-import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import { ADD_TOAST } from "@/store/constants";
+import { APIResetPassword } from "@/api/auth";
+import { AxiosError } from "axios";
+import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+import router from "@/router";
 
 interface PasswordResetValidationErrors {
   password?: string;
@@ -116,7 +119,35 @@ export default defineComponent({
       }
     });
 
-    const attemptPasswordReset = () => {};
+    const resetPassword = async () => {
+      try {
+        await APIResetPassword(resetToken.value, passwordResetForm.value);
+        router.push({ name: "login" });
+        store.dispatch(ADD_TOAST, {
+          type: "success",
+          message: "Your password was reset. Please login",
+        });
+      } catch (error: any) {
+        if ((error as AxiosError)?.response?.status === 422) {
+          if (error.response.data.errors) {
+            passwordResetValidationErrors.value = error.response.data.errors;
+          } else {
+            store.dispatch(ADD_TOAST, {
+              type: "error",
+              message: error.response.data.message,
+            });
+            router.push({ name: "login" });
+          }
+        }
+      }
+    };
+
+    const attemptPasswordReset = async () => {
+      passwordResetValidationErrors.value = {};
+      loadingResetApi.value = true;
+      await resetPassword();
+      loadingResetApi.value = false;
+    };
 
     return {
       passwordResetForm,
