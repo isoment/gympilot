@@ -132,7 +132,7 @@ import { LOGIN_USER, ADD_TOAST } from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
 
-interface ApiValidationErrors {
+interface RegisterValidationErrors {
   first_name?: string;
   last_name?: string;
   email?: string;
@@ -165,7 +165,7 @@ export default defineComponent({
      *  Logic for register *
      **********************/
     const loadingRegisterApi = ref(false);
-    const registerValidationErrors = ref<ApiValidationErrors>({});
+    const registerValidationErrors = ref<RegisterValidationErrors>({});
 
     const register = async () => {
       try {
