@@ -7,15 +7,6 @@ import router from "./router";
 import store, { key } from "./store";
 import { OnClickOutside } from "@vueuse/components";
 
-/*********************************
- * Import axios and set defaults *
- ********************************/
-import axios from "axios";
-axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-// axios.defaults.headers.common["Content-Type"] = "application/json";
-// axios.defaults.headers.common["Accept"] = "application/json";
-axios.defaults.withCredentials = true;
-
 /***************************************************
  * Import the font awesome library modules we need *
  **************************************************/
@@ -35,6 +26,9 @@ import {
   faXmark,
   faMagnifyingGlass,
   faDumbbell,
+  faCircleExclamation,
+  faCircleCheck,
+  faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faUser);
 library.add(faLock);
@@ -49,11 +43,19 @@ library.add(faXmark);
 library.add(faMagnifyingGlass);
 library.add(faBell as IconDefinition);
 library.add(faDumbbell);
+library.add(faCircleExclamation);
+library.add(faCircleCheck);
+library.add(faUserTie);
+
+/****************************
+ * Import custom components *
+ ***************************/
+import ToastsList from "./components/toasts/ToastsList.vue";
 
 /*********************************************************************
  *  Create the Vue application instance, creating global components, *
  *  use necessary libraries and mount the root element.              *
- *********************************************************************/
+ ********************************************************************/
 createApp({
   extends: App,
   beforeCreate() {
@@ -63,5 +65,6 @@ createApp({
   .use(store, key)
   .use(router)
   .component("font-awesome-icon", FontAwesomeIcon)
+  .component("toasts-list", ToastsList)
   .directive("click-outside", OnClickOutside)
   .mount("#app");

@@ -38,11 +38,12 @@ export class Email {
   }
 
   passwordReset(emailAddress: string, token: string): void {
+    const resetLink = `${appConfig.frontendRootURL}/password-reset/${token}`;
     const mailOptions = {
       from: "gympilot@gympilot.com",
       to: emailAddress,
       subject: "GymPilot | Reset Password",
-      html: this.renderTemplate("passwordReset", { resetToken: token }),
+      html: this.renderTemplate("passwordReset", { resetLink: resetLink }),
     };
     this.sendEmail("testEmail", mailOptions);
   }

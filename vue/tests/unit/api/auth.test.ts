@@ -1,75 +1,72 @@
-import axios from "axios";
-jest.mock("axios");
 import {
-  APIAuthCsrf,
-  APIAuthLoadUser,
   APIAuthLogin,
   APIAuthLogout,
+  APIAuthRefreshToken,
   APIAuthRegister,
 } from "@/api/auth";
-const getMock = axios.get as jest.Mock;
 
-const baseURL = process.env.VUE_APP_API_URL;
+import client from "@/http/client";
+jest.mock("@/http/client");
 
 describe("auth", () => {
-  // Test the axios request for the csrf token
-  describe("APIAuthCsrf", () => {
-    it("makes a csrf token request to the correct endpoint", async () => {
-      await APIAuthCsrf();
-      expect(axios.get).toHaveBeenCalledWith(`${baseURL}/sanctum/csrf-cookie`);
-    });
-  });
+  /* DEPRECATED */
+  // describe("APIAuthLoadUser", () => {
+  //   it("fetches the user details from the correct endpoint", async () => {
+  //     await APIAuthLoadUser();
+  //     expect(axios.get).toHaveBeenCalledWith(`${baseURL}/api/user`);
+  //   });
 
-  // Test the axios request to get teh user details
-  describe("APIAuthLoadUser", () => {
-    it("fetches the user details from the correct endpoint", async () => {
-      await APIAuthLoadUser();
-      expect(axios.get).toHaveBeenCalledWith(`${baseURL}/api/user`);
-    });
+  //   it("gets the user details from the response", async () => {
+  //     const user = {
+  //       id: 1,
+  //       name: "Fake User",
+  //       email: "test@test.com",
+  //     };
 
-    it("gets the user details from the response", async () => {
-      const user = {
-        id: 1,
-        name: "Fake User",
-        email: "test@test.com",
-      };
+  //     getMock.mockResolvedValue(user);
+  //     const response = await APIAuthLoadUser();
+  //     expect(response).toEqual(user);
+  //   });
+  // });
 
-      getMock.mockResolvedValue(user);
-      const response = await APIAuthLoadUser();
-      expect(response).toEqual(user);
-    });
-  });
-
-  // Test the axios request for user login
   describe("APIAuthLogin", () => {
     it("makes a post request to the correct login endpoint", async () => {
+      const postMock = jest.spyOn(client, "post");
       const data = {
         email: "test@test.com",
         password: "password",
       };
       await APIAuthLogin(data);
-      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/login`, data);
+      expect(postMock).toHaveBeenCalledWith("/api/auth/login", data);
     });
   });
 
-  // Test the axios request for user registration
   describe("APIAuthRegister", () => {
     it("makes a post request to the correct register endpoint", async () => {
+      const postMock = jest.spyOn(client, "post");
       const data = {
         name: "Test User",
         email: "test@test.com",
         password: "password",
       };
       await APIAuthRegister(data);
-      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/register`, data);
+      expect(postMock).toHaveBeenCalledWith("/api/auth/register", data);
     });
   });
 
-  // Test the axios request for user logout
   describe("APIAuthLogout", () => {
     it("makes a post request to the correct logout endpoint", async () => {
+      const postMock = jest.spyOn(client, "post");
       await APIAuthLogout();
-      expect(axios.post).toHaveBeenCalledWith(`${baseURL}/api/logout`);
+      expect(postMock).toHaveBeenCalledWith("/api/auth/logout");
+    });
+  });
+
+  describe("APIAuthRefreshToken", () => {
+    it("makes a post request to the correct refresh token endpoint", async () => {
+      const postMock = jest.spyOn(client, "post");
+      await APIAuthRefreshToken();
+      expect(postMock).toHaveBeenCalledWith("/api/auth/refresh-token");
     });
   });
 });

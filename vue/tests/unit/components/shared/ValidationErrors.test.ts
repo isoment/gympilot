@@ -6,8 +6,8 @@ describe("ValidationErrors", () => {
   const createConfig = (props = {}) => ({
     props: {
       errors: {
-        email: ["An email address is required"],
-        password: ["A password is required"],
+        email: "An email address is required",
+        password: "A password is required",
       },
       field: "email",
       ...props,

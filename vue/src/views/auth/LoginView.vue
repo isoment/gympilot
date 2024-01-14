@@ -11,7 +11,7 @@
           </font-awesome-icon>
         </div>
         <div class="px-12 pb-10">
-          <h2 class="mt-4 mb-5 text-lg font-bold text-gray-600">Sign in</h2>
+          <h2 class="mt-4 mb-5 text-lg font-bold text-slate-800">Sign in</h2>
           <!-- Email -->
           <div class="w-full mb-6">
             <TextInput
@@ -20,16 +20,14 @@
               :icon="['fa', 'user']"
               data-test="email-input"
             />
-            <div
-              v-if="loginValidationError"
-              class="mt-2 ml-1 text-xs text-left text-red-400"
-              data-test="validation-error"
-            >
-              {{ loginValidationError }}
-            </div>
+            <ValidationErrors
+              :errors="loginValidationErrors"
+              field="email"
+              class="mt-2 -mb-2 text-left"
+            />
           </div>
           <!-- Password -->
-          <div class="w-full mt-5 mb-8">
+          <div class="w-full mt-5">
             <TextInput
               v-model="loginForm.password"
               placeholder="Password"
@@ -37,16 +35,27 @@
               type="password"
               data-test="password-input"
             />
+            <ValidationErrors
+              :errors="loginValidationErrors"
+              field="password"
+              class="mt-2 -mb-2 text-left"
+            />
           </div>
           <!-- Forgot Password -->
-          <div>
+          <div class="mt-7">
             <a
               href="#"
               class="font-light transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
               data-test="forgot-password-link"
+              @click="openPasswordResetModal"
             >
               Forgot Your Password?
             </a>
+            <SingleModal v-model="showPasswordResetModal">
+              <ForgotPassword
+                @close:forgot:password:modal="closePasswordResetModal"
+              ></ForgotPassword>
+            </SingleModal>
           </div>
           <!-- Button -->
           <div class="mt-4">
@@ -88,55 +97,108 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { key } from "@/store";
 import { AxiosError } from "axios";
-import { APIAuthLogin, APIAuthCsrf } from "@/api/auth";
-import { LOGIN_USER } from "@/store/constants";
+import { APIAuthLogin } from "@/api/auth";
+import {
+  LOGIN_USER,
+  ADD_TOAST,
+  UNSET_SESSION_EXPIRED_LAST_ROUTE,
+} from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
+import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+import SingleModal from "@/components/modals/SingleModal.vue";
+import ForgotPassword from "@/components/auth/ForgotPassword.vue";
+
+interface LoginValidationErrors {
+  email?: string;
+  password?: string;
+}
 
 export default defineComponent({
   name: "LoginView",
 
-  components: { GuestTopNavbar, TextInput },
+  components: {
+    GuestTopNavbar,
+    TextInput,
+    ValidationErrors,
+    SingleModal,
+    ForgotPassword,
+  },
 
   setup() {
     const router = useRouter();
     const store = useStore(key);
 
+    /********************
+     *  Logic for login *
+     *******************/
     const loginForm = ref({
       email: "",
       password: "",
     });
 
-    /********************
-     *  Logic for login *
-     *******************/
     const loadingLoginAPI = ref(false);
-    const loginValidationError = ref("");
+    const loginValidationErrors = ref<LoginValidationErrors>({});
 
     const login = async () => {
       try {
-        await APIAuthCsrf();
         const response = await APIAuthLogin(loginForm.value);
-        if (response.status === 200) {
-          store.dispatch(LOGIN_USER);
-          router.push({ name: "home" });
+        const accessToken = response.headers["authorization"];
+        if (accessToken) {
+          store.dispatch(LOGIN_USER, accessToken);
+          const route = store.state.sessionExpiredLastRoute ?? "/dashboard";
+          router.push(route);
+          store.commit(UNSET_SESSION_EXPIRED_LAST_ROUTE);
+        } else {
+          store.dispatch(ADD_TOAST, {
+            type: "error",
+            message: "Invalid access token",
+          });
         }
-      } catch (error) {
+      } catch (error: any) {
         if ((error as AxiosError)?.response?.status === 422) {
-          loginValidationError.value =
-            "These credentials do not match our records";
+          if (error.response.data.errors) {
+            loginValidationErrors.value = error.response.data.errors;
+          } else {
+            store.dispatch(ADD_TOAST, {
+              type: "error",
+              message: error.response.data.message,
+            });
+          }
         }
       }
     };
 
     const attemptLogin = async () => {
       loadingLoginAPI.value = true;
-      loginValidationError.value = "";
+      loginValidationErrors.value = {};
       await login();
       loadingLoginAPI.value = false;
     };
 
-    return { loginForm, attemptLogin, loadingLoginAPI, loginValidationError };
+    /*****************************
+     *  Logic for Password Reset *
+     *****************************/
+
+    const showPasswordResetModal = ref(false);
+
+    const openPasswordResetModal = () => {
+      showPasswordResetModal.value = true;
+    };
+
+    const closePasswordResetModal = () => {
+      showPasswordResetModal.value = false;
+    };
+
+    return {
+      loginForm,
+      attemptLogin,
+      loadingLoginAPI,
+      loginValidationErrors,
+      showPasswordResetModal,
+      openPasswordResetModal,
+      closePasswordResetModal,
+    };
   },
 });
 </script>

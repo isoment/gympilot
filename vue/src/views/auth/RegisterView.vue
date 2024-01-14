@@ -11,20 +11,33 @@
           </font-awesome-icon>
         </div>
         <div class="px-12 pb-10">
-          <h2 class="mb-5 text-lg font-bold text-gray-600">Sign up</h2>
-          <!-- Name -->
+          <h2 class="mb-5 text-lg font-bold text-slate-800">Sign up</h2>
+          <!-- First Name -->
           <div class="w-full mb-6">
-            <!-- Maybe and required to API -->
             <TextInput
-              v-model="registerForm.name"
-              placeholder="Name"
-              data-test="name-input"
+              v-model="registerForm.first_name"
+              placeholder="First Name"
+              data-test="first-name-input"
               :icon="['fa', 'user']"
             />
             <ValidationErrors
               :errors="registerValidationErrors"
-              field="name"
-              class="mt-2 text-left"
+              field="first_name"
+              class="mt-2 -mb-2 text-left"
+            />
+          </div>
+          <!-- Last Name -->
+          <div class="w-full mb-6">
+            <TextInput
+              v-model="registerForm.last_name"
+              placeholder="Last Name"
+              data-test="last-name-input"
+              :icon="['fa', 'user-tie']"
+            />
+            <ValidationErrors
+              :errors="registerValidationErrors"
+              field="last_name"
+              class="mt-2 -mb-2 text-left"
             />
           </div>
           <!-- Email -->
@@ -39,7 +52,7 @@
             <ValidationErrors
               :errors="registerValidationErrors"
               field="email"
-              class="mt-2 text-left"
+              class="mt-2 -mb-2 text-left"
             />
           </div>
           <!-- Password -->
@@ -54,13 +67,13 @@
             <ValidationErrors
               :errors="registerValidationErrors"
               field="password"
-              class="mt-2 text-left"
+              class="mt-2 -mb-2 text-left"
             />
           </div>
           <!-- Confirm Password -->
           <div class="w-full mb-10">
             <TextInput
-              v-model="registerForm.password_confirmation"
+              v-model="registerForm.password_verify"
               placeholder="Confirm password"
               type="password"
               data-test="password-confirm-input"
@@ -68,14 +81,14 @@
             />
             <ValidationErrors
               :errors="registerValidationErrors"
-              field="password-confirmation"
-              class="mt-2 text-left"
+              field="password_verify"
+              class="mt-2 -mb-2 text-left"
             />
           </div>
           <!-- Button -->
           <div class="mt-4">
             <button
-              class="w-full px-4 py-2 font-bold text-white transition-all duration-200 bg-emerald-500 hover:bg-emerald-400 focus:outline-emerald-400"
+              class="w-full px-4 py-2 font-bold text-white transition-all duration-200 bg-emerald-500 hover:bg-emerald-400 focus:outline-slate-500"
               :disabled="loadingRegisterApi"
               data-test="submit-button"
               @click.prevent="attemptRegister()"
@@ -95,7 +108,7 @@
             Already have an account?
             <router-link
               :to="{ name: 'login' }"
-              class="font-bold transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
+              class="font-bold transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-slate-500"
               data-test="login-link"
             >
               Login
@@ -113,17 +126,18 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { key } from "@/store";
 import { AxiosError } from "axios";
-import { APIAuthRegister, APIAuthCsrf } from "@/api/auth";
+import { APIAuthRegister } from "@/api/auth";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
-import { LOGIN_USER } from "@/store/constants";
+import { LOGIN_USER, ADD_TOAST } from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
 
-interface ApiValidationErrors {
-  name?: string[];
-  email?: string[];
-  password?: string[];
-  password_confirmation?: string[];
+interface RegisterValidationErrors {
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  password?: string;
+  password_verify?: string;
 }
 
 export default defineComponent({
@@ -140,21 +154,21 @@ export default defineComponent({
     const store = useStore(key);
 
     const registerForm = ref({
-      name: "",
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
-      password_confirmation: "",
+      password_verify: "",
     });
 
     /***********************
      *  Logic for register *
      **********************/
     const loadingRegisterApi = ref(false);
-    const registerValidationErrors = ref<ApiValidationErrors>({});
+    const registerValidationErrors = ref<RegisterValidationErrors>({});
 
     const register = async () => {
       try {
-        await APIAuthCsrf();
         const response = await APIAuthRegister(registerForm.value);
         if (response.status === 201) {
           store.dispatch(LOGIN_USER);
@@ -162,7 +176,14 @@ export default defineComponent({
         }
       } catch (error: any) {
         if ((error as AxiosError)?.response?.status === 422) {
-          registerValidationErrors.value = error.response.data.errors;
+          if (error.response.data.errors) {
+            registerValidationErrors.value = error.response.data.errors;
+          } else {
+            store.dispatch(ADD_TOAST, {
+              type: "error",
+              message: error.response.data.message,
+            });
+          }
         }
       }
     };

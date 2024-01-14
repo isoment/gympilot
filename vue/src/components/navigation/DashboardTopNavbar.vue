@@ -81,6 +81,7 @@
                 v-for="item in items"
                 :key="item.name"
                 v-slot="{ active }"
+                @click="menuItemClick(item)"
               >
                 <a
                   :href="item.href"
@@ -101,8 +102,12 @@
 
 <script lang="ts">
 import { PropType, defineComponent } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { key } from "@/store";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { DashboardTopNavItems } from "@/config/types";
+import { DashboardTopNavItem } from "@/config/types";
+import { ADD_TOAST, LOGOUT_USER } from "@/store/constants";
 
 export default defineComponent({
   name: "DashboardTopNavbar",
@@ -116,7 +121,7 @@ export default defineComponent({
 
   props: {
     items: {
-      type: Array as PropType<DashboardTopNavItems[]>,
+      type: Array as PropType<DashboardTopNavItem[]>,
       required: true,
     },
   },
@@ -124,11 +129,29 @@ export default defineComponent({
   emits: ["openSidebar"],
 
   setup(props, { emit }) {
+    const router = useRouter();
+    const store = useStore(key);
+
     const sidebarOpen = (): void => {
       emit("openSidebar", true);
     };
 
-    return { sidebarOpen };
+    const menuItemClick = async (item: DashboardTopNavItem) => {
+      if (item.value === "logout") {
+        logout();
+      }
+    };
+
+    const logout = async () => {
+      await store.dispatch(LOGOUT_USER);
+      router.push({ name: "login" });
+      store.dispatch(ADD_TOAST, {
+        type: "success",
+        message: "You are now logout out",
+      });
+    };
+
+    return { sidebarOpen, menuItemClick };
   },
 });
 </script>

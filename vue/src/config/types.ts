@@ -10,7 +10,8 @@ interface DashboardSidebarChildren {
   to: string;
 }
 
-export interface DashboardTopNavItems {
+export interface DashboardTopNavItem {
   name: string;
+  value: string;
   href: string;
 }

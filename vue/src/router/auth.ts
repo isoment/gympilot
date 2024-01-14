@@ -9,4 +9,9 @@ export const authRoutes = [
     name: "register",
     component: () => import("@/views/auth/RegisterView.vue"),
   },
+  {
+    path: "/password-reset/:token",
+    name: "password-reset",
+    component: () => import("@/views/auth/PasswordResetView.vue"),
+  },
 ];

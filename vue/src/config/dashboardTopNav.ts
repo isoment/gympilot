@@ -1,9 +1,9 @@
-import { DashboardTopNavItems } from "./types";
+import { DashboardTopNavItem } from "./types";
 
-const items: DashboardTopNavItems[] = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
+const items: DashboardTopNavItem[] = [
+  { name: "Your Profile", value: "user-profile", href: "#" },
+  { name: "Settings", value: "settings", href: "#" },
+  { name: "Sign out", value: "logout", href: "#" },
 ];
 
 export default items;

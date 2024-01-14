@@ -2,12 +2,14 @@ import { AddressInfo } from "net";
 import { Server } from "http";
 import express from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import "dotenv/config";
 import defineRoutes from "../routes/routes";
 import { errorHandler } from "../errors/error";
 import { logger } from "../logger/logger";
 import { appConfig } from "../config/app";
+import { corsOptions } from "../config/cors";
 import { email } from "../services/notification/email/email";
 import { memoryStore } from "../data-access/memory-store/memoryStore";
 import { database } from "../data-access/models/database";
@@ -20,6 +22,7 @@ async function startWebServer(): Promise<AddressInfo> {
   database.configure();
   await memoryStore.configure();
   const expressApp = express();
+  expressApp.use(cors(corsOptions));
   expressApp.use(express.json());
   expressApp.use(express.urlencoded({ extended: true }));
   expressApp.use(cookieParser());

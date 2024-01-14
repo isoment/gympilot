@@ -14,10 +14,6 @@ import { useRoute } from "vue-router";
 jest.mock("vue-router");
 const useRouteMock = useRoute as jest.Mock;
 
-import { APIAuthCsrf } from "@/api/auth";
-jest.mock("@/api/auth");
-const APIAuthCsrfMock = APIAuthCsrf as jest.Mock;
-
 import { APIAuthRegister } from "@/api/auth";
 jest.mock("@/api/auth");
 const APIAuthRegisterMock = APIAuthRegister as jest.Mock;
@@ -50,20 +46,6 @@ describe("RegisterView", () => {
   });
 
   describe("the register form logic works correctly", () => {
-    it("calls the APIAuthCsrf method to get the csrf token from the api", async () => {
-      useStoreMock.mockReturnValue({ dispatch: jest.fn() });
-      useRouteMock.mockReturnValue({ push: jest.fn() });
-      APIAuthCsrfMock.mockResolvedValue({});
-      const wrapper = shallowMount(
-        RegisterView,
-        createConfig({ attachTo: document.body })
-      );
-      const submitFormButton = wrapper.find("[data-test='submit-button']");
-      await submitFormButton.trigger("click");
-      expect(APIAuthCsrfMock).toHaveBeenCalled();
-      wrapper.unmount();
-    });
-
     it("calls the APIAuthRegister method with the correct values from the register form", async () => {
       useStoreMock.mockReturnValue({ dispatch: jest.fn() });
       useRouteMock.mockReturnValue({ push: jest.fn() });
@@ -73,8 +55,11 @@ describe("RegisterView", () => {
         createConfig({ attachTo: document.body })
       );
 
-      const nameInput = wrapper.find("[data-test='name-input']");
-      await nameInput.setValue("Test User");
+      const firstNameInput = wrapper.find("[data-test='first-name-input']");
+      await firstNameInput.setValue("Test");
+
+      const lastNameInput = wrapper.find("[data-test='last-name-input']");
+      await lastNameInput.setValue("User");
 
       const emailInput = wrapper.find("[data-test='email-input']");
       await emailInput.setValue("test@test.com");
@@ -93,10 +78,11 @@ describe("RegisterView", () => {
       await flushPromises();
 
       expect(APIAuthRegisterMock).toHaveBeenCalledWith({
-        name: "Test User",
+        first_name: "Test",
+        last_name: "User",
         email: "test@test.com",
         password: "password",
-        password_confirmation: "password",
+        password_verify: "password",
       });
       wrapper.unmount();
     });
@@ -115,8 +101,11 @@ describe("RegisterView", () => {
         createConfig({ attachTo: document.body })
       );
 
-      const nameInput = wrapper.find("[data-test='name-input']");
-      await nameInput.setValue("Test User");
+      const firstNameInput = wrapper.find("[data-test='first-name-input']");
+      await firstNameInput.setValue("Test");
+
+      const lastNameInput = wrapper.find("[data-test='last-name-input']");
+      await lastNameInput.setValue("User");
 
       const emailInput = wrapper.find("[data-test='email-input']");
       await emailInput.setValue("test@test.com");
@@ -147,7 +136,8 @@ describe("RegisterView", () => {
             status: 422,
             data: {
               errors: {
-                name: ["The name is required"],
+                first_name: ["The first name is required"],
+                last_name: ["The last name is required"],
                 email: ["The email is invalid"],
                 password: ["The password is required"],
               },
@@ -166,8 +156,11 @@ describe("RegisterView", () => {
         createConfig({ attachTo: document.body })
       );
 
-      const nameInput = wrapper.find("[data-test='name-input']");
-      await nameInput.setValue("Test User");
+      const firstNameInput = wrapper.find("[data-test='first-name-input']");
+      await firstNameInput.setValue("Test");
+
+      const lastNameInput = wrapper.find("[data-test='last-name-input']");
+      await lastNameInput.setValue("User");
 
       const emailInput = wrapper.find("[data-test='email-input']");
       await emailInput.setValue("test@test.com");
@@ -185,7 +178,8 @@ describe("RegisterView", () => {
 
       await flushPromises();
 
-      expect(wrapper.text()).toMatch("The name is required");
+      expect(wrapper.text()).toMatch("The first name is required");
+      expect(wrapper.text()).toMatch("The last name is required");
       expect(wrapper.text()).toMatch("The email is invalid");
       expect(wrapper.text()).toMatch("The password is required");
     });
