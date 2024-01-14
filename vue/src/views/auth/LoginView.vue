@@ -85,13 +85,6 @@
               >Sign up</router-link
             >
           </div>
-          <div class="mt-6 text-center text-gray-500">
-            <router-link
-              :to="{ name: 'protected-endpoint-test' }"
-              class="text-emerald-500"
-              >Protected Endpoint Test</router-link
-            >
-          </div>
         </div>
       </form>
     </div>
@@ -153,7 +146,7 @@ export default defineComponent({
         const accessToken = response.headers["authorization"];
         if (accessToken) {
           store.dispatch(LOGIN_USER, accessToken);
-          const route = store.state.sessionExpiredLastRoute ?? "/";
+          const route = store.state.sessionExpiredLastRoute ?? "/dashboard";
           router.push(route);
           store.commit(UNSET_SESSION_EXPIRED_LAST_ROUTE);
         } else {

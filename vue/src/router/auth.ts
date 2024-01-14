@@ -10,11 +10,6 @@ export const authRoutes = [
     component: () => import("@/views/auth/RegisterView.vue"),
   },
   {
-    path: "/protected-endpoint-test",
-    name: "protected-endpoint-test",
-    component: () => import("@/views/auth/ProtectedEndpointTest.vue"),
-  },
-  {
     path: "/password-reset/:token",
     name: "password-reset",
     component: () => import("@/views/auth/PasswordResetView.vue"),
