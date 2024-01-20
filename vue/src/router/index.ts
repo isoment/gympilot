@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import store from "@/store";
 import { authRoutes } from "./auth";
 import { dashboard } from "./dashboard";
+import { MiddlewareFunction } from "./types";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -28,7 +30,24 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const pageTitle = to.meta.title || "GymPilot";
   document.title = pageTitle as string;
-  next();
+
+  // If the route has no middleware defined proceed.
+  if (!to.meta.middleware) {
+    return next();
+  }
+
+  const middleware = to.meta.middleware as MiddlewareFunction[];
+
+  const context = {
+    to,
+    from,
+    next,
+    store,
+  };
+
+  return middleware[0]({
+    ...context,
+  });
 });
 
 export default router;

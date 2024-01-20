@@ -3,10 +3,15 @@ import DashboardHome from "@/views/dashboard/DashboardHome.vue";
 import DashboardAbout from "@/views/dashboard/DashboardAbout.vue";
 import DashboardSettings from "@/views/dashboard/DashboardSettings.vue";
 
+import auth from "./middleware/auth";
+
 export const dashboard = [
   {
     path: "/dashboard",
     component: DashboardLayout,
+    meta: {
+      middleware: [auth],
+    },
     children: [
       {
         path: "",
