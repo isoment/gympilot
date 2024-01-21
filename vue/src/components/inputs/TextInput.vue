@@ -89,6 +89,16 @@ export default defineComponent({
       return classes.join(" ");
     });
 
+    // When the prop changes we want to change the input state
+    watch(
+      () => props.modelValue,
+      (newValue) => {
+        input.value = newValue;
+      }
+    );
+
+    // When the input state changes we want to emit an update event, we can now
+    // then use the v-model directive.
     watch(input, () => {
       emit("update:modelValue", input.value);
     });

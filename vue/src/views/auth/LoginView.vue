@@ -164,6 +164,7 @@ export default defineComponent({
               type: "error",
               message: error.response.data.message,
             });
+            resetLoginForm();
           }
         }
       }
@@ -174,6 +175,11 @@ export default defineComponent({
       loginValidationErrors.value = {};
       await login();
       loadingLoginAPI.value = false;
+    };
+
+    const resetLoginForm = () => {
+      loginForm.value.email = "";
+      loginForm.value.password = "";
     };
 
     /*****************************
