@@ -1,14 +1,16 @@
-import { MiddlewareContext } from "../types";
+import { MiddlewareContext, MiddlewareFunction } from "../types";
+import router from "..";
 
-export default function auth(context: MiddlewareContext) {
+const auth: MiddlewareFunction = (context: MiddlewareContext) => {
   const { next, store } = context;
   const isLoggedIn = store.state.isLoggedIn;
 
   if (!isLoggedIn) {
-    return next({
-      name: "login",
-    });
+    router.push({ name: "login" });
+    return;
   }
 
   return next();
-}
+};
+
+export default auth;

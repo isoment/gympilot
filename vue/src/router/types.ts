@@ -11,6 +11,4 @@ export interface MiddlewareContext {
 }
 
 // This is the function signature for each vue router middleware
-export type MiddlewareFunction = (
-  context: MiddlewareContext
-) => NavigationGuardNext;
+export type MiddlewareFunction = (context: MiddlewareContext) => void;
