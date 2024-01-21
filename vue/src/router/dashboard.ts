@@ -1,29 +1,27 @@
-import DashboardLayout from "@/layouts/DashboardLayout.vue";
-import DashboardHome from "@/views/dashboard/DashboardHome.vue";
-import DashboardAbout from "@/views/dashboard/DashboardAbout.vue";
-import DashboardSettings from "@/views/dashboard/DashboardSettings.vue";
-
 import auth from "./middleware/auth";
 
 export const dashboard = [
   {
     path: "/dashboard",
-    component: DashboardLayout,
+    component: () => import("@/layouts/DashboardLayout.vue"),
     meta: {
       middleware: [auth],
     },
     children: [
       {
         path: "",
-        component: DashboardHome,
+        name: "dashboard-home",
+        component: () => import("@/views/dashboard/DashboardHome.vue"),
       },
       {
         path: "about",
-        component: DashboardAbout,
+        name: "dashboard-about",
+        component: () => import("@/views/dashboard/DashboardAbout.vue"),
       },
       {
         path: "settings",
-        component: DashboardSettings,
+        name: "dashboard-settings",
+        component: () => import("@/views/dashboard/DashboardSettings.vue"),
       },
     ],
   },
