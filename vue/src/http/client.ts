@@ -40,7 +40,7 @@ client.interceptors.response.use(
   (response: AxiosResponse<any, any>): AxiosResponse<any, any> => {
     return response;
   },
-  (error) => {
+  async (error) => {
     const originalRequest = error.config;
     const { url } = error.config;
 
@@ -53,7 +53,7 @@ client.interceptors.response.use(
         const lastRoute = router.currentRoute.value.fullPath;
         store.dispatch(ADD_SESSION_EXPIRED_LAST_ROUTE, lastRoute);
         try {
-          store.dispatch(LOGOUT_USER);
+          await store.dispatch(LOGOUT_USER);
         } finally {
           store.dispatch(ADD_TOAST, {
             type: "error",
@@ -63,7 +63,7 @@ client.interceptors.response.use(
         }
       } else {
         try {
-          store.dispatch(REFRESH_TOKEN);
+          await store.dispatch(REFRESH_TOKEN);
           const newAccessToken = store.state.accessToken;
           if (newAccessToken) {
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
