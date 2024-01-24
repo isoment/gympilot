@@ -1,8 +1,3 @@
-interface Role {
-  name: string;
-  created_at?: string;
-}
-
 export interface LoadUser {
   id: number;
   first_name: string;
@@ -10,5 +5,5 @@ export interface LoadUser {
   email: string;
   created_at: string;
   updated_at: string;
-  Roles: Role[];
+  roles: string[];
 }

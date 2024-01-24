@@ -26,7 +26,7 @@ describe("mutations", () => {
         email: "test@test.com",
         created_at: "Date",
         updated_at: "Date",
-        Roles: [{ name: "owner" }],
+        roles: ["owner"],
       };
       const initialState = createState({ user: {} });
       mutations.SET_USER(initialState, user);

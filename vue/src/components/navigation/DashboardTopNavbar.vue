@@ -147,7 +147,7 @@ export default defineComponent({
       router.push({ name: "login" });
       store.dispatch(ADD_TOAST, {
         type: "success",
-        message: "You are now logout out",
+        message: "You are now logged out",
       });
     };
 

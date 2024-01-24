@@ -170,9 +170,10 @@ export default defineComponent({
     const register = async () => {
       try {
         const response = await APIAuthRegister(registerForm.value);
-        if (response.status === 201) {
-          store.dispatch(LOGIN_USER);
-          router.push({ name: "home" });
+        const accessToken = response.headers["authorization"];
+        if (accessToken) {
+          store.dispatch(LOGIN_USER, accessToken);
+          router.push({ name: "dashboard-home" });
         }
       } catch (error: any) {
         if ((error as AxiosError)?.response?.status === 422) {
