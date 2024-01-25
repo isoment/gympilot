@@ -1,4 +1,4 @@
-import { LoadUser } from "@/api/types";
+import { UserState } from "@/api/types";
 
 export interface Toast {
   id?: string;
@@ -8,7 +8,7 @@ export interface Toast {
 
 export interface GlobalState {
   isLoggedIn: boolean;
-  user: Partial<LoadUser>;
+  user: Partial<UserState>;
   accessToken: string | null;
   toasts: Toast[];
   sessionExpiredLastRoute: string | null;

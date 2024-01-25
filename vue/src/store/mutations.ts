@@ -1,4 +1,4 @@
-import { LoadUser } from "@/api/types";
+import { UserState } from "@/api/types";
 import {
   SET_TOAST,
   UNSET_TOAST,
@@ -16,7 +16,7 @@ const mutations = {
     state.isLoggedIn = isLoggedIn;
   },
 
-  [SET_USER](state: GlobalState, user: LoadUser) {
+  [SET_USER](state: GlobalState, user: UserState) {
     state.user = user;
   },
 

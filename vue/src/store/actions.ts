@@ -25,7 +25,7 @@ import {
   storageGetLastRoute,
 } from "../utils/localStorageHelpers";
 import { APIAuthLogout, APIAuthRefreshToken } from "../api/auth";
-import { LoadUser } from "@/api/types";
+import { UserState } from "@/api/types";
 import { Toast } from "./types";
 
 interface Context {
@@ -49,9 +49,12 @@ const actions = {
   [LOGIN_USER](context: Context, payload: string): void {
     storageSetLogin("true");
 
-    // We need to decode the token access token and store the user info
+    // We need to decode the token access token and store the user info, we can remove
+    // the iat and exp from the JWT payload
     const accessToken = payload.split(" ")[1];
-    const user = jwt_decode(accessToken) as Partial<LoadUser>;
+    const user = jwt_decode(accessToken) as Partial<UserState>;
+    delete user.iat;
+    delete user.exp;
 
     storageSetUser(user);
     context.commit(SET_USER, user);

@@ -1,5 +1,7 @@
-export interface LoadUser {
+export interface UserState {
   id: number;
+  iat?: number;
+  exp?: number;
   first_name: string;
   last_name: string;
   email: string;
