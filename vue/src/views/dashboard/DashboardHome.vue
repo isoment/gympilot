@@ -34,7 +34,7 @@ export default defineComponent({
       try {
         await client.get("/api/auth/user");
       } catch (error: any) {
-        console.log(error);
+        console.log("There was an error", error);
       }
     };
 
