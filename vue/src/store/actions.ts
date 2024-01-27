@@ -107,6 +107,10 @@ const actions = {
   //   }
   // },
 
+  /**
+   *  Set the users last route in the store so we can redirect them when they log
+   *  back in after session expiration.
+   */
   [ADD_SESSION_EXPIRED_LAST_ROUTE](context: Context, payload: string): void {
     context.commit(SET_SESSION_EXPIRED_LAST_ROUTE, payload);
     storageSetLastRoute(payload);

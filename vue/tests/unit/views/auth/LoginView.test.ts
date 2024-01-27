@@ -10,6 +10,11 @@ import { useStore } from "vuex";
 jest.mock("vuex");
 const useStoreMock = useStore as jest.Mock;
 
+/*
+  We can prevent the error on the router beforeEach() method by using
+  the actual vue router implementation and mocking out the parts the component
+  will be using.
+*/
 import { useRoute, useRouter } from "vue-router";
 jest.mock("vue-router", () => ({
   __esModule: true,

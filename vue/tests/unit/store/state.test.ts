@@ -20,4 +20,9 @@ describe("state", () => {
     const initialState = state();
     expect(initialState.toasts).toEqual([]);
   });
+
+  it("stores state to track the last route the user was at when the session expired", () => {
+    const initialState = state();
+    expect(initialState.sessionExpiredLastRoute).toEqual(null);
+  });
 });

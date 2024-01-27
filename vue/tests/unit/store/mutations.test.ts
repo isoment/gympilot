@@ -80,4 +80,23 @@ describe("mutations", () => {
       expect(initialState.toasts.length).toEqual(0);
     });
   });
+
+  describe("SET_SESSION_EXPIRED_LAST_ROUTE", () => {
+    it("sets the session expired last route", () => {
+      const lastRoute = "/dashboard";
+      const initialState = createState({ sessionExpiredLastRoute: null });
+      mutations.SET_SESSION_EXPIRED_LAST_ROUTE(initialState, lastRoute);
+      expect(initialState.sessionExpiredLastRoute).toBe(lastRoute);
+    });
+  });
+
+  describe("UNSET_SESSION_EXPIRED_LAST_ROUTE", () => {
+    it("removes the session expired last route", () => {
+      const initialState = createState({
+        sessionExpiredLastRoute: "/dashboard",
+      });
+      mutations.UNSET_SESSION_EXPIRED_LAST_ROUTE(initialState);
+      expect(initialState.sessionExpiredLastRoute).toBeNull();
+    });
+  });
 });

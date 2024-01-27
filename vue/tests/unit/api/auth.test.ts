@@ -3,6 +3,8 @@ import {
   APIAuthLogout,
   APIAuthRefreshToken,
   APIAuthRegister,
+  APIAuthForgotPassword,
+  APIAuthResetPassword,
 } from "@/api/auth";
 
 import client from "@/http/client";
@@ -67,6 +69,33 @@ describe("auth", () => {
       const postMock = jest.spyOn(client, "post");
       await APIAuthRefreshToken();
       expect(postMock).toHaveBeenCalledWith("/api/auth/refresh-token");
+    });
+  });
+
+  describe("APIAuthForgotPassword", () => {
+    it("makes a post request to the correct forgot password endpoint", async () => {
+      const postMock = jest.spyOn(client, "post");
+      const data = {
+        email: "test@test.com",
+      };
+      await APIAuthForgotPassword(data);
+      expect(postMock).toHaveBeenCalledWith("/api/auth/forgot-password", data);
+    });
+  });
+
+  describe("APIAuthResetPassword", () => {
+    it("makes a post request to the correct reset password endpoint", async () => {
+      const postMock = jest.spyOn(client, "post");
+      const token = "token123456";
+      const data = {
+        password: "password",
+        password_verify: "password",
+      };
+      await APIAuthResetPassword(token, data);
+      expect(postMock).toHaveBeenCalledWith(
+        `/api/auth/reset-password/${token}`,
+        data
+      );
     });
   });
 });
