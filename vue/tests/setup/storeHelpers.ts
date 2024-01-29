@@ -6,7 +6,7 @@ const createUserObject = (params: Partial<UserState> = {}) => {
     first_name: "Test",
     last_name: "User",
     email: "user@test.com",
-    roles: ["owner", "admin", "test"],
+    roles: ["owner"],
     created_at: "2020-01-01T24:59:59.000Z",
     updated_at: "2020-01-01T24:59:59.000Z",
     ...params,

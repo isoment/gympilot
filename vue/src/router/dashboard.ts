@@ -1,11 +1,12 @@
 import auth from "./middleware/auth";
+import staff from "./middleware/staff";
 
 export const dashboard = [
   {
     path: "/dashboard",
     component: () => import("@/layouts/DashboardLayout.vue"),
     meta: {
-      middleware: [auth],
+      middleware: [auth, staff],
     },
     children: [
       {
