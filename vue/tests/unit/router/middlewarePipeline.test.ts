@@ -1,42 +1,12 @@
-// middleware.test.js
-import { createStore, Store } from "vuex";
-import { GlobalState } from "@/store/types";
 import middlewarePipeline from "@/router/middlewarePipeline";
-import { MiddlewareContext, MiddlewareFunction } from "@/router/types";
-
-// Define a mock context and a mock middleware function for testing
-const createMockContext = () => ({
-  to: {
-    path: "/example",
-    matched: [],
-    fullPath: "/example",
-    query: {},
-    hash: "",
-    redirectedFrom: undefined,
-    name: null,
-    params: {},
-    meta: {},
-  },
-  from: {
-    path: "/",
-    matched: [],
-    fullPath: "/",
-    query: {},
-    hash: "",
-    redirectedFrom: undefined,
-    name: null,
-    params: {},
-    meta: {},
-  },
-  next: jest.fn(),
-  store: createStore<GlobalState>({}),
-});
+import { MiddlewareContext } from "@/router/types";
+import { createMockMiddlewareContext } from "../../setup/routerHelpers";
 
 const createMockMiddleware = (next: any) => jest.fn((context) => next(context));
 
 describe("middlewarePipeline", () => {
   it("should execute middleware in order", () => {
-    const context = createMockContext();
+    const context = createMockMiddlewareContext();
     const middleware1 = createMockMiddleware((context: MiddlewareContext) =>
       context.next()
     );
@@ -56,7 +26,7 @@ describe("middlewarePipeline", () => {
   });
 
   it("should stop execution if next is not called", () => {
-    const context = createMockContext();
+    const context = createMockMiddlewareContext();
     const middleware1 = createMockMiddleware((context: MiddlewareContext) => {
       return;
     });
@@ -71,7 +41,7 @@ describe("middlewarePipeline", () => {
   });
 
   it("should handle empty middleware array", () => {
-    const context = createMockContext();
+    const context = createMockMiddlewareContext();
 
     const pipeline = middlewarePipeline(context, [], 0);
     pipeline();
