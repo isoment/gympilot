@@ -33,6 +33,7 @@
     "@tailwindcss/forms": "^0.5.3",
     "@testing-library/vue": "^7.0.0",
     "@types/jest": "^27.0.1",
+    "@types/node": "^20.11.16",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vue/cli-plugin-babel": "~5.0.0",
@@ -52,6 +53,7 @@
     "eslint-plugin-vue": "^8.0.3",
     "jest": "^27.0.5",
     "prettier": "^2.4.1",
+    "resize-observer-polyfill": "^1.5.1",
     "ts-jest": "^27.0.4",
     "typescript": "~4.5.5",
     "vue-cli-plugin-tailwind": "~3.0.0"
