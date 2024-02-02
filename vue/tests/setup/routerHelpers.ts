@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import { GlobalState } from "@/store/types";
+import getters from "@/store/getters";
 
 const createMockMiddlewareContext = (params: Partial<GlobalState> = {}) => {
   const globalState = {
@@ -35,7 +36,7 @@ const createMockMiddlewareContext = (params: Partial<GlobalState> = {}) => {
       meta: {},
     },
     next: jest.fn(),
-    store: createStore<GlobalState>({ state: globalState }),
+    store: createStore<GlobalState>({ state: globalState, getters }),
   };
 };
 
