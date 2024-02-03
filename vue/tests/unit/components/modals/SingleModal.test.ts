@@ -3,9 +3,7 @@ import SingleModal from "@/components/modals/SingleModal.vue";
 import ResizeObserver from "resize-observer-polyfill";
 import TestModalSlot from "../../../setup/test-components/TestModalSlot.vue";
 
-jest.useFakeTimers();
-
-// Use ResizeObserver ponyfill.
+// Use ResizeObserver ponyfill since Node does not support this API
 global.ResizeObserver = ResizeObserver;
 
 describe("SingleModal", () => {
