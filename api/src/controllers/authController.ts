@@ -14,6 +14,7 @@ import { email } from "../services/notification/email/email";
 import { compareDate } from "../services/dateTime";
 import verifyAccessToken from "../middleware/verifyAccessToken";
 import { appConfig } from "../config/app";
+import tokenPayload from "../services/tokenPayload";
 
 const authController = express.Router();
 
@@ -36,8 +37,7 @@ authController.post("/login", [validateRequest(postLogin)], async (req: Request,
       return response.unprocessableContent(res, "These credentials do not match our records");
     }
 
-    const payload = _.omit(user.toJSON(), ["password"]);
-
+    const payload = tokenPayload.prepare(user);
     const accessToken = await authToken.create(payload, { expiresIn: appConfig.accessTokenExp });
     const refreshToken = await authToken.create(payload, { expiresIn: appConfig.refreshTokenExp });
 
@@ -99,7 +99,7 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
       return response.internalError(res, "There was an error during registration");
     }
 
-    const payload = user.toJSON();
+    const payload = tokenPayload.prepare(user);
     const accessToken = await authToken.create(payload, { expiresIn: appConfig.accessTokenExp });
     const refreshToken = await authToken.create(payload, { expiresIn: appConfig.refreshTokenExp });
 

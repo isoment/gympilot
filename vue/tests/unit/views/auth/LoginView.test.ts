@@ -10,9 +10,24 @@ import { useStore } from "vuex";
 jest.mock("vuex");
 const useStoreMock = useStore as jest.Mock;
 
-import { useRoute } from "vue-router";
-jest.mock("vue-router");
+/*
+  We can prevent the error on the router beforeEach() method by using
+  the actual vue router implementation and mocking out the parts the component
+  will be using.
+*/
+import { useRoute, useRouter } from "vue-router";
+jest.mock("vue-router", () => ({
+  __esModule: true,
+  ...jest.requireActual("vue-router"),
+  useRouter: jest.fn(),
+  useRoute: jest.fn(),
+}));
 const useRouteMock = useRoute as jest.Mock;
+
+const mockRouter = {
+  push: jest.fn(),
+  beforeEach: (fn: Function) => fn(),
+};
 
 import { APIAuthLogin } from "@/api/auth";
 jest.mock("@/api/auth");
@@ -30,6 +45,10 @@ describe("LoginView", () => {
       ...params,
     };
   };
+
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+  });
 
   afterEach(() => {
     jest.clearAllMocks();

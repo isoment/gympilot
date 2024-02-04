@@ -35,7 +35,7 @@ export async function getUser<T extends keyof User>(field: T, value: User[T], ex
         model: model.Role,
         as: "Roles",
         // Only include these fields
-        attributes: ["name", "created_at"],
+        attributes: ["name"],
         // Exclude the join table
         through: { attributes: [] },
       },
@@ -50,7 +50,7 @@ export async function getUser<T extends keyof User>(field: T, value: User[T], ex
       {
         model: model.Role,
         as: "Roles",
-        attributes: ["name", "created_at"],
+        attributes: ["name"],
         through: { attributes: [] },
       },
     ],

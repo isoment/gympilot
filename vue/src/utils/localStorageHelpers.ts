@@ -1,4 +1,4 @@
-import { LoadUser } from "@/api/types";
+import { UserState } from "@/api/types";
 
 export const storageGetIsLoggedIn = (): boolean => {
   return localStorage.getItem("isLoggedIn") === "true";
@@ -12,12 +12,12 @@ export const storageSetLogin = (isLoggedIn: string): void => {
  *  Get the user object from storage or if it doesn't exist
  *  return an empty object.
  */
-export const storageGetUser = (): Partial<LoadUser> => {
+export const storageGetUser = (): Partial<UserState> => {
   const user = localStorage.getItem("user");
   return user ? JSON.parse(user) : {};
 };
 
-export const storageSetUser = (user: Partial<LoadUser>): void => {
+export const storageSetUser = (user: Partial<UserState>): void => {
   localStorage.setItem("user", JSON.stringify(user));
 };
 

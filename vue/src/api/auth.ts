@@ -27,7 +27,7 @@ export const APIAuthForgotPassword = (params: {
   return client.post("/api/auth/forgot-password", params);
 };
 
-export const APIResetPassword = (
+export const APIAuthResetPassword = (
   token: string,
   params: {
     [key: string]: string;

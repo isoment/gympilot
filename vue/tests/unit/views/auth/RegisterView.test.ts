@@ -10,9 +10,19 @@ import { useStore } from "vuex";
 jest.mock("vuex");
 const useStoreMock = useStore as jest.Mock;
 
-import { useRoute } from "vue-router";
-jest.mock("vue-router");
+import { useRoute, useRouter } from "vue-router";
+jest.mock("vue-router", () => ({
+  __esModule: true,
+  ...jest.requireActual("vue-router"),
+  useRouter: jest.fn(),
+  useRoute: jest.fn(),
+}));
 const useRouteMock = useRoute as jest.Mock;
+
+const mockRouter = {
+  push: jest.fn(),
+  beforeEach: (fn: Function) => fn(),
+};
 
 import { APIAuthRegister } from "@/api/auth";
 jest.mock("@/api/auth");
@@ -30,6 +40,10 @@ describe("RegisterView", () => {
       ...params,
     };
   };
+
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+  });
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -94,7 +108,12 @@ describe("RegisterView", () => {
       useStoreMock.mockReturnValue({ dispatch });
       const push = jest.fn();
       useRouteMock.mockReturnValue({ push });
-      APIAuthRegisterMock.mockResolvedValue({ status: 201 });
+      APIAuthRegisterMock.mockResolvedValue({
+        status: 201,
+        headers: {
+          authorization: "Bearer fakeToken123",
+        },
+      });
 
       const wrapper = mount(
         RegisterView,
@@ -122,7 +141,10 @@ describe("RegisterView", () => {
       await submitFormButton.trigger("click");
 
       await flushPromises();
-      expect(dispatch).toHaveBeenCalledWith("LOGIN_USER");
+      expect(dispatch).toHaveBeenCalledWith(
+        "LOGIN_USER",
+        "Bearer fakeToken123"
+      );
       wrapper.unmount();
     });
   });

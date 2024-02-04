@@ -73,7 +73,7 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { key } from "@/store";
 import { ADD_TOAST } from "@/store/constants";
-import { APIResetPassword } from "@/api/auth";
+import { APIAuthResetPassword } from "@/api/auth";
 import { AxiosError } from "axios";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
@@ -121,7 +121,7 @@ export default defineComponent({
 
     const resetPassword = async () => {
       try {
-        await APIResetPassword(resetToken.value, passwordResetForm.value);
+        await APIAuthResetPassword(resetToken.value, passwordResetForm.value);
         router.push({ name: "login" });
         store.dispatch(ADD_TOAST, {
           type: "success",

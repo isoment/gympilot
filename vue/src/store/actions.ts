@@ -25,7 +25,7 @@ import {
   storageGetLastRoute,
 } from "../utils/localStorageHelpers";
 import { APIAuthLogout, APIAuthRefreshToken } from "../api/auth";
-import { LoadUser } from "@/api/types";
+import { UserState } from "@/api/types";
 import { Toast } from "./types";
 
 interface Context {
@@ -49,9 +49,12 @@ const actions = {
   [LOGIN_USER](context: Context, payload: string): void {
     storageSetLogin("true");
 
-    // We need to decode the token access token and store the user info
+    // We need to decode the token access token and store the user info, we can remove
+    // the iat and exp from the JWT payload
     const accessToken = payload.split(" ")[1];
-    const user = jwt_decode(accessToken) as Partial<LoadUser>;
+    const user = jwt_decode(accessToken) as Partial<UserState>;
+    delete user.iat;
+    delete user.exp;
 
     storageSetUser(user);
     context.commit(SET_USER, user);
@@ -104,6 +107,10 @@ const actions = {
   //   }
   // },
 
+  /**
+   *  Set the users last route in the store so we can redirect them when they log
+   *  back in after session expiration.
+   */
   [ADD_SESSION_EXPIRED_LAST_ROUTE](context: Context, payload: string): void {
     context.commit(SET_SESSION_EXPIRED_LAST_ROUTE, payload);
     storageSetLastRoute(payload);

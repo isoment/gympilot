@@ -149,6 +149,36 @@ describe("actions", () => {
     });
   });
 
+  describe("REFRESH_TOKEN", () => {
+    it("makes an api call to refresh the access token", async () => {
+      jest.spyOn(client, "post");
+      const actual = jest.requireActual("@/api/auth");
+      const APIAuthRefreshTokenSpy = jest.spyOn(actual, "APIAuthRefreshToken");
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      await actions.REFRESH_TOKEN(context);
+      expect(APIAuthRefreshTokenSpy).toHaveBeenCalled();
+    });
+
+    it("dispatches an action to log a user in when a new access token is returned", async () => {
+      const postMock = client.post as jest.Mock;
+      const response = {
+        data: {},
+        headers: { authorization: "TEST_ACCESS_TOKEN" },
+      };
+      postMock.mockResolvedValue(response);
+
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+
+      await actions.REFRESH_TOKEN(context);
+      expect(dispatch).toHaveBeenCalledWith("LOGIN_USER", "TEST_ACCESS_TOKEN");
+    });
+  });
+
   describe("ADD_TOAST", () => {
     it("commits a SET_TOAST mutation", () => {
       const commit = jest.fn();
@@ -232,4 +262,33 @@ describe("actions", () => {
   //     expect(dispatch).toHaveBeenCalledWith("LOGOUT_USER");
   //   });
   // });
+
+  describe("ADD_SESSION_EXPIRED_LAST_ROUTE", () => {
+    it("commits a SET_SESSION_EXPIRED_LAST_ROUTE mutation with the last route", () => {
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+      const lastRoute = "/dashboard";
+
+      actions.ADD_SESSION_EXPIRED_LAST_ROUTE(context, lastRoute);
+
+      expect(commit).toHaveBeenCalledWith(
+        "SET_SESSION_EXPIRED_LAST_ROUTE",
+        lastRoute
+      );
+    });
+
+    it("sets the last route in local storage", () => {
+      const actual = jest.requireActual("@/utils/localStorageHelpers");
+      const storageSetLastRouteSpy = jest.spyOn(actual, "storageSetLastRoute");
+      const commit = jest.fn();
+      const dispatch = jest.fn();
+      const context = { commit, dispatch };
+      const lastRoute = "/dashboard";
+
+      actions.ADD_SESSION_EXPIRED_LAST_ROUTE(context, lastRoute);
+
+      expect(storageSetLastRouteSpy).toHaveBeenCalledWith(lastRoute);
+    });
+  });
 });

@@ -3,6 +3,8 @@ import {
   storageGetUser,
   storageSetLogin,
   storageSetUser,
+  storageSetLastRoute,
+  storageGetLastRoute,
 } from "@/utils/localStorageHelpers";
 import { MockLocalStorage } from "@/test-utils/MockLocalStorage";
 
@@ -62,7 +64,7 @@ describe("localStorageHelpers", () => {
   });
 
   describe("storageSetUser", () => {
-    it("the user value can be set in local storage", () => {
+    it("sets the user value in local storage", () => {
       const user = {
         id: 1,
         name: "Test User",
@@ -71,6 +73,24 @@ describe("localStorageHelpers", () => {
       storageSetUser(user);
       const retrievedUser = localStorage.getItem("user")!;
       expect(JSON.parse(retrievedUser)).toEqual(user);
+    });
+  });
+
+  describe("storageSetLastRoute", () => {
+    it("sets the last route in local storage", () => {
+      const lastRoute = "/dashboard";
+      storageSetLastRoute(lastRoute);
+      const retrievedLastRoute = localStorage.getItem("lastRoute")!;
+      expect(retrievedLastRoute).toBe(lastRoute);
+    });
+  });
+
+  describe("storageGetLastRoute", () => {
+    it("sets the last route in local storage", () => {
+      const lastRoute = "/dashboard";
+      localStorage.setItem("lastRoute", lastRoute);
+      const retrieveLastRoute = storageGetLastRoute();
+      expect(retrieveLastRoute).toBe(lastRoute);
     });
   });
 });
