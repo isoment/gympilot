@@ -38,14 +38,13 @@
       </div>
     </div>
     <div class="mt-5 sm:mt-8">
-      <button
-        type="button"
-        class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+      <ButtonPrimary
         data-test="submit-button"
+        color="bg-indigo-600"
+        hover="hover:bg-indigo-500"
         @click="attemptRequestPasswordReset()"
+        >Send Password Reset</ButtonPrimary
       >
-        Send Password Reset
-      </button>
     </div>
   </div>
 </template>
@@ -57,6 +56,7 @@ import { useStore } from "vuex";
 import { key } from "@/store";
 import { ADD_TOAST } from "@/store/constants";
 import TextInput from "@/components/inputs/TextInput.vue";
+import ButtonPrimary from "../buttons/ButtonPrimary.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import { APIAuthForgotPassword } from "@/api/auth";
 
@@ -70,6 +70,7 @@ export default defineComponent({
   components: {
     TextInput,
     ValidationErrors,
+    ButtonPrimary,
   },
 
   emits: ["close:forgot:password:modal"],

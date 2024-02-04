@@ -59,21 +59,15 @@
           </div>
           <!-- Button -->
           <div class="mt-4">
-            <button
-              class="w-full px-4 py-2 font-bold text-white transition-all duration-200 bg-emerald-500 hover:bg-emerald-400 focus:outline-emerald-400"
-              :disabled="loadingLoginAPI"
+            <ButtonPrimary
+              color="bg-emerald-400"
+              hover="hover:bg-emerald-300"
               data-test="submit-button"
+              :disabled="loadingLoginAPI"
+              :loading="loadingLoginAPI"
               @click.prevent="attemptLogin()"
+              >Sign In</ButtonPrimary
             >
-              <span v-if="!loadingLoginAPI">Sign in</span>
-              <span v-if="loadingLoginAPI"
-                ><font-awesome-icon
-                  :icon="['fa', 'spinner']"
-                  class="mr-1 animate-spin"
-                ></font-awesome-icon>
-                Sign in...
-              </span>
-            </button>
           </div>
           <!-- Register -->
           <div class="mt-6 text-center text-gray-500">
@@ -105,6 +99,7 @@ import {
 } from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
+import ButtonPrimary from "@/components/buttons/ButtonPrimary.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import SingleModal from "@/components/modals/SingleModal.vue";
 import ForgotPassword from "@/components/auth/ForgotPassword.vue";
@@ -120,6 +115,7 @@ export default defineComponent({
   components: {
     GuestTopNavbar,
     TextInput,
+    ButtonPrimary,
     ValidationErrors,
     SingleModal,
     ForgotPassword,

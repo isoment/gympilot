@@ -44,7 +44,13 @@
       </div>
       <!-- Button Primary -->
       <div class="flex justify-center mt-10">
-        <ButtonPrimary text="My Button" size="base" />
+        <ButtonPrimary
+          text="My Button"
+          size="base"
+          color="bg-indigo-500"
+          hover="hover:bg-indigo-400"
+          :loading="false"
+        />
       </div>
     </div>
   </div>
