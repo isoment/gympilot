@@ -102,7 +102,7 @@
             Already have an account?
             <router-link
               :to="{ name: 'login' }"
-              class="font-bold transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-slate-500"
+              class="font-bold transition-all duration-200 rounded text-emerald-500 hover:text-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
               data-test="login-link"
             >
               Login

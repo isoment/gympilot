@@ -45,7 +45,7 @@
           <div class="mt-7">
             <a
               href="#"
-              class="font-light transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
+              class="font-light transition-all duration-200 rounded text-emerald-500 hover:text-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
               data-test="forgot-password-link"
               @click="openPasswordResetModal"
             >
@@ -74,7 +74,7 @@
             Don't have an account?
             <router-link
               :to="{ name: 'register' }"
-              class="font-bold transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-emerald-400"
+              class="font-bold transition-all duration-200 rounded text-emerald-500 hover:text-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
               data-test="register-link"
               >Sign up</router-link
             >
@@ -181,7 +181,6 @@ export default defineComponent({
     /*****************************
      *  Logic for Password Reset *
      *****************************/
-
     const showPasswordResetModal = ref(false);
 
     const openPasswordResetModal = () => {
