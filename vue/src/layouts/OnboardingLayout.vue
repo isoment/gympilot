@@ -20,7 +20,7 @@
             <li
               v-for="(step, stepIdx) in steps"
               :key="step.name"
-              :class="[stepIdx !== steps.length - 1 ? 'pb-10' : '', 'relative']"
+              :class="[stepIdx !== steps.length - 1 ? 'pb-8' : '', 'relative']"
             >
               <template v-if="step.status === 'complete'">
                 <div
@@ -79,6 +79,10 @@
                     }}</span>
                   </span>
                 </a>
+                <!-- Render Vue Component Here -->
+                <div class="mt-4 ml-5 mr-2 bg-emerald-50">
+                  <component :is="getComponentName()"></component>
+                </div>
               </template>
               <template v-else>
                 <div
@@ -116,44 +120,52 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+import TimeZone from "@/components/onboarding/TimeZone.vue";
+import YourBilling from "@/components/onboarding/YourBilling.vue";
+import YourOrganization from "@/components/onboarding/YourOrganization.vue";
 
+/**
+ *  Status can be current, complete or upcoming
+ */
 const steps = [
   {
-    name: "Create account",
-    description: "Vitae sed mi luctus laoreet.",
-    href: "#",
-    status: "complete",
-  },
-  {
-    name: "Profile information",
-    description: "Cursus semper viverra facilisis et et some more.",
+    name: "Organization",
+    description: "About your business",
     href: "#",
     status: "current",
+    component: "YourOrganization",
   },
   {
-    name: "Business information",
-    description: "Penatibus eu quis ante.",
+    name: "Time Zone",
+    description: "Select your location",
     href: "#",
     status: "upcoming",
+    component: "TimeZone",
   },
   {
-    name: "Theme",
-    description: "Faucibus nec enim leo et.",
+    name: "Billing",
+    description: "Your billing details",
     href: "#",
     status: "upcoming",
-  },
-  {
-    name: "Preview",
-    description: "Iusto et officia maiores porro ad non quas.",
-    href: "#",
-    status: "upcoming",
+    component: "Billing",
   },
 ];
 
 export default defineComponent({
+  name: "OnboardingLayout",
+
+  components: { TimeZone, YourBilling, YourOrganization },
+
   setup() {
-    return { steps };
+    const currentStep = ref(0);
+
+    const getComponentName = () => {
+      const stepObject = steps.find((s) => s.status === "current");
+      return stepObject!.component;
+    };
+
+    return { steps, currentStep, getComponentName };
   },
 });
 </script>
