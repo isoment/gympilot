@@ -4,14 +4,15 @@
       <div
         class="w-full max-w-6xl mx-2 mt-20 border rounded-lg shadow-sm md:w-8/10 lg:pt-2 border-slate-200"
       >
-        <div class="mt-4 ml-8 text-left">
+        <div class="mt-4 ml-8 mr-8 text-left">
           <h3
             class="font-sans text-4xl font-black tracking-wide text-slate-800"
           >
             Welcome to GymPilot
           </h3>
           <h5 class="mt-2 text-slate-500">
-            Let's take a few minutes to setup your account
+            Let's take a few minutes to setup your account. You can change these
+            settings at any time in the dashboard.
           </h5>
         </div>
 
@@ -22,13 +23,18 @@
               :key="step.name"
               :class="[stepIdx !== steps.length - 1 ? 'pb-8' : '', 'relative']"
             >
+              <!-- Step Complete -->
               <template v-if="step.status === 'complete'">
                 <div
                   v-if="stepIdx !== steps.length - 1"
                   class="-ml-px absolute mt-0.5 top-4 left-4 w-0.5 h-full bg-indigo-600"
                   aria-hidden="true"
                 />
-                <a :href="step.href" class="relative flex items-start group">
+                <a
+                  href="#"
+                  class="relative flex items-start group"
+                  @click="selectStep(stepIdx)"
+                >
                   <span class="flex items-center h-9">
                     <span
                       class="relative z-10 flex items-center justify-center w-8 h-8 bg-indigo-600 rounded-full group-hover:bg-indigo-800"
@@ -51,6 +57,7 @@
                   </span>
                 </a>
               </template>
+              <!-- Step Current -->
               <template v-else-if="step.status === 'current'">
                 <div
                   v-if="stepIdx !== steps.length - 1"
@@ -58,9 +65,10 @@
                   aria-hidden="true"
                 />
                 <a
-                  :href="step.href"
+                  href="#"
                   class="relative flex items-start group"
                   aria-current="step"
+                  @click="selectStep(stepIdx)"
                 >
                   <span class="flex items-center h-9" aria-hidden="true">
                     <span
@@ -84,13 +92,18 @@
                   <component :is="getComponentName()"></component>
                 </div>
               </template>
+              <!-- Step Upcoming -->
               <template v-else>
                 <div
                   v-if="stepIdx !== steps.length - 1"
                   class="-ml-px absolute mt-0.5 top-4 left-4 w-0.5 h-full bg-gray-300"
                   aria-hidden="true"
                 />
-                <a :href="step.href" class="relative flex items-start group">
+                <a
+                  href="#"
+                  class="relative flex items-start group"
+                  @click="selectStep(stepIdx)"
+                >
                   <span class="flex items-center h-9" aria-hidden="true">
                     <span
                       class="relative z-10 flex items-center justify-center w-8 h-8 bg-white border-2 border-gray-300 rounded-full group-hover:border-gray-400"
@@ -125,47 +138,57 @@ import TimeZone from "@/components/onboarding/TimeZone.vue";
 import YourBilling from "@/components/onboarding/YourBilling.vue";
 import YourOrganization from "@/components/onboarding/YourOrganization.vue";
 
-/**
- *  Status can be current, complete or upcoming
- */
-const steps = [
-  {
-    name: "Organization",
-    description: "About your business",
-    href: "#",
-    status: "current",
-    component: "YourOrganization",
-  },
-  {
-    name: "Time Zone",
-    description: "Select your location",
-    href: "#",
-    status: "upcoming",
-    component: "TimeZone",
-  },
-  {
-    name: "Billing",
-    description: "Your billing details",
-    href: "#",
-    status: "upcoming",
-    component: "Billing",
-  },
-];
-
 export default defineComponent({
   name: "OnboardingLayout",
 
   components: { TimeZone, YourBilling, YourOrganization },
 
   setup() {
-    const currentStep = ref(0);
+    /**
+     *  Status can be current, complete or upcoming
+     */
+    const steps = ref([
+      {
+        name: "Organization",
+        description: "About your business",
+        status: "current",
+        component: "YourOrganization",
+      },
+      {
+        name: "Time Zone",
+        description: "Select your location",
+        status: "upcoming",
+        component: "TimeZone",
+      },
+      {
+        name: "Billing",
+        description: "Your billing details",
+        status: "upcoming",
+        component: "YourBilling",
+      },
+    ]);
 
     const getComponentName = () => {
-      const stepObject = steps.find((s) => s.status === "current");
+      const stepObject = steps.value.find((s) => s.status === "current");
       return stepObject!.component;
     };
 
-    return { steps, currentStep, getComponentName };
+    const selectStep = (index: number) => {
+      // Set previous steps to complete
+      for (let i = 0; i < index; i++) {
+        steps.value[i].status = "complete";
+      }
+
+      // Set the selected step to current
+      steps.value[index].status = "current";
+
+      // Set the next steps to upcoming
+      for (let i = index + 1; i < steps.value.length; i++) {
+        steps.value[i].status = "upcoming";
+      }
+    };
+
+    return { steps, getComponentName, selectStep };
   },
 });
 </script>
