@@ -16,7 +16,7 @@
           </h5>
         </div>
 
-        <nav class="p-6 m-2" aria-label="Progress">
+        <nav class="p-4 m-2" aria-label="Progress">
           <ol role="list" class="overflow-hidden">
             <li
               v-for="(step, stepIdx) in steps"
@@ -88,7 +88,7 @@
                   </span>
                 </a>
                 <!-- Render Vue Component Here -->
-                <div class="mt-4 ml-5 mr-2 bg-emerald-50">
+                <div class="mt-4 ml-12 mr-2">
                   <component :is="getComponentName()"></component>
                 </div>
               </template>

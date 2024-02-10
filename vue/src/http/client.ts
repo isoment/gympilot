@@ -20,14 +20,13 @@ const client = axios.create({
 });
 
 client.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
+  (config) => {
     // Include the access token in the Authorization header
     const accessToken = store.state.accessToken;
     if (accessToken) {
-      if (!config.headers) {
-        config.headers = {};
+      if (config.headers) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
       }
-      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
