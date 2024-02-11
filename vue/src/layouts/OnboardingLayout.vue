@@ -11,8 +11,8 @@
             Welcome to GymPilot
           </h3>
           <h5 class="mt-2 text-slate-500">
-            Let's take a few minutes to setup your account. You can change these
-            settings at any time in the dashboard.
+            Let's take a few minutes to setup your account. You can change this
+            information at any time in the dashboard.
           </h5>
         </div>
 
