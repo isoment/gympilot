@@ -5,12 +5,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
+import { StepperStatusProp } from "../types";
 
 export default defineComponent({
   name: "TimeZone",
 
-  setup() {
+  props: {
+    status: {
+      type: Object as PropType<StepperStatusProp>,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    console.log(props.status);
+
     return {};
   },
 });

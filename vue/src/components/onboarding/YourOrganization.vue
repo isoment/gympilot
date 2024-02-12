@@ -49,12 +49,12 @@
         />
       </div>
       <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
-        <div class="flex flex-row">
-          <div class="w-1/2 mr-1">
+        <div class="flex flex-col sm:flex-row">
+          <div class="w-full sm:w-1/2 sm:mr-1 mb-7">
             <TextInput
               v-model="form.city"
               label="The city or locality."
-              placeholder="City/Locality"
+              placeholder="City / Locality"
               data-test="city"
             />
             <ValidationErrors
@@ -63,7 +63,7 @@
               class="mt-2 -mb-2 text-left"
             />
           </div>
-          <div class="w-1/2 ml-1">
+          <div class="w-full sm:w-1/2 sm:ml-1">
             <TextInput
               v-model="form.postal_code"
               label="The postal code for this location"
@@ -83,9 +83,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, PropType } from "vue";
 import TextInput from "../inputs/TextInput.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+import { StepperStatusProp } from "../types";
 
 interface FormValidationErrors {
   organization_name?: string;
@@ -100,7 +101,16 @@ export default defineComponent({
 
   components: { TextInput, ValidationErrors },
 
-  setup() {
+  props: {
+    status: {
+      type: Object as PropType<StepperStatusProp>,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    console.log(props.status);
+
     const form = ref({
       organization_name: "",
       location_name: "",

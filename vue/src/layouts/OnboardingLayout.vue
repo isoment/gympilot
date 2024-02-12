@@ -4,7 +4,7 @@
       <div
         class="w-full max-w-6xl mx-2 mt-20 border rounded-lg shadow-sm md:w-8/10 lg:pt-2 border-slate-200"
       >
-        <div class="mt-4 ml-8 mr-8 text-left">
+        <div class="mt-4 ml-4 mr-8 text-left md:ml-8">
           <h3
             class="font-sans text-4xl font-black tracking-wide text-slate-800"
           >
@@ -16,12 +16,12 @@
           </h5>
         </div>
 
-        <nav class="p-4 m-2" aria-label="Progress">
+        <nav class="px-2 py-4 md:px-4 md:m-2" aria-label="Progress">
           <ol role="list" class="overflow-hidden">
             <li
               v-for="(step, stepIdx) in steps"
               :key="step.name"
-              :class="[stepIdx !== steps.length - 1 ? 'pb-8' : '', 'relative']"
+              :class="[stepIdx !== steps.length - 1 ? 'pb-6' : '', 'relative']"
             >
               <!-- Step Complete -->
               <template v-if="step.status === 'complete'">
@@ -89,7 +89,10 @@
                 </a>
                 <!-- Render Vue Component Here -->
                 <div class="mt-4 ml-12 mr-2">
-                  <component :is="getComponentName()"></component>
+                  <component
+                    :is="getComponentName()"
+                    :status="stepperStatus()"
+                  ></component>
                 </div>
               </template>
               <!-- Step Upcoming -->
@@ -134,6 +137,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { StepperStatusProp } from "@/components/types";
 import TimeZone from "@/components/onboarding/TimeZone.vue";
 import YourBilling from "@/components/onboarding/YourBilling.vue";
 import YourOrganization from "@/components/onboarding/YourOrganization.vue";
@@ -188,7 +192,19 @@ export default defineComponent({
       }
     };
 
-    return { steps, getComponentName, selectStep };
+    const stepperStatus = (): StepperStatusProp | undefined => {
+      for (const [index, value] of steps.value.entries()) {
+        if (value.status === "current") {
+          return {
+            index: index,
+            first: index === 0 ? true : false,
+            last: index === steps.value.length - 1 ? true : false,
+          };
+        }
+      }
+    };
+
+    return { steps, getComponentName, selectStep, stepperStatus };
   },
 });
 </script>
