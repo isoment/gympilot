@@ -2,7 +2,7 @@
   <div>
     <div class="flex justify-center w-full">
       <div
-        class="w-full max-w-6xl mx-2 mt-20 border rounded-lg shadow-sm md:w-8/10 lg:pt-2 border-slate-200"
+        class="w-full max-w-6xl mx-2 mt-4 rounded-lg shadow-sm md:mt-12 md:border md:w-8/10 lg:pt-2 border-slate-200"
       >
         <div class="mt-4 ml-4 mr-8 text-left md:ml-8">
           <h3

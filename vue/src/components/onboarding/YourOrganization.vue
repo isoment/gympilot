@@ -1,7 +1,7 @@
 <template>
   <div class="text-left">
     <div>
-      <h5 class="mt-6 mb-4 font-bold tracking-widest text-slate-700">
+      <h5 class="mt-6 mb-4 ml-1 font-bold tracking-widest text-slate-700">
         Tell us about your organization
       </h5>
       <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div>
-      <h5 class="mt-8 mb-4 font-bold tracking-widest text-slate-700">
+      <h5 class="mt-8 mb-4 ml-1 font-bold tracking-widest text-slate-700">
         Create a location
       </h5>
       <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
@@ -78,6 +78,9 @@
           </div>
         </div>
       </div>
+      <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
+        <ButtonGroup :status="status" @click:action="buttonClicked($event)" />
+      </div>
     </div>
   </div>
 </template>
@@ -85,6 +88,7 @@
 <script lang="ts">
 import { defineComponent, ref, PropType } from "vue";
 import TextInput from "../inputs/TextInput.vue";
+import ButtonGroup from "./ButtonGroup.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import { StepperStatusProp } from "../types";
 
@@ -99,7 +103,7 @@ interface FormValidationErrors {
 export default defineComponent({
   name: "YourOrganization",
 
-  components: { TextInput, ValidationErrors },
+  components: { ButtonGroup, TextInput, ValidationErrors },
 
   props: {
     status: {
@@ -108,9 +112,7 @@ export default defineComponent({
     },
   },
 
-  setup(props) {
-    console.log(props.status);
-
+  setup() {
     const form = ref({
       organization_name: "",
       location_name: "",
@@ -120,7 +122,11 @@ export default defineComponent({
     });
     const validationErrors = ref<FormValidationErrors>({});
 
-    return { form, validationErrors };
+    const buttonClicked = (event: any) => {
+      console.log("BUTTON_CLICKED", event);
+    };
+
+    return { buttonClicked, form, validationErrors };
   },
 });
 </script>
