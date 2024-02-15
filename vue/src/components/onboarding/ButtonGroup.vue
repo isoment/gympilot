@@ -26,8 +26,8 @@
       <div class="w-1/2 mr-1 sm:w-1/4">
         <ButtonPrimary
           data-test="next-button"
-          color="bg-slate-500"
-          hover="hover:bg-slate-400"
+          color="bg-slate-400"
+          hover="hover:bg-slate-300"
           @click="previousClicked()"
           >Previous</ButtonPrimary
         >

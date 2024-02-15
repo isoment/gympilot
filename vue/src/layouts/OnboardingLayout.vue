@@ -92,6 +92,7 @@
                   <component
                     :is="getComponentName()"
                     :status="stepperStatus()"
+                    @click:button="componentButtonClicked($event)"
                   ></component>
                 </div>
               </template>
@@ -141,11 +142,13 @@ import { StepperStatusProp } from "@/components/types";
 import TimeZone from "@/components/onboarding/TimeZone.vue";
 import YourBilling from "@/components/onboarding/YourBilling.vue";
 import YourOrganization from "@/components/onboarding/YourOrganization.vue";
+import ProgramsOffered from "@/components/onboarding/ProgramsOffered.vue";
+import { ButtonGroupEventValue } from "@/components/types";
 
 export default defineComponent({
   name: "OnboardingLayout",
 
-  components: { TimeZone, YourBilling, YourOrganization },
+  components: { TimeZone, YourBilling, YourOrganization, ProgramsOffered },
 
   setup() {
     /**
@@ -157,6 +160,12 @@ export default defineComponent({
         description: "About your business",
         status: "current",
         component: "YourOrganization",
+      },
+      {
+        name: "Programs",
+        description: "What your organization offers",
+        status: "upcoming",
+        component: "ProgramsOffered",
       },
       {
         name: "Time Zone",
@@ -204,7 +213,26 @@ export default defineComponent({
       }
     };
 
-    return { steps, getComponentName, selectStep, stepperStatus };
+    const componentButtonClicked = (event: ButtonGroupEventValue) => {
+      console.log("COMPONENT_BUTTON_CLICKED", event);
+      const status = stepperStatus();
+
+      if (!status) return;
+
+      if (event === "next") {
+        selectStep(status.index + 1);
+      } else if (event === "previous") {
+        selectStep(status.index - 1);
+      }
+    };
+
+    return {
+      steps,
+      getComponentName,
+      selectStep,
+      stepperStatus,
+      componentButtonClicked,
+    };
   },
 });
 </script>

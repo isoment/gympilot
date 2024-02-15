@@ -91,6 +91,7 @@ import TextInput from "../inputs/TextInput.vue";
 import ButtonGroup from "./ButtonGroup.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import { StepperStatusProp } from "../types";
+import { ButtonGroupEventValue } from "../types";
 
 interface FormValidationErrors {
   organization_name?: string;
@@ -112,7 +113,9 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  emits: ["click:button"],
+
+  setup(_, { emit }) {
     const form = ref({
       organization_name: "",
       location_name: "",
@@ -122,8 +125,8 @@ export default defineComponent({
     });
     const validationErrors = ref<FormValidationErrors>({});
 
-    const buttonClicked = (event: any) => {
-      console.log("BUTTON_CLICKED", event);
+    const buttonClicked = (event: ButtonGroupEventValue) => {
+      emit("click:button", event);
     };
 
     return { buttonClicked, form, validationErrors };
