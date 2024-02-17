@@ -10,9 +10,18 @@
           options from some program templates.
         </p>
       </div>
-      <div class="w-full mt-8 mb-6 ml-1 md:w-2/3 lg:w-1/2">
+      <div class="w-full mt-6 mb-6 ml-1 md:w-2/3 lg:w-1/2">
         <div class="flex items-center justify-between mb-6">
-          <div>Avatar</div>
+          <div class="flex items-center">
+            <img
+              src="../../assets/gym.jpg"
+              alt="gym"
+              class="w-12 h-12 rounded-full"
+            />
+            <h6 class="ml-3 text-base font-extrabold text-slate-800">
+              Fitness
+            </h6>
+          </div>
           <div><CheckBox v-model="showFitnessTrainingOptions" label="" /></div>
         </div>
         <div v-if="showFitnessTrainingOptions" class="mt-2 mb-6">
@@ -20,17 +29,35 @@
         </div>
         <div class="border-b border-slate-200"></div>
       </div>
-      <div class="w-full mt-8 mb-6 ml-1 md:w-2/3 lg:w-1/2">
+      <div class="w-full mt-6 mb-6 ml-1 md:w-2/3 lg:w-1/2">
         <div class="flex items-center justify-between mb-6">
-          <div>Avatar</div>
+          <div class="flex items-center">
+            <img
+              src="../../assets/yoga.jpg"
+              alt="gym"
+              class="w-12 h-12 rounded-full"
+            />
+            <h6 class="ml-3 text-base font-extrabold text-slate-800">Yoga</h6>
+          </div>
+
           <div><CheckBox v-model="showYogaOptions" label="" /></div>
         </div>
         <div v-if="showYogaOptions" class="mt-2 mb-6">Yoga Options</div>
         <div class="border-b border-slate-200"></div>
       </div>
-      <div class="w-full mt-8 mb-6 ml-1 md:w-2/3 lg:w-1/2">
+      <div class="w-full mt-6 mb-6 ml-1 md:w-2/3 lg:w-1/2">
         <div class="flex items-center justify-between mb-6">
-          <div>Avatar</div>
+          <div class="flex items-center">
+            <img
+              src="../../assets/gymnastics.jpg"
+              alt="gym"
+              class="w-12 h-12 rounded-full"
+            />
+            <h6 class="ml-3 text-base font-extrabold text-slate-800">
+              Gymnastics
+            </h6>
+          </div>
+
           <div><CheckBox v-model="showGymnasticsOptions" label="" /></div>
         </div>
         <div v-if="showGymnasticsOptions" class="mt-2 mb-6">
@@ -38,19 +65,28 @@
         </div>
         <div class="border-b border-slate-200"></div>
       </div>
-      <div class="w-full mt-8 mb-6 ml-1 md:w-2/3 lg:w-1/2">
+      <div class="w-full mt-6 mb-6 ml-1 md:w-2/3 lg:w-1/2">
         <div class="flex items-center justify-between mb-6">
-          <div>Avatar</div>
+          <div class="flex items-center">
+            <img
+              src="../../assets/martial-arts.jpg"
+              alt="gym"
+              class="w-12 h-12 rounded-full"
+            />
+            <h6 class="ml-3 text-base font-extrabold text-slate-800">
+              Martial Arts
+            </h6>
+          </div>
+
           <div><CheckBox v-model="showMartialArtsOptions" label="" /></div>
         </div>
         <div v-if="showMartialArtsOptions" class="mt-2 mb-6">
           Martial Arts Options
         </div>
-        <div class="border-b border-slate-200"></div>
       </div>
     </div>
     <div>
-      <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
+      <div class="w-full mt-8 mb-6 md:w-2/3 lg:w-1/2">
         <ButtonGroup :status="status" @click:action="buttonClicked($event)" />
       </div>
     </div>
