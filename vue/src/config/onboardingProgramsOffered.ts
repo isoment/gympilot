@@ -58,10 +58,6 @@ const programItems: { [key: string]: OnboardingProgramItem[] } = {
       name: "Judo",
       value: "judo",
     },
-    {
-      name: "Other",
-      value: "other",
-    },
   ],
   gymnastics: [
     {
@@ -71,6 +67,10 @@ const programItems: { [key: string]: OnboardingProgramItem[] } = {
     {
       name: "Dance",
       value: "dance",
+    },
+    {
+      name: "Zumba",
+      value: "zumba",
     },
   ],
 };

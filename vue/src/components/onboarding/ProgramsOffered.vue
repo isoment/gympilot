@@ -22,10 +22,31 @@
               Fitness
             </h6>
           </div>
-          <div><CheckBox v-model="showFitnessTrainingOptions" label="" /></div>
+          <div>
+            <CheckBox
+              v-model="showFitnessTrainingOptions"
+              color="text-indigo-500"
+              label=""
+            />
+          </div>
         </div>
-        <div v-if="showFitnessTrainingOptions" class="mt-2 mb-6">
-          Fitness Options
+        <!-- Fitness Options -->
+        <div
+          v-if="showFitnessTrainingOptions"
+          class="flex flex-col mt-2 mb-6 sm:flex-row sm:flex-wrap sm:items-center"
+        >
+          <div
+            v-for="program in onboardingProgramsOffered.fitness"
+            :key="program.value"
+            class="w-full sm:w-1/2"
+          >
+            <button
+              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-indigo-50"
+              @click="selectProgram(program.value)"
+            >
+              {{ program.name }}
+            </button>
+          </div>
         </div>
         <div class="border-b border-slate-200"></div>
       </div>
@@ -39,10 +60,31 @@
             />
             <h6 class="ml-3 text-base font-extrabold text-slate-800">Yoga</h6>
           </div>
-
-          <div><CheckBox v-model="showYogaOptions" label="" /></div>
+          <div>
+            <CheckBox
+              v-model="showYogaOptions"
+              label=""
+              color="text-indigo-500"
+            />
+          </div>
         </div>
-        <div v-if="showYogaOptions" class="mt-2 mb-6">Yoga Options</div>
+        <div
+          v-if="showYogaOptions"
+          class="flex flex-col mt-2 mb-6 sm:flex-row sm:flex-wrap sm:items-center"
+        >
+          <div
+            v-for="program in onboardingProgramsOffered.yoga"
+            :key="program.value"
+            class="w-full sm:w-1/2"
+          >
+            <button
+              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-indigo-50"
+              @click="selectProgram(program.value)"
+            >
+              {{ program.name }}
+            </button>
+          </div>
+        </div>
         <div class="border-b border-slate-200"></div>
       </div>
       <div class="w-full mt-6 mb-6 ml-1 md:w-2/3 lg:w-1/2">
@@ -57,11 +99,30 @@
               Gymnastics
             </h6>
           </div>
-
-          <div><CheckBox v-model="showGymnasticsOptions" label="" /></div>
+          <div>
+            <CheckBox
+              v-model="showGymnasticsOptions"
+              label=""
+              color="text-indigo-500"
+            />
+          </div>
         </div>
-        <div v-if="showGymnasticsOptions" class="mt-2 mb-6">
-          Gymnastics Options
+        <div
+          v-if="showGymnasticsOptions"
+          class="flex flex-col mt-2 mb-6 sm:flex-row sm:flex-wrap sm:items-center"
+        >
+          <div
+            v-for="program in onboardingProgramsOffered.gymnastics"
+            :key="program.value"
+            class="w-full sm:w-1/2"
+          >
+            <button
+              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-indigo-50"
+              @click="selectProgram(program.value)"
+            >
+              {{ program.name }}
+            </button>
+          </div>
         </div>
         <div class="border-b border-slate-200"></div>
       </div>
@@ -77,11 +138,30 @@
               Martial Arts
             </h6>
           </div>
-
-          <div><CheckBox v-model="showMartialArtsOptions" label="" /></div>
+          <div>
+            <CheckBox
+              v-model="showMartialArtsOptions"
+              label=""
+              color="text-indigo-500"
+            />
+          </div>
         </div>
-        <div v-if="showMartialArtsOptions" class="mt-2 mb-6">
-          Martial Arts Options
+        <div
+          v-if="showMartialArtsOptions"
+          class="flex flex-col mt-2 mb-6 sm:flex-row sm:flex-wrap sm:items-center"
+        >
+          <div
+            v-for="program in onboardingProgramsOffered.martialArts"
+            :key="program.value"
+            class="w-full sm:w-1/2"
+          >
+            <button
+              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-indigo-50"
+              @click="selectProgram(program.value)"
+            >
+              {{ program.name }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -99,6 +179,7 @@ import { StepperStatusProp } from "../types";
 import ButtonGroup from "./ButtonGroup.vue";
 import CheckBox from "../inputs/CheckBox.vue";
 import { ButtonGroupEventValue } from "../types";
+import onboardingProgramsOffered from "@/config/onboardingProgramsOffered";
 
 export default defineComponent({
   name: "ProgramsOffered",
@@ -126,8 +207,14 @@ export default defineComponent({
       emit("click:button", event);
     };
 
+    const selectProgram = (program: string) => {
+      console.log(program);
+    };
+
     return {
       buttonClicked,
+      onboardingProgramsOffered,
+      selectProgram,
       showFitnessTrainingOptions,
       showGymnasticsOptions,
       showMartialArtsOptions,
