@@ -3,7 +3,7 @@ import { OnboardingProgramItem } from "./types";
 const programItems: { [key: string]: OnboardingProgramItem[] } = {
   fitness: [
     {
-      name: "Person Training",
+      name: "Personal Training",
       value: "personal-training",
     },
     {

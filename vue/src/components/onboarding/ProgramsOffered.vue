@@ -10,6 +10,7 @@
           options from some program templates.
         </p>
       </div>
+      <!-- Fitness -->
       <div class="w-full mt-6 mb-6 ml-1 md:w-2/3 lg:w-1/2">
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center">
@@ -30,7 +31,6 @@
             />
           </div>
         </div>
-        <!-- Fitness Options -->
         <div
           v-if="showFitnessTrainingOptions"
           class="flex flex-col mt-2 mb-6 sm:flex-row sm:flex-wrap sm:items-center"
@@ -41,7 +41,8 @@
             class="w-full sm:w-1/2"
           >
             <button
-              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-indigo-50"
+              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-emerald-50"
+              :class="programSelectClass(program.value)"
               @click="selectProgram(program.value)"
             >
               {{ program.name }}
@@ -50,6 +51,7 @@
         </div>
         <div class="border-b border-slate-200"></div>
       </div>
+      <!-- Yoga -->
       <div class="w-full mt-6 mb-6 ml-1 md:w-2/3 lg:w-1/2">
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center">
@@ -78,7 +80,8 @@
             class="w-full sm:w-1/2"
           >
             <button
-              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-indigo-50"
+              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-emerald-50"
+              :class="programSelectClass(program.value)"
               @click="selectProgram(program.value)"
             >
               {{ program.name }}
@@ -87,6 +90,7 @@
         </div>
         <div class="border-b border-slate-200"></div>
       </div>
+      <!-- Gymnastics -->
       <div class="w-full mt-6 mb-6 ml-1 md:w-2/3 lg:w-1/2">
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center">
@@ -117,7 +121,8 @@
             class="w-full sm:w-1/2"
           >
             <button
-              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-indigo-50"
+              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-emerald-50"
+              :class="programSelectClass(program.value)"
               @click="selectProgram(program.value)"
             >
               {{ program.name }}
@@ -126,6 +131,7 @@
         </div>
         <div class="border-b border-slate-200"></div>
       </div>
+      <!-- Martial Arts -->
       <div class="w-full mt-6 mb-6 ml-1 md:w-2/3 lg:w-1/2">
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center">
@@ -156,7 +162,8 @@
             class="w-full sm:w-1/2"
           >
             <button
-              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-indigo-50"
+              class="w-full py-2 m-1 text-sm font-black border rounded-sm text-slate-800 border-slate-800 sm:w-11/12 hover:bg-emerald-50"
+              :class="programSelectClass(program.value)"
               @click="selectProgram(program.value)"
             >
               {{ program.name }}
@@ -207,14 +214,31 @@ export default defineComponent({
       emit("click:button", event);
     };
 
-    const selectProgram = (program: string) => {
-      console.log(program);
+    const selectedPrograms = ref<string[]>([]);
+
+    const selectProgram = (program: string): void => {
+      for (let i = 0; i < selectedPrograms.value.length; i++) {
+        if (selectedPrograms.value[i] === program) {
+          selectedPrograms.value.splice(i, 1);
+          return;
+        }
+      }
+      selectedPrograms.value.push(program);
+    };
+
+    const programSelectClass = (program: string): string => {
+      if (selectedPrograms.value.includes(program)) {
+        return "bg-emerald-100";
+      }
+      return "bg-white";
     };
 
     return {
       buttonClicked,
       onboardingProgramsOffered,
+      programSelectClass,
       selectProgram,
+      selectedPrograms,
       showFitnessTrainingOptions,
       showGymnasticsOptions,
       showMartialArtsOptions,
