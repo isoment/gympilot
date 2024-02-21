@@ -214,7 +214,6 @@ export default defineComponent({
     };
 
     const componentButtonClicked = (event: ButtonGroupEventValue) => {
-      console.log("COMPONENT_BUTTON_CLICKED", event);
       const status = stepperStatus();
 
       if (!status) return;

@@ -65,8 +65,6 @@ export default defineComponent({
   emits: ["click:action"],
 
   setup(props, { emit }) {
-    console.log(props.status);
-
     const firstStep = computed(() => {
       return props.status.first;
     });

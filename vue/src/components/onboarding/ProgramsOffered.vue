@@ -203,8 +203,6 @@ export default defineComponent({
   emits: ["click:button"],
 
   setup(props, { emit }) {
-    console.log(props.status);
-
     const showFitnessTrainingOptions = ref(false);
     const showYogaOptions = ref(false);
     const showGymnasticsOptions = ref(false);
