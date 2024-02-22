@@ -46,4 +46,4 @@ const availableCountries = [
   "United States",
 ];
 
-export default { availableCountries };
+export { availableCountries };

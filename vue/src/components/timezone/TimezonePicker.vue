@@ -1,62 +1,68 @@
 <template>
-  <Combobox v-model="selectedPerson" as="div">
-    <ComboboxLabel class="block text-sm font-medium text-slate-700"
-      >Assigned to</ComboboxLabel
-    >
-    <div class="relative mt-1">
-      <ComboboxInput
-        class="w-full py-2 pl-3 pr-10 bg-white border rounded-md shadow-sm border-slate-300 focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
-        :display-value="(person) => person.name"
-        @change="query = $event.target.value"
-      />
-      <ComboboxButton
-        class="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none"
+  <div>
+    <Combobox v-model="selectedTimezone" as="div">
+      <ComboboxLabel class="block text-sm font-medium text-slate-700"
+        >Timezone</ComboboxLabel
       >
-        X
-      </ComboboxButton>
-
-      <ComboboxOptions
-        v-if="filteredPeople.length > 0"
-        class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-      >
-        <ComboboxOption
-          v-for="person in filteredPeople"
-          :key="person.id"
-          v-slot="{ active, selected }"
-          :value="person"
-          as="template"
+      <div class="relative mt-1">
+        <ComboboxInput
+          class="w-full py-2 pl-3 pr-10 bg-white border rounded-md shadow-sm border-slate-300 focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
+          :display-value="(option) => option.name"
+          @change="query = $event.target.value"
+        />
+        <ComboboxButton
+          class="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none"
         >
-          <li
-            :class="[
-              'relative cursor-default select-none py-2 pl-3 pr-9',
-              active ? 'bg-indigo-400 text-white' : 'text-slate-900',
-            ]"
+          <font-awesome-icon
+            :icon="['fa', 'chevron-down']"
+            class="z-10 text-xs"
           >
-            <span :class="['block truncate', selected && 'font-semibold']">
-              {{ person.name }}
-            </span>
+          </font-awesome-icon>
+        </ComboboxButton>
 
-            <span
-              v-if="selected"
+        <ComboboxOptions
+          v-if="filteredTimezones.length > 0"
+          class="relative z-40 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+        >
+          <ComboboxOption
+            v-for="option in filteredTimezones"
+            :key="option.id"
+            v-slot="{ active, selected }"
+            :value="option"
+            as="template"
+          >
+            <li
               :class="[
-                'absolute inset-y-0 right-0 flex items-center pr-4',
-                active ? 'text-white' : 'text-indigo-600',
+                'relative cursor-default select-none py-2 pl-3 pr-9',
+                active ? 'bg-indigo-400 text-white' : 'text-slate-900',
               ]"
             >
-              <font-awesome-icon
-                :icon="['fa', 'check']"
+              <span :class="['block truncate', selected && 'font-semibold']">
+                {{ option.name }}
+              </span>
+
+              <span
+                v-if="selected"
                 :class="[
-                  'z-10 text-xs',
+                  'absolute inset-y-0 right-0 flex items-center pr-4',
                   active ? 'text-white' : 'text-indigo-600',
                 ]"
               >
-              </font-awesome-icon>
-            </span>
-          </li>
-        </ComboboxOption>
-      </ComboboxOptions>
-    </div>
-  </Combobox>
+                <font-awesome-icon
+                  :icon="['fa', 'check']"
+                  :class="[
+                    'z-10 text-xs',
+                    active ? 'text-white' : 'text-indigo-600',
+                  ]"
+                >
+                </font-awesome-icon>
+              </span>
+            </li>
+          </ComboboxOption>
+        </ComboboxOptions>
+      </div>
+    </Combobox>
+  </div>
 </template>
 
 <script>
@@ -70,12 +76,7 @@ import {
   ComboboxOptions,
 } from "@headlessui/vue";
 import { getTimeZones } from "@vvo/tzdb";
-
-const people = [
-  { id: 1, name: "Leslie Alexander" },
-  { id: 2, name: "Stan Black" },
-  { id: 3, name: "H.P. Lovecraft" },
-];
+import { availableCountries } from "@/config/options";
 
 export default {
   components: {
@@ -88,18 +89,30 @@ export default {
   },
   setup() {
     const query = ref("");
-    const selectedPerson = ref();
+    const selectedTimezone = ref();
+    const options = [];
 
     onMounted(() => {
       const timezones = getTimeZones();
       console.log(timezones);
+
+      timezones.forEach((t) => {
+        if (availableCountries.includes(t.countryName)) {
+          options.push({
+            id: t.name,
+            name: `${t.countryName} - ${t.mainCities[0]} - ${t.name}`,
+          });
+        }
+      });
+
+      console.log(options);
     });
 
-    const filteredPeople = computed(() =>
+    const filteredTimezones = computed(() =>
       query.value === ""
-        ? people
-        : people.filter((person) => {
-            return person.name
+        ? options
+        : options.filter((option) => {
+            return option.name
               .toLowerCase()
               .includes(query.value.toLowerCase());
           })
@@ -107,8 +120,8 @@ export default {
 
     return {
       query,
-      selectedPerson,
-      filteredPeople,
+      selectedTimezone,
+      filteredTimezones,
     };
   },
 };
