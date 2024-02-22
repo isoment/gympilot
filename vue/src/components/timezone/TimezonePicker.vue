@@ -1,17 +1,19 @@
 <template>
   <div>
     <Combobox v-model="selectedTimezone" as="div">
-      <ComboboxLabel class="block text-sm font-medium text-slate-700"
-        >Timezone</ComboboxLabel
+      <ComboboxLabel
+        class="block ml-1 text-xs font-medium text-left text-gray-700"
+        >Select Your Timezone</ComboboxLabel
       >
       <div class="relative mt-1">
         <ComboboxInput
-          class="w-full py-2 pl-3 pr-10 bg-white border rounded-md shadow-sm border-slate-300 focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
+          class="w-full py-2 pl-3 pr-10 bg-white border rounded shadow-sm border-slate-300 focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
           :display-value="(option) => option.name"
+          placeholder="Search by country or city"
           @change="query = $event.target.value"
         />
         <ComboboxButton
-          class="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none"
+          class="absolute inset-y-0 right-0 flex items-center px-2 rounded-r focus:outline-none"
         >
           <font-awesome-icon
             :icon="['fa', 'chevron-down']"
@@ -19,10 +21,9 @@
           >
           </font-awesome-icon>
         </ComboboxButton>
-
         <ComboboxOptions
           v-if="filteredTimezones.length > 0"
-          class="relative z-40 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+          class="relative z-40 w-full py-1 mt-1 overflow-auto text-xs bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
         >
           <ComboboxOption
             v-for="option in filteredTimezones"
@@ -67,6 +68,7 @@
 
 <script>
 import { computed, ref, onMounted } from "vue";
+import { refDebounced } from "@vueuse/core";
 import {
   Combobox,
   ComboboxButton,
@@ -89,6 +91,8 @@ export default {
   },
   setup() {
     const query = ref("");
+    const queryDebounce = refDebounced(query, 800);
+
     const selectedTimezone = ref();
     const options = [];
 
@@ -98,9 +102,11 @@ export default {
 
       timezones.forEach((t) => {
         if (availableCountries.includes(t.countryName)) {
+          const offset = t.rawFormat.split(" ")[0];
+
           options.push({
             id: t.name,
-            name: `${t.countryName} - ${t.mainCities[0]} - ${t.name}`,
+            name: `(UTC${offset}) - ${t.alternativeName} - ${t.countryName} - ${t.mainCities[0]}`,
           });
         }
       });
@@ -109,12 +115,12 @@ export default {
     });
 
     const filteredTimezones = computed(() =>
-      query.value === ""
+      queryDebounce.value === ""
         ? options
         : options.filter((option) => {
             return option.name
               .toLowerCase()
-              .includes(query.value.toLowerCase());
+              .includes(queryDebounce.value.toLowerCase());
           })
     );
 
