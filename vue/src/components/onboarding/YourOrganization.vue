@@ -66,7 +66,7 @@
           <div class="w-full sm:w-1/2 sm:ml-1">
             <TextInput
               v-model="form.postal_code"
-              label="The postal code for this location"
+              label="The postal code for this location."
               placeholder="Postal Code"
               data-test="postal_code"
             />
