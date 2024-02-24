@@ -69,7 +69,7 @@
                 >
                   <font-awesome-icon
                     :icon="['fa', 'check']"
-                    class="z-10 text-xs fill-current input-icons text-slate-700"
+                    class="text-xs fill-current input-icons text-slate-700"
                   >
                   </font-awesome-icon>
                 </span>
@@ -156,6 +156,17 @@ export default defineComponent({
       setSelectedItem();
     });
 
+    watch(selectedItem, () => {
+      emit("update:modelValue", selectedItem.value.value);
+    });
+
+    watch(
+      () => props.modelValue,
+      () => {
+        setSelectedItem();
+      }
+    );
+
     const filteredItems = computed(() =>
       query.value === ""
         ? props.items
@@ -181,10 +192,6 @@ export default defineComponent({
     const onInputChange = (event: ComboboxInputChangeEvent): void => {
       query.value = event.target.value;
     };
-
-    watch(selectedItem, () => {
-      emit("update:modelValue", selectedItem.value.value);
-    });
 
     return {
       query,

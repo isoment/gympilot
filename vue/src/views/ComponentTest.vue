@@ -6,7 +6,6 @@
         <CheckBox
           v-model="checkboxData"
           label="Test Check"
-          color="text-emerald-500"
           size="md"
           @click="handleClick"
         />
@@ -110,7 +109,7 @@ export default defineComponent({
     /**
      *  MultiSelect
      */
-    const selectedEmployees = ref([7, 2, 1]);
+    const selectedEmployees = ref([7, 2, 3]);
     const employees = ref([
       { value: 1, text: "Wade Cooper" },
       { value: 2, text: "Arlene Mccoy" },
