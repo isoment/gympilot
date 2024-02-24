@@ -4,8 +4,7 @@
       <h5 class="font-bold tracking-widest text-slate-800">Timezone</h5>
     </div>
     <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
-      <!-- Timezone Input Here -->
-      <TimeZonePicker />
+      <TimeZonePicker v-model="form.timezone" />
     </div>
     <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
       <div class="flex flex-col sm:flex-row">

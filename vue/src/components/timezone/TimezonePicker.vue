@@ -8,7 +8,7 @@
       <div class="relative mt-1">
         <ComboboxInput
           class="w-full py-2 pl-3 pr-10 bg-white border rounded shadow-sm border-slate-300 focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
-          :display-value="(option) => option.name"
+          :display-value="(option: Option) => option.text"
           placeholder="Search by country or city"
           @change="query = $event.target.value"
         />
@@ -27,7 +27,7 @@
         >
           <ComboboxOption
             v-for="option in filteredTimezones"
-            :key="option.id"
+            :key="option.value"
             v-slot="{ active, selected }"
             :value="option"
             as="template"
@@ -39,7 +39,7 @@
               ]"
             >
               <span :class="['block truncate', selected && 'font-semibold']">
-                {{ option.name }}
+                {{ option.text }}
               </span>
 
               <span
@@ -66,8 +66,8 @@
   </div>
 </template>
 
-<script>
-import { computed, ref, onMounted } from "vue";
+<script lang="ts">
+import { computed, ref, onMounted, PropType, watch } from "vue";
 import { refDebounced } from "@vueuse/core";
 import {
   Combobox,
@@ -80,7 +80,14 @@ import {
 import { getTimeZones } from "@vvo/tzdb";
 import { availableCountries } from "@/config/options";
 
+interface Option {
+  value: string;
+  text: string;
+}
+
 export default {
+  name: "TimezonePicker",
+
   components: {
     Combobox,
     ComboboxButton,
@@ -89,36 +96,64 @@ export default {
     ComboboxOption,
     ComboboxOptions,
   },
-  setup() {
+
+  props: {
+    modelValue: {
+      type: String as PropType<string>,
+      required: true,
+    },
+  },
+
+  emits: ["update:modelValue"],
+
+  setup(props, { emit }) {
     const query = ref("");
     const queryDebounce = refDebounced(query, 800);
 
     const selectedTimezone = ref();
-    const options = [];
+    const options: Option[] = [];
 
     onMounted(() => {
       const timezones = getTimeZones();
-      console.log(timezones);
 
       timezones.forEach((t) => {
         if (availableCountries.includes(t.countryName)) {
           const offset = t.rawFormat.split(" ")[0];
 
           options.push({
-            id: t.name,
-            name: `(UTC${offset}) - ${t.alternativeName} - ${t.countryName} - ${t.mainCities[0]}`,
+            value: t.name,
+            text: `(UTC${offset}) - ${t.alternativeName} - ${t.countryName} - ${t.mainCities[0]}`,
           });
         }
       });
 
-      console.log(options);
+      setSelectedItem();
     });
+
+    watch(selectedTimezone, () => {
+      emit("update:modelValue", selectedTimezone.value.value);
+    });
+
+    watch(
+      () => props.modelValue,
+      () => {
+        setSelectedItem();
+      }
+    );
+
+    const setSelectedItem = () => {
+      for (const i of options) {
+        if (i.value === props.modelValue) {
+          selectedTimezone.value = i;
+        }
+      }
+    };
 
     const filteredTimezones = computed(() =>
       queryDebounce.value === ""
         ? options
         : options.filter((option) => {
-            return option.name
+            return option.text
               .toLowerCase()
               .includes(queryDebounce.value.toLowerCase());
           })
