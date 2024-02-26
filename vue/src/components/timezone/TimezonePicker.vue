@@ -23,7 +23,7 @@
         </ComboboxButton>
         <ComboboxOptions
           v-if="filteredTimezones.length > 0"
-          class="relative z-40 w-full py-1 mt-1 overflow-auto text-xs bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+          class="absolute z-40 w-full py-1 mt-1 overflow-auto text-xs bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
         >
           <ComboboxOption
             v-for="option in filteredTimezones"

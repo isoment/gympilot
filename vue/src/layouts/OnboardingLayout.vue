@@ -17,7 +17,7 @@
         </div>
 
         <nav class="px-2 py-4 md:px-4 md:m-2" aria-label="Progress">
-          <ol role="list" class="overflow-hidden">
+          <ol role="list">
             <li
               v-for="(step, stepIdx) in steps"
               :key="step.name"
