@@ -28,11 +28,10 @@
         >
           <font-awesome-icon
             :icon="['fa', 'chevron-down']"
-            class="z-10 text-xs fill-current input-icons text-slate-700"
+            class="text-xs fill-current input-icons text-slate-700"
           >
           </font-awesome-icon>
         </ComboboxButton>
-
         <transition
           leave-active-class="transition duration-100 ease-in"
           leave-from-class="opacity-100"
