@@ -73,7 +73,6 @@
 <script lang="ts">
 import { computed, ref, onMounted, PropType, watch } from "vue";
 import { refDebounced } from "@vueuse/core";
-import "/node_modules/flag-icons/css/flag-icons.min.css";
 import {
   Combobox,
   ComboboxButton,
@@ -83,6 +82,7 @@ import {
   ComboboxOptions,
 } from "@headlessui/vue";
 import { availableCountries } from "@/config/options";
+import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 interface Option {
   value: string;

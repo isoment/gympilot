@@ -4,8 +4,8 @@
       <div class="w-full">
         <ButtonPrimary
           data-test="next-button"
-          color="bg-indigo-600"
-          hover="hover:bg-indigo-500"
+          color="bg-emerald-400"
+          hover="hover:bg-emerald-300"
           @click="nextClicked()"
           >Next</ButtonPrimary
         >
@@ -15,8 +15,8 @@
       <div class="w-full">
         <ButtonPrimary
           data-test="next-button"
-          color="bg-indigo-600"
-          hover="hover:bg-indigo-500"
+          color="bg-emerald-400"
+          hover="hover:bg-emerald-300"
           @click="finishClicked()"
           >Finish</ButtonPrimary
         >
@@ -26,8 +26,8 @@
       <div class="w-1/2 mr-1 sm:w-1/4">
         <ButtonPrimary
           data-test="next-button"
-          color="bg-slate-500"
-          hover="hover:bg-slate-400"
+          color="bg-indigo-400"
+          hover="hover:bg-indigo-300"
           @click="previousClicked()"
           >Previous</ButtonPrimary
         >
@@ -35,8 +35,8 @@
       <div class="w-1/2 ml-1 sm:w-1/4">
         <ButtonPrimary
           data-test="next-button"
-          color="bg-indigo-600"
-          hover="hover:bg-indigo-500"
+          color="bg-emerald-400"
+          hover="hover:bg-emerald-300"
           @click="nextClicked()"
           >Next</ButtonPrimary
         >
