@@ -17,6 +17,14 @@
           class="mt-2 -mb-2 text-left"
         />
       </div>
+      <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
+        <CountrySelect v-model="form.country" data-test="organization_name" />
+        <ValidationErrors
+          :errors="validationErrors"
+          field="country"
+          class="mt-2 -mb-2 text-left"
+        />
+      </div>
     </div>
     <div>
       <h5 class="mt-8 mb-4 ml-1 font-bold tracking-widest text-slate-700">
@@ -92,6 +100,7 @@ import ButtonGroup from "./ButtonGroup.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import { StepperStatusProp } from "../types";
 import { ButtonGroupEventValue } from "../types";
+import CountrySelect from "@/components/countries/CountrySelect.vue";
 
 interface FormValidationErrors {
   organization_name?: string;
@@ -99,12 +108,13 @@ interface FormValidationErrors {
   street_address?: string;
   city?: string;
   postal_code?: string;
+  country?: string;
 }
 
 export default defineComponent({
   name: "YourOrganization",
 
-  components: { ButtonGroup, TextInput, ValidationErrors },
+  components: { ButtonGroup, CountrySelect, TextInput, ValidationErrors },
 
   props: {
     status: {
@@ -122,6 +132,7 @@ export default defineComponent({
       street_address: "",
       city: "",
       postal_code: "",
+      country: "US",
     });
     const validationErrors = ref<FormValidationErrors>({});
 
