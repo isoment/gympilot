@@ -33,8 +33,7 @@
                 <div class="relative flex items-start group">
                   <span class="flex items-center h-9">
                     <span
-                      class="relative z-10 flex items-center justify-center w-8 h-8 bg-indigo-600 rounded-full group-hover:bg-indigo-800 hover:cursor-pointer"
-                      @click="selectStep(stepIdx)"
+                      class="relative z-10 flex items-center justify-center w-8 h-8 bg-indigo-600 rounded-full group-hover:bg-indigo-800"
                     >
                       <font-awesome-icon
                         :icon="['fa', 'check']"
@@ -68,8 +67,7 @@
                 >
                   <span class="flex items-center h-9" aria-hidden="true">
                     <span
-                      class="relative z-10 flex items-center justify-center w-8 h-8 bg-white border-2 border-indigo-600 rounded-full hover:cursor-pointer"
-                      @click="selectStep(stepIdx)"
+                      class="relative z-10 flex items-center justify-center w-8 h-8 bg-white border-2 border-indigo-600 rounded-full"
                     >
                       <span class="h-2.5 w-2.5 bg-indigo-600 rounded-full" />
                     </span>
@@ -103,8 +101,7 @@
                 <div class="relative flex items-start group">
                   <span class="flex items-center h-9" aria-hidden="true">
                     <span
-                      class="relative z-10 flex items-center justify-center w-8 h-8 bg-white border-2 border-gray-300 rounded-full group-hover:border-gray-400 hover:cursor-pointer"
-                      @click="selectStep(stepIdx)"
+                      class="relative z-10 flex items-center justify-center w-8 h-8 bg-white border-2 border-gray-300 rounded-full group-hover:border-gray-400"
                     >
                       <span
                         class="h-2.5 w-2.5 bg-transparent rounded-full group-hover:bg-gray-300"

@@ -11,8 +11,17 @@
         >
       </div>
     </div>
-    <div v-else-if="lastStep">
-      <div class="w-full">
+    <div class="flex flex-row justify-between" v-else-if="lastStep">
+      <div class="w-1/2 mr-1 sm:w-1/4">
+        <ButtonPrimary
+          data-test="next-button"
+          color="bg-indigo-500"
+          hover="hover:bg-indigo-400"
+          @click="previousClicked()"
+          >Previous</ButtonPrimary
+        >
+      </div>
+      <div class="w-1/2 ml-1 sm:w-1/4">
         <ButtonPrimary
           data-test="next-button"
           color="bg-emerald-400"
@@ -26,8 +35,8 @@
       <div class="w-1/2 mr-1 sm:w-1/4">
         <ButtonPrimary
           data-test="next-button"
-          color="bg-indigo-400"
-          hover="hover:bg-indigo-300"
+          color="bg-indigo-500"
+          hover="hover:bg-indigo-400"
           @click="previousClicked()"
           >Previous</ButtonPrimary
         >

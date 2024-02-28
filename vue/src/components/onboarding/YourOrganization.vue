@@ -33,7 +33,7 @@
       <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
         <TextInput
           v-model="form.location_name"
-          label="A location represents your gym, fitness studio etc. An upgraded account allow multiple locations."
+          label="A location represents your gym, fitness studio etc. An upgraded account allows multiple locations."
           placeholder="Name"
           data-test="location_name"
         />
