@@ -101,6 +101,7 @@ import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import { StepperStatusProp } from "../types";
 import { ButtonGroupEventValue } from "../types";
 import CountrySelect from "@/components/countries/CountrySelect.vue";
+import { validStringInput, validCountry } from "@/utils/validationHelpers";
 
 interface FormValidationErrors {
   organization_name?: string;
@@ -137,7 +138,52 @@ export default defineComponent({
     const validationErrors = ref<FormValidationErrors>({});
 
     const buttonClicked = (event: ButtonGroupEventValue) => {
+      if (event === "next") {
+        validationErrors.value = {};
+        const valid = formValid();
+        if (!valid) return;
+      }
       emit("click:button", event);
+    };
+
+    const formValid = (): boolean => {
+      const formData = form.value;
+
+      if (!validStringInput(formData.organization_name, 5, 255)) {
+        validationErrors.value["organization_name"] =
+          "Must be between 5 and 255 characters";
+        return false;
+      }
+
+      if (!validCountry(formData.country)) {
+        validationErrors.value["country"] = "Invalid country";
+        return false;
+      }
+
+      if (!validStringInput(formData.location_name, 5, 255)) {
+        validationErrors.value["location_name"] =
+          "Must be between 5 and 255 characters";
+        return false;
+      }
+
+      if (!validStringInput(formData.street_address, 5, 255)) {
+        validationErrors.value["street_address"] =
+          "Must be between 5 and 255 characters";
+        return false;
+      }
+
+      if (!validStringInput(formData.city, 2, 255)) {
+        validationErrors.value["city"] = "Must be between 2 and 255 characters";
+        return false;
+      }
+
+      if (!validStringInput(formData.postal_code, 2, 255)) {
+        validationErrors.value["postal_code"] =
+          "Must be between 2 and 255 characters";
+        return false;
+      }
+
+      return true;
     };
 
     return { buttonClicked, form, validationErrors };
