@@ -1,3 +1,4 @@
+import { timeZonesNames } from "@vvo/tzdb";
 import { availableCountries } from "@/config/options";
 
 const validStringInput = (
@@ -21,4 +22,10 @@ const validCountry = (country: string): boolean => {
   return false;
 };
 
-export { validStringInput, validCountry };
+const validTimezone = (timezone: string): boolean => {
+  if (timezone.length === 0) return false;
+  const timezones = timeZonesNames;
+  return timezones.includes(timezone) ? true : false;
+};
+
+export { validStringInput, validCountry, validTimezone };

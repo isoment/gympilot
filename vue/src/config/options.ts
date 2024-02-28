@@ -153,4 +153,31 @@ const availableCurrencies = [
   },
 ];
 
-export { availableCountries, availableCurrencies };
+const dateFormatItems = [
+  {
+    value: "MM/DD/YYYY",
+    text: "Month / Day / Year",
+  },
+  {
+    value: "DD/MM/YYYY",
+    text: "Day / Month / Year",
+  },
+];
+
+const timeFormatItems = [
+  {
+    value: "AM/PM",
+    text: "AM / PM",
+  },
+  {
+    value: "24HR",
+    text: "24 Hour",
+  },
+];
+
+export {
+  availableCountries,
+  availableCurrencies,
+  dateFormatItems,
+  timeFormatItems,
+};

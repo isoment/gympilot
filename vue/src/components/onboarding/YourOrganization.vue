@@ -14,7 +14,7 @@
         <ValidationErrors
           :errors="validationErrors"
           field="organization_name"
-          class="mt-2 -mb-2 text-left"
+          class="mt-2 ml-1 -mb-2 text-left"
         />
       </div>
       <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
@@ -22,7 +22,7 @@
         <ValidationErrors
           :errors="validationErrors"
           field="country"
-          class="mt-2 -mb-2 text-left"
+          class="mt-2 ml-1 -mb-2 text-left"
         />
       </div>
     </div>
@@ -40,7 +40,7 @@
         <ValidationErrors
           :errors="validationErrors"
           field="location_name"
-          class="mt-2 -mb-2 text-left"
+          class="mt-2 ml-1 -mb-2 text-left"
         />
       </div>
       <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
@@ -53,7 +53,7 @@
         <ValidationErrors
           :errors="validationErrors"
           field="street_address"
-          class="mt-2 -mb-2 text-left"
+          class="mt-2 ml-1 -mb-2 text-left"
         />
       </div>
       <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
@@ -68,7 +68,7 @@
             <ValidationErrors
               :errors="validationErrors"
               field="city"
-              class="mt-2 -mb-2 text-left"
+              class="mt-2 ml-1 -mb-2 text-left"
             />
           </div>
           <div class="w-full sm:w-1/2 sm:ml-1">
@@ -81,7 +81,7 @@
             <ValidationErrors
               :errors="validationErrors"
               field="postal_code"
-              class="mt-2 -mb-2 text-left"
+              class="mt-2 ml-1 -mb-2 text-left"
             />
           </div>
         </div>
