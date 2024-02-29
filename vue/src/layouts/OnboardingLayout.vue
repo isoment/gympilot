@@ -129,12 +129,15 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { useStore } from "vuex";
+import { key } from "@/store";
 import { StepperStatusProp } from "@/components/types";
 import TimeZone from "@/components/onboarding/TimeZone.vue";
 import YourBilling from "@/components/onboarding/YourBilling.vue";
 import YourOrganization from "@/components/onboarding/YourOrganization.vue";
 import ProgramsOffered from "@/components/onboarding/ProgramsOffered.vue";
 import { ButtonGroupEventValue } from "@/components/types";
+import { ADD_TOAST } from "@/store/constants";
 
 export default defineComponent({
   name: "OnboardingLayout",
@@ -142,6 +145,8 @@ export default defineComponent({
   components: { TimeZone, YourBilling, YourOrganization, ProgramsOffered },
 
   setup() {
+    const store = useStore(key);
+
     /**
      *  Status can be current, complete or upcoming
      */
@@ -213,7 +218,32 @@ export default defineComponent({
         selectStep(status.index + 1);
       } else if (event === "previous") {
         selectStep(status.index - 1);
+      } else if (event === "finish") {
+        submitOnboarding();
       }
+    };
+
+    const submitOnboarding = async () => {
+      console.log("submitOnboarding");
+
+      // Check that the values from each stage are in local storage. Programs are optional so
+      // we don't need to check against that.
+      const organization = localStorage.getItem("onboarding.organization");
+      const programs = localStorage.getItem("onboarding.programs");
+      const timezone = localStorage.getItem("onboarding.timezone");
+      const billing = localStorage.getItem("onboarding.billing");
+
+      if (!organization || !timezone || !billing) {
+        store.dispatch(ADD_TOAST, {
+          type: "error",
+          message: "Please check the form for errors",
+        });
+        selectStep(0);
+        return;
+      }
+
+      // Make API call
+      console.log("API CALL");
     };
 
     return {
