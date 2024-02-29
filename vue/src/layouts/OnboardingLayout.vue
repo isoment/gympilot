@@ -242,8 +242,15 @@ export default defineComponent({
         return;
       }
 
-      // Make API call
-      console.log("API CALL");
+      // Prepare data and make API call
+      const formData = {
+        organization: JSON.parse(organization),
+        programs: programs ? JSON.parse(programs) : [],
+        timezone: JSON.parse(timezone),
+        billing: JSON.parse(billing),
+      };
+
+      console.log("API CALL", formData);
     };
 
     return {
