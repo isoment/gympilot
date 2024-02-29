@@ -181,7 +181,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, onMounted, PropType, ref } from "vue";
 import { StepperStatusProp } from "../types";
 import ButtonGroup from "./ButtonGroup.vue";
 import CheckBox from "../inputs/CheckBox.vue";
@@ -202,17 +202,61 @@ export default defineComponent({
 
   emits: ["click:button"],
 
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     const showFitnessTrainingOptions = ref(false);
     const showYogaOptions = ref(false);
     const showGymnasticsOptions = ref(false);
     const showMartialArtsOptions = ref(false);
 
     const buttonClicked = (event: ButtonGroupEventValue) => {
+      if (selectedPrograms.value.length !== 0) {
+        localStorage.setItem(
+          "onboarding.programs",
+          JSON.stringify(selectedPrograms.value)
+        );
+      }
       emit("click:button", event);
     };
 
     const selectedPrograms = ref<string[]>([]);
+
+    onMounted(() => {
+      const programsFromStorage = localStorage.getItem("onboarding.programs");
+
+      if (programsFromStorage !== null) {
+        selectedPrograms.value = JSON.parse(programsFromStorage);
+      } else {
+        return;
+      }
+
+      for (const item of onboardingProgramsOffered["fitness"]) {
+        if (programsFromStorage.includes(item.value)) {
+          showFitnessTrainingOptions.value = true;
+          break;
+        }
+      }
+
+      for (const item of onboardingProgramsOffered["yoga"]) {
+        if (programsFromStorage.includes(item.value)) {
+          showYogaOptions.value = true;
+          break;
+        }
+      }
+
+      for (const item of onboardingProgramsOffered["martialArts"]) {
+        if (programsFromStorage.includes(item.value)) {
+          showMartialArtsOptions.value = true;
+          break;
+        }
+      }
+
+      for (const item of onboardingProgramsOffered["gymnastics"]) {
+        if (programsFromStorage.includes(item.value)) {
+          showGymnasticsOptions.value = true;
+          break;
+        }
+      }
+    });
 
     const selectProgram = (program: string): void => {
       for (let i = 0; i < selectedPrograms.value.length; i++) {

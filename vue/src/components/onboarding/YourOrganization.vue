@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType } from "vue";
+import { defineComponent, ref, PropType, onMounted } from "vue";
 import TextInput from "../inputs/TextInput.vue";
 import ButtonGroup from "./ButtonGroup.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
@@ -137,11 +137,28 @@ export default defineComponent({
     });
     const validationErrors = ref<FormValidationErrors>({});
 
+    onMounted(() => {
+      const formDataFromStorage = localStorage.getItem(
+        "onboarding.organization"
+      );
+
+      if (formDataFromStorage !== null) {
+        form.value = JSON.parse(formDataFromStorage);
+      }
+    });
+
     const buttonClicked = (event: ButtonGroupEventValue) => {
       if (event === "next") {
         validationErrors.value = {};
         const valid = formValid();
-        if (!valid) return;
+        if (valid) {
+          localStorage.setItem(
+            "onboarding.organization",
+            JSON.stringify(form.value)
+          );
+        } else {
+          return;
+        }
       }
       emit("click:button", event);
     };
