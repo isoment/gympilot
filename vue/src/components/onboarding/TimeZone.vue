@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, onMounted, PropType, ref } from "vue";
 import { StepperStatusProp } from "../types";
 import ButtonGroup from "./ButtonGroup.vue";
 import { ButtonGroupEventValue } from "../types";
@@ -90,11 +90,26 @@ export default defineComponent({
     });
     const validationErrors = ref<FormValidationErrors>({});
 
+    onMounted(() => {
+      const timezoneFromStorage = localStorage.getItem("onboarding.timezone");
+
+      if (timezoneFromStorage !== null) {
+        form.value = JSON.parse(timezoneFromStorage);
+      }
+    });
+
     const buttonClicked = (event: ButtonGroupEventValue) => {
       if (event === "next") {
         validationErrors.value = {};
         const valid = formValid();
-        if (!valid) return;
+        if (valid) {
+          localStorage.setItem(
+            "onboarding.timezone",
+            JSON.stringify(form.value)
+          );
+        } else {
+          return;
+        }
       }
       emit("click:button", event);
     };

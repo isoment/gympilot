@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType, ref, onMounted } from "vue";
 import { StepperStatusProp } from "../types";
 import ButtonGroup from "./ButtonGroup.vue";
 import { ButtonGroupEventValue } from "../types";
@@ -99,11 +99,26 @@ export default defineComponent({
     });
     const validationErrors = ref<FormValidationErrors>({});
 
+    onMounted(() => {
+      const billingFromStorage = localStorage.getItem("onboarding.billing");
+
+      if (billingFromStorage !== null) {
+        form.value = JSON.parse(billingFromStorage);
+      }
+    });
+
     const buttonClicked = (event: ButtonGroupEventValue) => {
       if (event === "finish") {
         validationErrors.value = {};
         const valid = formValid();
-        if (!valid) return;
+        if (valid) {
+          localStorage.setItem(
+            "onboarding.billing",
+            JSON.stringify(form.value)
+          );
+        } else {
+          return;
+        }
       }
       emit("click:button", event);
     };

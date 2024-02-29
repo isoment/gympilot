@@ -226,8 +226,6 @@ export default defineComponent({
       if (programsFromStorage !== null) {
         selectedPrograms.value = JSON.parse(programsFromStorage);
         setOptionsCheckboxes();
-      } else {
-        return;
       }
     });
 
