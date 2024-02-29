@@ -225,38 +225,38 @@ export default defineComponent({
 
       if (programsFromStorage !== null) {
         selectedPrograms.value = JSON.parse(programsFromStorage);
+        setOptionsCheckboxes();
       } else {
         return;
       }
-
-      for (const item of onboardingProgramsOffered["fitness"]) {
-        if (programsFromStorage.includes(item.value)) {
-          showFitnessTrainingOptions.value = true;
-          break;
-        }
-      }
-
-      for (const item of onboardingProgramsOffered["yoga"]) {
-        if (programsFromStorage.includes(item.value)) {
-          showYogaOptions.value = true;
-          break;
-        }
-      }
-
-      for (const item of onboardingProgramsOffered["martialArts"]) {
-        if (programsFromStorage.includes(item.value)) {
-          showMartialArtsOptions.value = true;
-          break;
-        }
-      }
-
-      for (const item of onboardingProgramsOffered["gymnastics"]) {
-        if (programsFromStorage.includes(item.value)) {
-          showGymnasticsOptions.value = true;
-          break;
-        }
-      }
     });
+
+    /**
+     *  When getting the programs from local storage we want to set the category
+     *  checkboxes to true to display the options for programs that are selected.
+     *  To avoid multiple loops we can use a hash. The key is the name of the program
+     *  category from onboardingProgramsOffered and the value is checkbox state. This
+     *  is more succinct than having multiple loops.
+     */
+    const setOptionsCheckboxes = (): void => {
+      const programOptionsMapping = {
+        fitness: showFitnessTrainingOptions,
+        yoga: showYogaOptions,
+        martialArts: showMartialArtsOptions,
+        gymnastics: showGymnasticsOptions,
+      };
+
+      for (const [program, optionRef] of Object.entries(
+        programOptionsMapping
+      )) {
+        for (const item of onboardingProgramsOffered[program]) {
+          if (selectedPrograms.value.includes(item.value)) {
+            optionRef.value = true;
+            break;
+          }
+        }
+      }
+    };
 
     const selectProgram = (program: string): void => {
       for (let i = 0; i < selectedPrograms.value.length; i++) {
