@@ -175,9 +175,37 @@ const timeFormatItems = [
   },
 ];
 
+const billingDateOptions = [
+  {
+    value: "start",
+    text: "Membership start date",
+  },
+  {
+    value: "first-of-month",
+    text: "First of the month",
+  },
+  {
+    value: "last-of-month",
+    text: "Last of the month",
+  },
+];
+
+const cancelOptions = [
+  {
+    value: 1,
+    text: "Yes",
+  },
+  {
+    value: 0,
+    text: "No",
+  },
+];
+
 export {
   availableCountries,
   availableCurrencies,
   dateFormatItems,
   timeFormatItems,
+  billingDateOptions,
+  cancelOptions,
 };

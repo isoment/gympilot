@@ -11,16 +11,26 @@
         color="bg-indigo-400"
         data-test="currency"
       />
+      <ValidationErrors
+        :errors="validationErrors"
+        field="currency"
+        class="mt-2 ml-1 -mb-2 text-left"
+      />
     </div>
     <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
       <div class="flex flex-col sm:flex-row">
         <div class="w-full sm:w-1/2 sm:mr-1 mb-7">
           <SelectInput
-            v-model="form.billingDate"
+            v-model="form.billing_date"
             :items="billingDateOptions"
             label="Billing Date."
             color="bg-indigo-400"
             data-test="billing_date"
+          />
+          <ValidationErrors
+            :errors="validationErrors"
+            field="billing_date"
+            class="mt-2 ml-1 -mb-2 text-left"
           />
         </div>
         <div class="w-full sm:w-1/2 sm:ml-1">
@@ -30,6 +40,11 @@
             label="Allow self cancellation?"
             color="bg-indigo-400"
             data-test="cancellation"
+          />
+          <ValidationErrors
+            :errors="validationErrors"
+            field="allow_cancellation"
+            class="mt-2 ml-1 -mb-2 text-left"
           />
         </div>
       </div>
@@ -48,38 +63,24 @@ import { StepperStatusProp } from "../types";
 import ButtonGroup from "./ButtonGroup.vue";
 import { ButtonGroupEventValue } from "../types";
 import SelectInput from "../inputs/SelectInput.vue";
-import { availableCurrencies } from "@/config/options";
+import ValidationErrors from "@/components/shared/ValidationErrors.vue";
+import {
+  availableCurrencies,
+  billingDateOptions,
+  cancelOptions,
+} from "@/config/options";
+import { validBooleanInt } from "@/utils/validationHelpers";
 
-const billingDateOptions = [
-  {
-    value: "start",
-    text: "Membership start date",
-  },
-  {
-    value: "first-of-month",
-    text: "First of the month",
-  },
-  {
-    value: "last-of-month",
-    text: "Last of the month",
-  },
-];
-
-const cancelOptions = [
-  {
-    value: 1,
-    text: "Yes",
-  },
-  {
-    value: 0,
-    text: "No",
-  },
-];
+interface FormValidationErrors {
+  currency?: string;
+  billing_date?: string;
+  allow_cancellation?: string;
+}
 
 export default defineComponent({
   name: "YourBilling",
 
-  components: { ButtonGroup, SelectInput },
+  components: { ButtonGroup, SelectInput, ValidationErrors },
 
   props: {
     status: {
@@ -90,17 +91,45 @@ export default defineComponent({
 
   emits: ["click:button"],
 
-  setup(props, { emit }) {
-    console.log(props.status);
-
+  setup(_, { emit }) {
     const form = ref({
       currency: "USD",
-      billingDate: "start",
+      billing_date: "start",
       allow_cancellation: 1,
     });
+    const validationErrors = ref<FormValidationErrors>({});
 
     const buttonClicked = (event: ButtonGroupEventValue) => {
+      if (event === "finish") {
+        validationErrors.value = {};
+        const valid = formValid();
+        if (!valid) return;
+      }
       emit("click:button", event);
+    };
+
+    const formValid = () => {
+      const formData = form.value;
+
+      if (!availableCurrencies.some((obj) => obj.value === formData.currency)) {
+        validationErrors.value["currency"] = "Invalid currency selection";
+        return false;
+      }
+
+      if (
+        !billingDateOptions.some((obj) => obj.value === formData.billing_date)
+      ) {
+        validationErrors.value["billing_date"] = "Invalid billing date";
+        return false;
+      }
+
+      if (!validBooleanInt(formData.allow_cancellation)) {
+        validationErrors.value["allow_cancellation"] =
+          "Invalid cancellation option";
+        return false;
+      }
+
+      return true;
     };
 
     return {
@@ -109,6 +138,7 @@ export default defineComponent({
       buttonClicked,
       cancelOptions,
       form,
+      validationErrors,
     };
   },
 });

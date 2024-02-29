@@ -28,4 +28,9 @@ const validTimezone = (timezone: string): boolean => {
   return timezones.includes(timezone) ? true : false;
 };
 
-export { validStringInput, validCountry, validTimezone };
+const validBooleanInt = (value: unknown): boolean => {
+  if (value === 0 || value === 1) return true;
+  return false;
+};
+
+export { validBooleanInt, validStringInput, validCountry, validTimezone };
