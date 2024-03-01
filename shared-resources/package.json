@@ -1,0 +1,18 @@
+{
+  "name": "gympilot-shared-resources",
+  "version": "0.1.0",
+  "description": "Common types, configuration options and helpers",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "isoment",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@vvo/tzdb": "^6.125.0"
+  }
+}
