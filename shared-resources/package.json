@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "description": "Common types, configuration options and helpers",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "isoment",
-  "license": "MIT",
+  "license": "CC BY-NC",
   "devDependencies": {
     "typescript": "^5.1.6"
   },
