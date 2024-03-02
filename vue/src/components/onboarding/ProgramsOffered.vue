@@ -215,8 +215,8 @@ export default defineComponent({
           "onboarding.programs",
           JSON.stringify(programsToSet)
         );
-        emit("click:button", event);
       }
+      emit("click:button", event);
     };
 
     const selectedPrograms = ref<string[]>([]);

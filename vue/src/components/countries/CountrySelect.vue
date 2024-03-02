@@ -7,7 +7,7 @@
       >
       <div class="relative mt-1">
         <ComboboxInput
-          class="w-full py-2 pl-3 pr-10 bg-white border rounded shadow-sm border-slate-300 focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm"
+          class="w-full py-2 pl-3 pr-10 text-sm bg-white border rounded shadow-sm border-slate-300 focus:ring-1 focus:ring-slate-500 focus:border-slate-500"
           :display-value="(option: Option) => option.text"
           placeholder="Search"
           @change="query = $event.target.value"
