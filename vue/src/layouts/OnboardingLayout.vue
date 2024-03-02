@@ -131,6 +131,7 @@
 import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { key } from "@/store";
+import { AxiosError } from "axios";
 import { StepperStatusProp } from "@/components/types";
 import TimeZone from "@/components/onboarding/TimeZone.vue";
 import YourBilling from "@/components/onboarding/YourBilling.vue";
@@ -138,6 +139,7 @@ import YourOrganization from "@/components/onboarding/YourOrganization.vue";
 import ProgramsOffered from "@/components/onboarding/ProgramsOffered.vue";
 import { ButtonGroupEventValue } from "@/components/types";
 import { ADD_TOAST } from "@/store/constants";
+import { APIOnboarding } from "@/api/onboarding";
 
 export default defineComponent({
   name: "OnboardingLayout",
@@ -250,7 +252,22 @@ export default defineComponent({
         billing: JSON.parse(billing),
       };
 
-      console.log("API CALL", formData);
+      try {
+        console.log("API CALL", formData);
+        const response = await APIOnboarding(formData);
+        console.log(response);
+      } catch (error: any) {
+        if ((error as AxiosError)?.response?.status === 422) {
+          if (error.response.data.errors) {
+            console.log(error.response.data.errors);
+          } else {
+            store.dispatch(ADD_TOAST, {
+              type: "error",
+              message: error.response.data.message,
+            });
+          }
+        }
+      }
     };
 
     return {

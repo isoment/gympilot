@@ -6,6 +6,7 @@ const onboardingController = express.Router();
 onboardingController.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     console.log(req.body);
+    return response.success(res, "Onboarding Successful");
   } catch (error) {
     console.log(error);
     response.internalError(res);
