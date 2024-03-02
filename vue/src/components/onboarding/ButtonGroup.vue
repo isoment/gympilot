@@ -11,7 +11,7 @@
         >
       </div>
     </div>
-    <div class="flex flex-row justify-between" v-else-if="lastStep">
+    <div v-else-if="lastStep" class="flex flex-row justify-between">
       <div class="w-1/2 mr-1 sm:w-1/4">
         <ButtonPrimary
           data-test="next-button"
