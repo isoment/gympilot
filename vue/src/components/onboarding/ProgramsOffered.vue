@@ -209,13 +209,14 @@ export default defineComponent({
     const showMartialArtsOptions = ref(false);
 
     const buttonClicked = (event: ButtonGroupEventValue) => {
-      if (selectedPrograms.value.length !== 0) {
+      if (event === "next") {
+        const programsToSet = selectedPrograms.value ?? [];
         localStorage.setItem(
           "onboarding.programs",
-          JSON.stringify(selectedPrograms.value)
+          JSON.stringify(programsToSet)
         );
+        emit("click:button", event);
       }
-      emit("click:button", event);
     };
 
     const selectedPrograms = ref<string[]>([]);
