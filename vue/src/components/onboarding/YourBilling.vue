@@ -68,8 +68,8 @@ import {
   availableCurrencies,
   billingDateOptions,
   cancelOptions,
-} from "@/config/options";
-import { validBooleanInt } from "@/utils/validationHelpers";
+  validBooleanInt,
+} from "gympilot-shared-resources";
 
 interface FormValidationErrors {
   currency?: string;

@@ -78,7 +78,7 @@ import {
   ComboboxOptions,
 } from "@headlessui/vue";
 import { getTimeZones } from "@vvo/tzdb";
-import { availableCountries } from "@/config/options";
+import { availableCountries } from "gympilot-shared-resources";
 
 interface Option {
   value: string;

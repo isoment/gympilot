@@ -59,8 +59,11 @@ import { ButtonGroupEventValue } from "../types";
 import TimeZonePicker from "@/components/timezone/TimezonePicker.vue";
 import SelectInput from "../inputs/SelectInput.vue";
 import ValidationErrors from "@/components/shared/ValidationErrors.vue";
-import { dateFormatItems, timeFormatItems } from "@/config/options";
-import { validTimezone } from "@/utils/validationHelpers";
+import {
+  dateFormatItems,
+  timeFormatItems,
+  validTimezone,
+} from "gympilot-shared-resources";
 
 interface FormValidationErrors {
   timezone?: string;

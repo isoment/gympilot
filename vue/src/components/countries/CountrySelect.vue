@@ -81,7 +81,7 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/vue";
-import { availableCountries } from "@/config/options";
+import { availableCountries } from "gympilot-shared-resources";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 interface Option {

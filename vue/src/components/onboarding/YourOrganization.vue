@@ -101,7 +101,7 @@ import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import { StepperStatusProp } from "../types";
 import { ButtonGroupEventValue } from "../types";
 import CountrySelect from "@/components/countries/CountrySelect.vue";
-import { validStringInput, validCountry } from "@/utils/validationHelpers";
+import { validStringInput, validCountry } from "gympilot-shared-resources";
 
 interface FormValidationErrors {
   organization_name?: string;
