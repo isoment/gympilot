@@ -18,7 +18,7 @@ export default <T>(joiSchema: JoiSchemaFunction<T>) => {
       const errors: Record<string, string> = {};
 
       validateRequest.error.details.forEach((err: Joi.ValidationErrorItem) => {
-        const fieldName = err.path[0];
+        const fieldName = err.path.join(".");
         const errorMessage = `${err.message.replace(/"/g, "")}`;
         const value = errorMessage.replace(/_/g, " ");
         const capitalizedMessage = value.charAt(0).toUpperCase() + value.slice(1);
