@@ -1,5 +1,4 @@
-import _ from "lodash";
-import { UserWithRoles } from "@base/data-access/repositories/userRepository";
+import { UserFieldsWithRoles } from "@base/data-access/models/user";
 
 interface UserData {
   id: number;
@@ -14,10 +13,8 @@ interface UserData {
 /**
  * This function will prepare the user data in a standardized way for inclusion in
  * the access or fresh tokens. This can be used in the frontend store.
- * @param user
- * @returns
  */
-const prepare = (user: UserWithRoles): UserData => {
+const prepare = (user: UserFieldsWithRoles): UserData => {
   const roles: string[] = [];
 
   user.Roles.forEach((role) => {

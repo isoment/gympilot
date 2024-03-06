@@ -11,7 +11,10 @@ export interface UserFields extends Model<InferAttributes<UserFields>, InferCrea
   owner_onboarding_complete: 1 | 0 | null;
   created_at: CreationOptional<Date>;
   updated_at: CreationOptional<Date>;
-  Roles?: RoleFields[];
+}
+
+export interface UserFieldsWithRoles extends UserFields {
+  Roles: RoleFields[];
 }
 
 const User = database.get().define<UserFields>(

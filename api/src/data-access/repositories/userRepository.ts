@@ -1,8 +1,8 @@
 import { WhereOptions, InferAttributes, Model } from "sequelize";
 
 import model from "../models";
-import { RoleFields } from "../models/role";
 import { logger } from "../../logger/logger";
+import { UserFieldsWithRoles } from "../models/user";
 
 export interface User extends Model {
   id: number;
@@ -14,10 +14,6 @@ export interface User extends Model {
   updated_at: Date;
 }
 
-export interface UserWithRoles extends User {
-  Roles: RoleFields[];
-}
-
 /**
  * Searches for a user with the given field. Include their roles as well.
  * @param field in the users table to search by
@@ -25,7 +21,7 @@ export interface UserWithRoles extends User {
  * @param excludeSensitive will exclude the sensitive values like password by default
  * @returns Promise<User | null>
  */
-export async function getUser<T extends keyof User>(field: T, value: User[T], excludeSensitive: boolean = true): Promise<UserWithRoles | null> {
+export async function getUser<T extends keyof User>(field: T, value: User[T], excludeSensitive: boolean = true): Promise<UserFieldsWithRoles | null> {
   const whereClause: WhereOptions<InferAttributes<User>> = { [field]: value };
 
   const withSensitive = {
@@ -59,7 +55,7 @@ export async function getUser<T extends keyof User>(field: T, value: User[T], ex
 
   const options = excludeSensitive ? withoutSensitive : withSensitive;
 
-  const user = (await model.User.findOne(options)) as UserWithRoles;
+  const user = (await model.User.findOne(options)) as UserFieldsWithRoles;
 
   return user;
 }
