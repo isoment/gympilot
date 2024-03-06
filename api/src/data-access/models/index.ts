@@ -5,6 +5,8 @@ import PasswordReset from "./passwordReset";
 import Organization from "./organization";
 import Location from "./location";
 import UserLocation from "./userLocation";
+import Template from "./template";
+import LocationTemplate from "./locationTemplate";
 
 /*********************************************************
  *  Here we can define the relationships between models  *
@@ -21,6 +23,9 @@ Location.belongsTo(Organization, { foreignKey: "organization_id" });
 Location.belongsToMany(User, { through: UserLocation, foreignKey: "location_id" });
 User.belongsToMany(Location, { through: UserLocation, foreignKey: "user_id" });
 
+Location.belongsToMany(Template, { through: LocationTemplate, foreignKey: "location_id" });
+Template.belongsToMany(Location, { through: LocationTemplate, foreignKey: "template_id" });
+
 export default {
   User,
   Role,
@@ -29,4 +34,6 @@ export default {
   Organization,
   Location,
   UserLocation,
+  Template,
+  LocationTemplate,
 };
