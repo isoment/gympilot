@@ -32,7 +32,7 @@ beforeEach(async () => {
 afterEach(async () => {
   await model.User.destroy({ where: {} });
   await model.Role.destroy({ where: {} });
-  await model.UserRoles.destroy({ where: {} });
+  await model.UserRole.destroy({ where: {} });
   await model.PasswordReset.destroy({ where: {} });
   jest.restoreAllMocks();
 });

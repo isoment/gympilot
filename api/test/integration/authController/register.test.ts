@@ -35,7 +35,7 @@ beforeEach(async () => {
 afterEach(async () => {
   await model.User.destroy({ where: {} });
   await model.Role.destroy({ where: {} });
-  await model.UserRoles.destroy({ where: {} });
+  await model.UserRole.destroy({ where: {} });
   const store = await memoryStore.get();
   store.flushdb();
   jest.restoreAllMocks();

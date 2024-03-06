@@ -92,7 +92,7 @@ export async function createUserWithRole(params: CreateUserWithRoleParams, roles
     });
 
     if (userRole) {
-      await model.UserRoles.create({
+      await model.UserRole.create({
         user_id: user.id,
         role_id: userRole.id,
       });

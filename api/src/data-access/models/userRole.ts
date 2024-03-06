@@ -3,7 +3,7 @@ import { database } from "./database";
 import userModel from "./user";
 import roleModel from "./role";
 
-export interface UserRolesFields extends Model<InferAttributes<UserRolesFields>, InferCreationAttributes<UserRolesFields>> {
+export interface UserRoleFields extends Model<InferAttributes<UserRoleFields>, InferCreationAttributes<UserRoleFields>> {
   id: CreationOptional<number>;
   user_id: number;
   role_id: number;
@@ -11,8 +11,8 @@ export interface UserRolesFields extends Model<InferAttributes<UserRolesFields>,
   updated_at: CreationOptional<Date>;
 }
 
-const UserRole = database.get().define<UserRolesFields>(
-  "UserRoles",
+const UserRole = database.get().define<UserRoleFields>(
+  "UserRole",
   {
     id: {
       type: DataTypes.INTEGER,
