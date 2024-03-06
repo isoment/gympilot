@@ -21,12 +21,12 @@ const Organization = database.get().define<OrganizationFields>(
   "Organization",
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
     },
     owner_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
       unique: true,
       references: {
