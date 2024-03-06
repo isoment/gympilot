@@ -2,17 +2,7 @@ import { WhereOptions, InferAttributes, Model } from "sequelize";
 
 import model from "../models";
 import { logger } from "../../logger/logger";
-import { UserFieldsWithRoles } from "../models/user";
-
-export interface User extends Model {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  created_at: Date;
-  updated_at: Date;
-}
+import { UserFields, UserFieldsWithRoles } from "../models/user";
 
 /**
  * Searches for a user with the given field. Include their roles as well.
@@ -21,8 +11,12 @@ export interface User extends Model {
  * @param excludeSensitive will exclude the sensitive values like password by default
  * @returns Promise<User | null>
  */
-export async function getUser<T extends keyof User>(field: T, value: User[T], excludeSensitive: boolean = true): Promise<UserFieldsWithRoles | null> {
-  const whereClause: WhereOptions<InferAttributes<User>> = { [field]: value };
+export async function getUser<T extends keyof UserFields>(
+  field: T,
+  value: UserFields[T],
+  excludeSensitive: boolean = true,
+): Promise<UserFieldsWithRoles | null> {
+  const whereClause: WhereOptions<InferAttributes<UserFields>> = { [field]: value };
 
   const withSensitive = {
     where: whereClause,
@@ -73,7 +67,7 @@ export interface CreateUserWithRoleParams {
  * @param roles to assign the user
  * @returns Promise<UserWithRoles | null>
  */
-export async function createUserWithRole(params: CreateUserWithRoleParams, roles: string[]): Promise<User | null> {
+export async function createUserWithRole(params: CreateUserWithRoleParams, roles: string[]): Promise<UserFields | null> {
   const user = await model.User.create({
     first_name: params.first_name,
     last_name: params.last_name,
@@ -97,10 +91,10 @@ export async function createUserWithRole(params: CreateUserWithRoleParams, roles
     }
   }
 
-  return user as User;
+  return user as UserFields;
 }
 
-type UserPartialUpdate = Partial<InferAttributes<User>>;
+type UserPartialUpdate = Partial<InferAttributes<UserFields>>;
 
 /**
  * Update a user record in the database, we can search by any of the columns and update one or all values
@@ -109,8 +103,8 @@ type UserPartialUpdate = Partial<InferAttributes<User>>;
  * @param data an object of user data to update
  * @returns number of rows updated
  */
-export async function updateUser<T extends keyof User>(field: T, value: User[T], data: UserPartialUpdate): Promise<number> {
-  const whereClause: WhereOptions<InferAttributes<User>> = { [field]: value };
+export async function updateUser<T extends keyof UserFields>(field: T, value: UserFields[T], data: UserPartialUpdate): Promise<number> {
+  const whereClause: WhereOptions<InferAttributes<UserFields>> = { [field]: value };
 
   const user = await model.User.update(data, {
     where: whereClause,
