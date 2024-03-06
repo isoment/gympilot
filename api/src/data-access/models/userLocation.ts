@@ -16,19 +16,19 @@ const UserLocation = database.get().define<UserLocationFields>(
   "UserLocation",
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       references: {
         model: userModel,
         key: "id",
       },
     },
     location_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       references: {
         model: locationModel,
         key: "id",

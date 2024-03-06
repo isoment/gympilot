@@ -15,19 +15,19 @@ const UserRole = database.get().define<UserRoleFields>(
   "UserRole",
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       references: {
         model: userModel,
         key: "id",
       },
     },
     role_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       references: {
         model: roleModel,
         key: "id",
