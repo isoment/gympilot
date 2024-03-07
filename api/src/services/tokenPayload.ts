@@ -1,4 +1,4 @@
-import { UserFieldsWithRoles } from "@base/data-access/models/user";
+import { UserFieldsWithRoles } from "../data-access/models/user";
 
 interface UserData {
   id: number;

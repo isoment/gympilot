@@ -4,6 +4,7 @@ import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
 import authToken from "../services/authToken";
 
+// This allows us to attach a verifiedUser property to the Request object.
 declare module "express-serve-static-core" {
   interface Request {
     verifiedUser?: string | jwt.JwtPayload;

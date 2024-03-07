@@ -39,6 +39,16 @@ export function unauthorized(res: Response, message: string = "Unauthorized", da
 }
 
 /**
+ * A response with status code 403 for when a request is unauthorized.
+ */
+export function forbidden(res: Response, message: string = "Forbidden", data: unknown = {}): void {
+  res.status(403).json({
+    message,
+    data,
+  });
+}
+
+/**
  * A response with status code 422, useful for validation related errors.
  */
 export function unprocessableContent(res: Response, message: string = "Unprocessable Content", data: unknown = {}): void {
