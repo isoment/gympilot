@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import * as response from "../services/http/responseHelper";
-import { JwtPayload } from "jsonwebtoken";
 import { logger } from "../logger/logger";
 
 /**
  *  This middleware should be used after the accessToken is verified and the payload
- *  has been attached to the request object. It can take either a single role as a string
- *  or an array of roles.
+ *  has been attached to the request object. It takes a string with one or more roles
+ *  and checks to see if the user has one of them.
+ *  @param role for example... "owner|employee|trainer"
  */
-export default (role: string | string[]) => {
+export default (role: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const payload = req.verifiedUser;
 
@@ -22,17 +22,10 @@ export default (role: string | string[]) => {
 
     const usersRoles: string[] = payload.roles;
 
-    if (typeof role === "string") {
-      if (usersRoles.includes(role)) {
+    for (const item of role.split("|")) {
+      if (usersRoles.includes(item)) {
         next();
         return;
-      }
-    } else {
-      for (const item of role) {
-        if (usersRoles.includes(item)) {
-          next();
-          return;
-        }
       }
     }
 

@@ -11,6 +11,10 @@ declare module "express-serve-static-core" {
   }
 }
 
+/**
+ *  Check that the given access token is valid and attach the payload to the request
+ *  for use further down the middleware pipeline.
+ */
 export default async (req: Request, res: Response, next: NextFunction) => {
   const token = req.header("Authorization");
 

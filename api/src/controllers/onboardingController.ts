@@ -12,7 +12,7 @@ const onboardingController = express.Router();
  */
 onboardingController.post(
   "/",
-  [verifyAccessToken, userHasRole("fake"), validateRequest(postOnboarding)],
+  [verifyAccessToken, userHasRole("owner"), validateRequest(postOnboarding)],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       console.log(req.body);
