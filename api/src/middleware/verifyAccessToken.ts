@@ -7,7 +7,7 @@ import authToken from "../services/authToken";
 // This allows us to attach a verifiedUser property to the Request object.
 declare module "express-serve-static-core" {
   interface Request {
-    verifiedUser?: string | jwt.JwtPayload;
+    verifiedUser?: jwt.JwtPayload;
   }
 }
 
@@ -27,6 +27,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const decoded = await authToken.verify(bearer);
+    if (!decoded || typeof decoded === "string") {
+      return response.unauthorized(res, "Token is invalid");
+    }
     req.verifiedUser = decoded;
     next();
   } catch (error) {

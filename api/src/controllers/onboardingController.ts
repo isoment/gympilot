@@ -1,21 +1,72 @@
 import express, { NextFunction, Request, Response } from "express";
 import * as response from "../services/http/responseHelper";
+import { logger } from "../logger/logger";
 import validateRequest from "../middleware/validateRequest";
 import { postOnboarding } from "../requests/onboardingRequestSchema";
 import verifyAccessToken from "../middleware/verifyAccessToken";
 import userHasRole from "../middleware/userHasRole";
+import * as userRepository from "../data-access/repositories/userRepository";
+import * as organizationRepository from "../data-access/repositories/organizationRepository";
 
 const onboardingController = express.Router();
 
-/**
- *  We will also want to use the verifyAccess token middleware and check if the user has a 'owner' role
- */
+// This goes in the shared resources package
+export interface OnboardingRequestBody {
+  organization: {
+    organization_name: string;
+    country: string;
+    location_name: string;
+    street_address: string;
+    city: string;
+    postal_code: string;
+  };
+  programs: string[] | [];
+  timezone: {
+    date_format: string;
+    time_format: string;
+    timezone: string;
+  };
+  billing: {
+    currency: string;
+    billing_date: string;
+    allow_cancellation: 1 | 0;
+  };
+}
+
 onboardingController.post(
   "/",
   [verifyAccessToken, userHasRole("owner"), validateRequest(postOnboarding)],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.body);
+      const body = req.body as OnboardingRequestBody;
+      console.log("REQUEST_BODY", body);
+
+      console.log("PAYLOAD", req.verifiedUser);
+
+      const user = await userRepository.getUser("id", req.verifiedUser?.id);
+
+      if (!user) {
+        logger.error("User not found during onboarding", { user: req.verifiedUser, body });
+        return response.internalError(res, "Onboarding failed, user not found");
+      }
+
+      const organization = await organizationRepository.createOrganization({
+        owner_id: user.id,
+        name: body.organization.organization_name,
+        country: body.organization.country,
+        timezone: body.timezone.timezone,
+        date_format: body.timezone.date_format,
+        time_format: body.timezone.time_format,
+        currency: body.billing.currency,
+        billing_date: body.billing.billing_date,
+        allow_cancellation: body.billing.allow_cancellation ? true : false,
+      });
+
+      if (!organization) {
+        logger.error("Failed to create organization", { user: req.verifiedUser, body });
+        return response.internalError(res, "Failed to create organization");
+      }
+
       return response.success(res, "Onboarding Successful");
     } catch (error) {
       console.log(error);
