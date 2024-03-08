@@ -23,7 +23,6 @@ onboardingController.post(
         response.internalError(res, onboardingResult.message);
       }
     } catch (error) {
-      console.log(error);
       response.internalError(res);
       next(error);
     }

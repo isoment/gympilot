@@ -35,19 +35,16 @@ interface OnboardingResult {
 
 export const onboardOwner = async (userId: number, body: OnboardingRequestBody): Promise<OnboardingResult> => {
   const user = await userRepository.getUser("id", userId);
-
   if (!user) {
     return { success: false, response: "internalError", message: "Onboarding failed, user not found" };
   }
 
   const organization = await _saveOrganization(user.id, body);
-
   if (!organization) {
     return { success: false, response: "internalError", message: "Failed to create organization" };
   }
 
-  const location = await _saveLocation(organization.id, body);
-
+  const location = await _saveLocation(organization.id, body.organization);
   if (!location) {
     return { success: false, response: "internalError", message: "Failed to create location" };
   }
@@ -69,12 +66,12 @@ const _saveOrganization = async (userId: number, body: OnboardingRequestBody): P
   });
 };
 
-const _saveLocation = async (organizationId: number, body: OnboardingRequestBody): Promise<LocationFields | null> => {
+const _saveLocation = async (organizationId: number, organization: OnboardingRequestBody["organization"]): Promise<LocationFields | null> => {
   return await locationRepository.createLocation({
     organization_id: organizationId,
-    name: body.organization.location_name,
-    street_address: body.organization.street_address,
-    city: body.organization.city,
-    postal_code: body.organization.postal_code,
+    name: organization.location_name,
+    street_address: organization.street_address,
+    city: organization.city,
+    postal_code: organization.postal_code,
   });
 };
