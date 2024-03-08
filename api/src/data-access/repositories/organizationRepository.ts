@@ -1,5 +1,6 @@
 import { OrganizationFields } from "../models/organization";
 import model from "../models";
+import { logger } from "../../logger/logger";
 
 interface CreateOrganizationParams {
   owner_id: number;
@@ -19,7 +20,10 @@ interface CreateOrganizationParams {
  */
 export async function createOrganization(params: CreateOrganizationParams): Promise<OrganizationFields | null> {
   const existing = await model.Organization.findOne({ where: { owner_id: params.owner_id } });
-  if (existing) return null;
+  if (existing) {
+    logger.error(`An organization, ID: ${existing.id} with owner_id ${existing.owner_id} already exists.`);
+    return null;
+  }
 
   return await model.Organization.create(params);
 }
