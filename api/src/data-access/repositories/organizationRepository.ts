@@ -15,10 +15,10 @@ interface CreateOrganizationParams {
 
 /**
  *  There is a unique constraint on the owner_id field since there should only ever be one
- *  organization record for an owner.
+ *  organization record for an owner so if one is found return null indicating creation failed.
  */
 export async function createOrganization(params: CreateOrganizationParams): Promise<OrganizationFields | null> {
-  const existing = await model.Organization.findOne({ where: { id: params.owner_id } });
+  const existing = await model.Organization.findOne({ where: { owner_id: params.owner_id } });
   if (existing) return null;
 
   return await model.Organization.create(params);

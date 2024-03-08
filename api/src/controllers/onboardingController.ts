@@ -7,6 +7,7 @@ import verifyAccessToken from "../middleware/verifyAccessToken";
 import userHasRole from "../middleware/userHasRole";
 import * as userRepository from "../data-access/repositories/userRepository";
 import * as organizationRepository from "../data-access/repositories/organizationRepository";
+import * as locationRepository from "../data-access/repositories/locationRepository";
 
 const onboardingController = express.Router();
 
@@ -39,9 +40,6 @@ onboardingController.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body = req.body as OnboardingRequestBody;
-      console.log("REQUEST_BODY", body);
-
-      console.log("PAYLOAD", req.verifiedUser);
 
       const user = await userRepository.getUser("id", req.verifiedUser?.id);
 
@@ -65,6 +63,19 @@ onboardingController.post(
       if (!organization) {
         logger.error("Failed to create organization", { user: req.verifiedUser, body });
         return response.internalError(res, "Failed to create organization");
+      }
+
+      const location = await locationRepository.createLocation({
+        organization_id: organization.id,
+        name: body.organization.location_name,
+        street_address: body.organization.street_address,
+        city: body.organization.city,
+        postal_code: body.organization.postal_code,
+      });
+
+      if (!location) {
+        logger.error("Failed to create location", { user: req.verifiedUser, body });
+        return response.internalError(res, "Failed to create location");
       }
 
       return response.success(res, "Onboarding Successful");
