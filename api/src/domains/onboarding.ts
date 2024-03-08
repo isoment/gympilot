@@ -1,6 +1,8 @@
 import * as userRepository from "../data-access/repositories/userRepository";
 import * as organizationRepository from "../data-access/repositories/organizationRepository";
 import * as locationRepository from "../data-access/repositories/locationRepository";
+import { OrganizationFields } from "@base/data-access/models/organization";
+import { LocationFields } from "@base/data-access/models/location";
 
 // This goes in the shared resources package
 interface OnboardingRequestBody {
@@ -38,8 +40,24 @@ export const onboardOwner = async (userId: number, body: OnboardingRequestBody):
     return { success: false, response: "internalError", message: "Onboarding failed, user not found" };
   }
 
-  const organization = await organizationRepository.createOrganization({
-    owner_id: user.id,
+  const organization = await _saveOrganization(user.id, body);
+
+  if (!organization) {
+    return { success: false, response: "internalError", message: "Failed to create organization" };
+  }
+
+  const location = await _saveLocation(organization.id, body);
+
+  if (!location) {
+    return { success: false, response: "internalError", message: "Failed to create location" };
+  }
+
+  return { success: true, response: "success", message: "Onboarding Successful" };
+};
+
+const _saveOrganization = async (userId: number, body: OnboardingRequestBody): Promise<OrganizationFields | null> => {
+  return await organizationRepository.createOrganization({
+    owner_id: userId,
     name: body.organization.organization_name,
     country: body.organization.country,
     timezone: body.timezone.timezone,
@@ -49,22 +67,14 @@ export const onboardOwner = async (userId: number, body: OnboardingRequestBody):
     billing_date: body.billing.billing_date,
     allow_cancellation: body.billing.allow_cancellation ? true : false,
   });
+};
 
-  if (!organization) {
-    return { success: false, response: "internalError", message: "Failed to create organization" };
-  }
-
-  const location = await locationRepository.createLocation({
-    organization_id: organization.id,
+const _saveLocation = async (organizationId: number, body: OnboardingRequestBody): Promise<LocationFields | null> => {
+  return await locationRepository.createLocation({
+    organization_id: organizationId,
     name: body.organization.location_name,
     street_address: body.organization.street_address,
     city: body.organization.city,
     postal_code: body.organization.postal_code,
   });
-
-  if (!location) {
-    return { success: false, response: "internalError", message: "Failed to create location" };
-  }
-
-  return { success: true, response: "success", message: "Onboarding Successful" };
 };
