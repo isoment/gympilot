@@ -4,17 +4,11 @@ import * as organizationRepository from "../data-access/repositories/organizatio
 import * as locationRepository from "../data-access/repositories/locationRepository";
 import * as templateRepository from "../data-access/repositories/templateRepository";
 import * as locationTemplateRepository from "../data-access/repositories/locationTemplateRepository";
-
 import { OrganizationFields } from "../data-access/models/organization";
 import { LocationFields } from "../data-access/models/location";
+import { OnboardingReturn } from "./types";
 
-interface OnboardingResult {
-  success: boolean;
-  response: string;
-  message: string;
-}
-
-export const onboardOwner = async (userId: number, body: OnboardingRequestBody): Promise<OnboardingResult> => {
+export const onboardOwner = async (userId: number, body: OnboardingRequestBody): Promise<OnboardingReturn> => {
   const user = await userRepository.getUser("id", userId);
   if (!user) {
     return { success: false, response: "internalError", message: "Onboarding failed, user not found" };

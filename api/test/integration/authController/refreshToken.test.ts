@@ -6,14 +6,12 @@ import roleHelper from "../..//testing/helpers/roles";
 import authToken from "../../../src/services/authToken";
 import userHelper from "../../testing/helpers/users";
 import * as refreshTokenStore from "../../../src/data-access/memory-store/refreshTokenStore";
-import databaseSetup from "../../../test/testing/databaseSetup";
 
 const endpoint = "/api/auth/refresh-token";
 let axiosAPIClient: AxiosInstance;
 
 beforeAll(async () => {
   const apiConnection = await startWebServer();
-  // await databaseSetup.migrate();
   const axiosConfig = {
     baseURL: `http://127.0.0.1:${apiConnection.port}`,
     validateStatus: () => true,

@@ -19,7 +19,4 @@ async function rollback() {
   }
 }
 
-export default {
-  migrate,
-  rollback,
-};
+export { migrate, rollback };

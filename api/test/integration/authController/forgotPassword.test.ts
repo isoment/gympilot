@@ -7,14 +7,12 @@ import roleHelper from "../..//testing/helpers/roles";
 import userHelper from "../..//testing/helpers/users";
 import * as passwordResetRepository from "../../../src/data-access/repositories/passwordResetRepository";
 import { email } from "../../../src/services/notification/email/email";
-import databaseSetup from "../../../test/testing/databaseSetup";
 
 const endpoint = "/api/auth/forgot-password";
 let axiosAPIClient: AxiosInstance;
 
 beforeAll(async () => {
   const apiConnection = await startWebServer();
-  // await databaseSetup.migrate();
   const axiosConfig = {
     baseURL: `http://127.0.0.1:${apiConnection.port}`,
     validateStatus: () => true,
@@ -49,7 +47,7 @@ describe("POST /api/auth/forgot-password", () => {
     const body = _.omit(createRequestBody(), "email");
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("email");
+    expect(response.data.errors).toHaveProperty("email");
   });
 
   it("requires email field to be a valid email", async () => {
@@ -58,7 +56,7 @@ describe("POST /api/auth/forgot-password", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("email");
+    expect(response.data.errors).toHaveProperty("email");
   });
 
   it("returns a 422 response if the email provided does not match a record", async () => {

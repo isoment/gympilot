@@ -8,14 +8,12 @@ import * as userRepository from "../../../src/data-access/repositories/userRepos
 import authToken from "../../../src/services/authToken";
 import { memoryStore } from "../../../src/data-access/memory-store/memoryStore";
 import * as refreshTokenStore from "../../../src/data-access/memory-store/refreshTokenStore";
-import databaseSetup from "../../../test/testing/databaseSetup";
 
 const endpoint = "/api/auth/register";
 let axiosAPIClient: AxiosInstance;
 
 beforeAll(async () => {
   const apiConnection = await startWebServer();
-  // await databaseSetup.migrate();
   const axiosConfig = {
     baseURL: `http://127.0.0.1:${apiConnection.port}`,
     // Don't throw HTTP exceptions. Delegate to the tests to decide which error is acceptable
@@ -57,28 +55,28 @@ describe("POST /api/auth/register", () => {
     const body = _.omit(createRequestBody(), "first_name");
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("first_name");
+    expect(response.data.errors).toHaveProperty("first_name");
   });
 
   it("requires a last name field", async () => {
     const body = _.omit(createRequestBody(), "last_name");
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("last_name");
+    expect(response.data.errors).toHaveProperty("last_name");
   });
 
   it("requires an email field", async () => {
     const body = _.omit(createRequestBody(), "email");
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("email");
+    expect(response.data.errors).toHaveProperty("email");
   });
 
   it("requires a password field", async () => {
     const body = _.omit(createRequestBody(), "password");
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("requires the password to be a string", async () => {
@@ -87,7 +85,7 @@ describe("POST /api/auth/register", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("requires the password to be at least 8 characters", async () => {
@@ -96,7 +94,7 @@ describe("POST /api/auth/register", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("requires the password to be less than 256 characters", async () => {
@@ -105,14 +103,14 @@ describe("POST /api/auth/register", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("requires a password verify field", async () => {
     const body = _.omit(createRequestBody(), "password_verify");
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password_verify");
+    expect(response.data.errors).toHaveProperty("password_verify");
   });
 
   it("requires password and password verify to match", async () => {
@@ -122,7 +120,7 @@ describe("POST /api/auth/register", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password_verify");
+    expect(response.data.errors).toHaveProperty("password_verify");
   });
 
   it("returns a 422 response if there is a user registered with the given email", async () => {
@@ -212,8 +210,7 @@ describe("POST /api/auth/register", () => {
     expect(decodedJWT.last_name).toBe(user!.last_name);
     expect(decodedJWT.email).toBe(user!.email);
     expect(decodedJWT.exp).toBeTruthy();
-    expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
-    expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
+    expect(decodedJWT.roles.some((role: string) => role === "owner")).toBe(true);
   });
 
   it("sets an http only cookie with the refresh token", async () => {
@@ -236,8 +233,7 @@ describe("POST /api/auth/register", () => {
     expect(decodedJWT.last_name).toBe(user!.last_name);
     expect(decodedJWT.email).toBe(user!.email);
     expect(decodedJWT.exp).toBeTruthy();
-    expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
-    expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
+    expect(decodedJWT.roles.some((role: string) => role === "owner")).toBe(true);
 
     expect(split).toContain("HttpOnly");
   });
