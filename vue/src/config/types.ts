@@ -15,8 +15,3 @@ export interface DashboardTopNavItem {
   value: string;
   href: string;
 }
-
-export interface OnboardingProgramItem {
-  name: string;
-  value: string;
-}

@@ -1,31 +1,9 @@
+import { OnboardingRequestBody } from "gympilot-shared-resources";
 import * as userRepository from "../data-access/repositories/userRepository";
 import * as organizationRepository from "../data-access/repositories/organizationRepository";
 import * as locationRepository from "../data-access/repositories/locationRepository";
 import { OrganizationFields } from "@base/data-access/models/organization";
 import { LocationFields } from "@base/data-access/models/location";
-
-// This goes in the shared resources package
-interface OnboardingRequestBody {
-  organization: {
-    organization_name: string;
-    country: string;
-    location_name: string;
-    street_address: string;
-    city: string;
-    postal_code: string;
-  };
-  programs: string[] | [];
-  timezone: {
-    date_format: string;
-    time_format: string;
-    timezone: string;
-  };
-  billing: {
-    currency: string;
-    billing_date: string;
-    allow_cancellation: 1 | 0;
-  };
-}
 
 interface OnboardingResult {
   success: boolean;

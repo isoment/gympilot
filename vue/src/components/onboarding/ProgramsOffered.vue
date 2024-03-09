@@ -36,7 +36,7 @@
           class="flex flex-col mt-2 mb-6 sm:flex-row sm:flex-wrap sm:items-center"
         >
           <div
-            v-for="program in onboardingProgramsOffered.fitness"
+            v-for="program in programItems.fitness"
             :key="program.value"
             class="w-full sm:w-1/2"
           >
@@ -75,7 +75,7 @@
           class="flex flex-col mt-2 mb-6 sm:flex-row sm:flex-wrap sm:items-center"
         >
           <div
-            v-for="program in onboardingProgramsOffered.yoga"
+            v-for="program in programItems.yoga"
             :key="program.value"
             class="w-full sm:w-1/2"
           >
@@ -116,7 +116,7 @@
           class="flex flex-col mt-2 mb-6 sm:flex-row sm:flex-wrap sm:items-center"
         >
           <div
-            v-for="program in onboardingProgramsOffered.gymnastics"
+            v-for="program in programItems.gymnastics"
             :key="program.value"
             class="w-full sm:w-1/2"
           >
@@ -157,7 +157,7 @@
           class="flex flex-col mt-2 mb-6 sm:flex-row sm:flex-wrap sm:items-center"
         >
           <div
-            v-for="program in onboardingProgramsOffered.martialArts"
+            v-for="program in programItems.martialArts"
             :key="program.value"
             class="w-full sm:w-1/2"
           >
@@ -186,7 +186,7 @@ import { StepperStatusProp } from "../types";
 import ButtonGroup from "./ButtonGroup.vue";
 import CheckBox from "../inputs/CheckBox.vue";
 import { ButtonGroupEventValue } from "../types";
-import onboardingProgramsOffered from "@/config/onboardingProgramsOffered";
+import { programItems } from "gympilot-shared-resources";
 
 export default defineComponent({
   name: "ProgramsOffered",
@@ -234,7 +234,7 @@ export default defineComponent({
      *  When getting the programs from local storage we want to set the category
      *  checkboxes to true to display the options for programs that are selected.
      *  To avoid multiple loops we can use a hash. The key is the name of the program
-     *  category from onboardingProgramsOffered and the value is checkbox state. This
+     *  category from programItems and the value is checkbox state. This
      *  is more succinct than having multiple loops.
      */
     const setOptionsCheckboxes = (): void => {
@@ -248,7 +248,7 @@ export default defineComponent({
       for (const [program, optionRef] of Object.entries(
         programOptionsMapping
       )) {
-        for (const item of onboardingProgramsOffered[program]) {
+        for (const item of programItems[program]) {
           if (selectedPrograms.value.includes(item.value)) {
             optionRef.value = true;
             break;
@@ -276,7 +276,7 @@ export default defineComponent({
 
     return {
       buttonClicked,
-      onboardingProgramsOffered,
+      programItems,
       programSelectClass,
       selectProgram,
       selectedPrograms,
