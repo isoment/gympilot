@@ -2,8 +2,8 @@ import { OnboardingRequestBody } from "gympilot-shared-resources";
 import * as userRepository from "../data-access/repositories/userRepository";
 import * as organizationRepository from "../data-access/repositories/organizationRepository";
 import * as locationRepository from "../data-access/repositories/locationRepository";
-import { OrganizationFields } from "@base/data-access/models/organization";
-import { LocationFields } from "@base/data-access/models/location";
+import { OrganizationFields } from "../data-access/models/organization";
+import { LocationFields } from "../data-access/models/location";
 
 interface OnboardingResult {
   success: boolean;
@@ -26,6 +26,12 @@ export const onboardOwner = async (userId: number, body: OnboardingRequestBody):
   if (!location) {
     return { success: false, response: "internalError", message: "Failed to create location" };
   }
+
+  if (body.programs.length !== 0) {
+    await _saveProgramTemplates(location.id, body.programs);
+  }
+
+  // Set the owner onboarding to complete.
 
   return { success: true, response: "success", message: "Onboarding Successful" };
 };
@@ -53,3 +59,5 @@ const _saveLocation = async (organizationId: number, organization: OnboardingReq
     postal_code: organization.postal_code,
   });
 };
+
+const _saveProgramTemplates = async (locationId: number, programs: OnboardingRequestBody["programs"]): Promise<void> => {};
