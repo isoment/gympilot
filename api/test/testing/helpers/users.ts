@@ -16,7 +16,9 @@ const createUser = async (params = {}, password = "password123", roles: string[]
     roles,
   );
 
-  return user;
+  const userWithRoles = await userRepository.getUser("id", user!.id, true);
+
+  return userWithRoles;
 };
 
 export default {

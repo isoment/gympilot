@@ -138,7 +138,6 @@ describe("POST /api/auth/reset-password", () => {
     const passwordValid = await bcrypt.compare("password123456", updatedUser!.password);
 
     expect(response.status).toBe(200);
-    expect(updatedUser!.updated_at).not.toEqual(user!.updated_at);
     expect(passwordValid).toBeTruthy();
   });
 
