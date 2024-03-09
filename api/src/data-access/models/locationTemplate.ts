@@ -18,9 +18,11 @@ const LocationTemplate = database.get().define<LocationTemplateFields>(
       type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
+      allowNull: false,
     },
     location_id: {
       type: DataTypes.BIGINT,
+      allowNull: false,
       references: {
         model: locationModel,
         key: "id",
@@ -28,6 +30,7 @@ const LocationTemplate = database.get().define<LocationTemplateFields>(
     },
     template_id: {
       type: DataTypes.BIGINT,
+      allowNull: false,
       references: {
         model: templateModel,
         key: "id",

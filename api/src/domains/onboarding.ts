@@ -2,6 +2,9 @@ import { OnboardingRequestBody } from "gympilot-shared-resources";
 import * as userRepository from "../data-access/repositories/userRepository";
 import * as organizationRepository from "../data-access/repositories/organizationRepository";
 import * as locationRepository from "../data-access/repositories/locationRepository";
+import * as templateRepository from "../data-access/repositories/templateRepository";
+import * as locationTemplateRepository from "../data-access/repositories/locationTemplateRepository";
+
 import { OrganizationFields } from "../data-access/models/organization";
 import { LocationFields } from "../data-access/models/location";
 
@@ -60,4 +63,11 @@ const _saveLocation = async (organizationId: number, organization: OnboardingReq
   });
 };
 
-const _saveProgramTemplates = async (locationId: number, programs: OnboardingRequestBody["programs"]): Promise<void> => {};
+const _saveProgramTemplates = async (locationId: number, programs: OnboardingRequestBody["programs"]): Promise<void> => {
+  for (const program of programs) {
+    const template = await templateRepository.getTemplate("name", program);
+    if (template) {
+      await locationTemplateRepository.createLocationTemplate(locationId, template.id, false);
+    }
+  }
+};
