@@ -81,7 +81,7 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
         email: req.body.email,
         password: hashedPassword,
       },
-      ["owner", "employee"],
+      ["owner"],
     );
 
     if (!createdUser) {

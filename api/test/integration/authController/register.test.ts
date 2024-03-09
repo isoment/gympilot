@@ -140,7 +140,7 @@ describe("POST /api/auth/register", () => {
 
     const user = await userRepository.getUser("email", requestBody.email);
 
-    const expectedRoles = ["owner", "employee"];
+    const expectedRoles = ["owner"];
     const actualRoles = [];
 
     for (const role of user!.Roles) {
