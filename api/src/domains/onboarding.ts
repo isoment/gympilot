@@ -34,7 +34,9 @@ export const onboardOwner = async (userId: number, body: OnboardingRequestBody):
     await _saveProgramTemplates(location.id, body.programs);
   }
 
-  // Set the owner onboarding to complete.
+  await user.update({
+    owner_onboarding_complete: 1,
+  });
 
   return { success: true, response: "success", message: "Onboarding Successful" };
 };
