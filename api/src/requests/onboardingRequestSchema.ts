@@ -53,15 +53,15 @@ export const postOnboarding = () => {
     timezone: Joi.object({
       timezone: Joi.string().custom(timezoneValidator).required().messages({
         "any.invalid": "Invalid timezone.",
-        "string.empty": "Time format is required.",
+        "string.empty": "Timezone is required.",
       }),
       date_format: Joi.string().custom(displayDateFormatValidator).required().messages({
         "any.invalid": "Invalid date format.",
-        "string.empty": "Time format is required.",
+        "string.empty": "Timezone is required.",
       }),
       time_format: Joi.string().custom(displayTimeFormatValidator).required().messages({
         "any.invalid": "Invalid time format.",
-        "string.empty": "Time format is required.",
+        "string.empty": "Timezone is required.",
       }),
     }).required(),
     billing: Joi.object({

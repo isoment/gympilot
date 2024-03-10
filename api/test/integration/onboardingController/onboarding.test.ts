@@ -236,11 +236,146 @@ describe("POST /api/onboarding", () => {
         const body = validOnboardingRequest();
         body.organization.country = "Fake country code";
         const response = await requestWithValidAccessToken(body);
-        console.log(response.data);
         expect(response.status).toBe(422);
         const errors = response.data.errors;
         expect(errors.hasOwnProperty("organization.country")).toBeTruthy();
       });
     });
+
+    describe("the programs array", () => {
+      it("requires the programs field to be an array", async () => {
+        const response = await requestWithValidAccessToken({
+          programs: "String",
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("programs")).toBeTruthy();
+      });
+
+      it("requires the programs array to be all strings", async () => {
+        const response = await requestWithValidAccessToken({
+          programs: ["gym", 123, ["5"]],
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        // The elements at position 1 and 2 are not strings and therefor invalid
+        expect(errors.hasOwnProperty("programs.1")).toBeTruthy();
+        expect(errors.hasOwnProperty("programs.2")).toBeTruthy();
+      });
+    });
+
+    describe("the timezone object", () => {
+      it("requires the timezone", async () => {
+        const response = await requestWithValidAccessToken({
+          timezone: { timezone: "" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("timezone.timezone")).toBeTruthy();
+      });
+
+      it("requires the timezone to be valid", async () => {
+        const response = await requestWithValidAccessToken({
+          timezone: { timezone: "fake/timezone" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("timezone.timezone")).toBeTruthy();
+      });
+
+      it("requires the date format", async () => {
+        const response = await requestWithValidAccessToken({
+          timezone: { date_format: "" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("timezone.date_format")).toBeTruthy();
+      });
+
+      it("requires the date format to be valid", async () => {
+        const response = await requestWithValidAccessToken({
+          timezone: { date_format: "Invalid" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("timezone.date_format")).toBeTruthy();
+      });
+
+      it("requires the time format", async () => {
+        const response = await requestWithValidAccessToken({
+          timezone: { time_format: "" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("timezone.time_format")).toBeTruthy();
+      });
+
+      it("requires the time format to be valid", async () => {
+        const response = await requestWithValidAccessToken({
+          timezone: { time_format: "Invalid" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("timezone.time_format")).toBeTruthy();
+      });
+    });
+
+    describe("the billing object", () => {
+      it("requires the currency", async () => {
+        const response = await requestWithValidAccessToken({
+          billing: { currency: "" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("billing.currency")).toBeTruthy();
+      });
+
+      it("requires the currency to be valid", async () => {
+        const response = await requestWithValidAccessToken({
+          billing: { currency: "FAKE" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("billing.currency")).toBeTruthy();
+      });
+
+      it("requires the billing date", async () => {
+        const response = await requestWithValidAccessToken({
+          billing: { billing_date: "" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("billing.billing_date")).toBeTruthy();
+      });
+
+      it("requires the billing date to be valid", async () => {
+        const response = await requestWithValidAccessToken({
+          billing: { billing_date: "Invalid" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("billing.billing_date")).toBeTruthy();
+      });
+
+      it("requires the allow cancellation field", async () => {
+        const response = await requestWithValidAccessToken({
+          billing: { allow_cancellation: "" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("billing.allow_cancellation")).toBeTruthy();
+      });
+
+      it("requires the allow cancellation field to be a number", async () => {
+        const response = await requestWithValidAccessToken({
+          billing: { allow_cancellation: "FAKE" },
+        });
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("billing.allow_cancellation")).toBeTruthy();
+      });
+    });
   });
+
+  describe("the onboarding process works as expected", () => {});
 });
