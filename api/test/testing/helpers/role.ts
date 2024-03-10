@@ -14,6 +14,4 @@ const createRoles = async () => {
   });
 };
 
-export default {
-  createRoles,
-};
+export { createRoles };

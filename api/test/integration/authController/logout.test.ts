@@ -2,8 +2,8 @@ import axios, { AxiosInstance } from "axios";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
-import roleHelper from "../..//testing/helpers/roles";
-import userHelper from "../../testing/helpers/users";
+import * as roleHelper from "../..//testing/helpers/role";
+import * as userHelper from "../../testing/helpers/user";
 import authToken from "../../../src/services/authToken";
 import * as refreshTokenStore from "../../../src/data-access/memory-store/refreshTokenStore";
 

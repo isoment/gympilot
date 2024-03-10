@@ -21,6 +21,4 @@ const createUser = async (params = {}, password = "password123", roles: string[]
   return userWithRoles;
 };
 
-export default {
-  createUser,
-};
+export { createUser };

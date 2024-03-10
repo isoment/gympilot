@@ -3,7 +3,7 @@ import _ from "lodash";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
-import roleHelper from "../..//testing/helpers/roles";
+import * as roleHelper from "../..//testing/helpers/role";
 import * as userRepository from "../../../src/data-access/repositories/userRepository";
 import authToken from "../../../src/services/authToken";
 import { memoryStore } from "../../../src/data-access/memory-store/memoryStore";

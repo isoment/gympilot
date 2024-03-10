@@ -3,8 +3,8 @@ import _ from "lodash";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
-import roleHelper from "../..//testing/helpers/roles";
-import userHelper from "../..//testing/helpers/users";
+import * as roleHelper from "../../testing/helpers/role";
+import * as userHelper from "../../testing/helpers/user";
 import * as passwordResetRepository from "../../../src/data-access/repositories/passwordResetRepository";
 import { email } from "../../../src/services/notification/email/email";
 
