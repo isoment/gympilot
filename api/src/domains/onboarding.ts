@@ -14,6 +14,10 @@ export const onboardOwner = async (userId: number, body: OnboardingRequestBody):
     return { success: false, response: "internalError", message: "Onboarding failed, user not found" };
   }
 
+  if (user.owner_onboarding_complete) {
+    return { success: false, response: "forbidden", message: "Onboarding was already complete" };
+  }
+
   const organization = await _saveOrganization(user.id, body);
   if (!organization) {
     return { success: false, response: "internalError", message: "Failed to create organization" };
@@ -29,7 +33,7 @@ export const onboardOwner = async (userId: number, body: OnboardingRequestBody):
   }
 
   await user.update({
-    owner_onboarding_complete: 1,
+    owner_onboarding_complete: true,
   });
 
   return { success: true, response: "success", message: "Onboarding Successful" };

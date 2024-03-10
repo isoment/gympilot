@@ -8,7 +8,7 @@ export interface UserFields extends Model<InferAttributes<UserFields>, InferCrea
   last_name: string;
   email: string;
   password: string;
-  owner_onboarding_complete: 1 | 0 | null;
+  owner_onboarding_complete: boolean | null;
   created_at: CreationOptional<Date>;
   updated_at: CreationOptional<Date>;
 }

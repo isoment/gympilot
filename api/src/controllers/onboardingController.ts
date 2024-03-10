@@ -14,15 +14,16 @@ onboardingController.post(
   [verifyAccessToken, userHasRole("owner"), validateRequest(postOnboarding)],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // Add a check to see if the user has already finished onboarding
+      const result = await onboardOwner(req.verifiedUser?.id, req.body);
 
-      const onboardingResult = await onboardOwner(req.verifiedUser?.id, req.body);
-
-      if (onboardingResult.success) {
-        return response.success(res, onboardingResult.message);
+      if (result.success) {
+        return response.success(res, result.message);
+      } else if (!result.success && result.response === "forbidden") {
+        logger.error(result.message, { user: req.verifiedUser, request: req.body });
+        response.forbidden(res, result.message);
       } else {
-        logger.error(onboardingResult.message, { user: req.verifiedUser, request: req.body });
-        response.internalError(res, onboardingResult.message);
+        logger.error(result.message, { user: req.verifiedUser, request: req.body });
+        response.internalError(res, result.message);
       }
     } catch (error) {
       response.internalError(res);
