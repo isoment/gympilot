@@ -14,6 +14,8 @@ onboardingController.post(
   [verifyAccessToken, userHasRole("owner"), validateRequest(postOnboarding)],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      // Add a check to see if the user has already finished onboarding
+
       const onboardingResult = await onboardOwner(req.verifiedUser?.id, req.body);
 
       if (onboardingResult.success) {

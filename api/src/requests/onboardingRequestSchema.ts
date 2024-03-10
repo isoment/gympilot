@@ -11,26 +11,36 @@ export const postOnboarding = () => {
     organization: Joi.object({
       organization_name: Joi.string().min(2).max(255).required().messages({
         "string.empty": "Organization name is required.",
+        "any.required": "Organization name is required.",
+        "any.invalid": "Organization name must be a string.",
         "string.min": "Organization name must be at least {#limit} characters long.",
         "string.max": "Organization name cannot be more than {#limit} characters long.",
       }),
       location_name: Joi.string().min(2).max(255).required().messages({
         "string.empty": "Location name is required.",
+        "any.required": "Location name is required.",
+        "any.invalid": "Location must be a string.",
         "string.min": "Location name must be at least {#limit} characters long.",
         "string.max": "Location name cannot be more than {#limit} characters long.",
       }),
       street_address: Joi.string().min(5).max(255).required().messages({
         "string.empty": "Address is required.",
+        "any.required": "Address is required.",
+        "any.invalid": "Address must be a string.",
         "string.min": "Address must be at least {#limit} characters long.",
         "string.max": "Address cannot be more than {#limit} characters long.",
       }),
       city: Joi.string().min(2).max(255).required().messages({
         "string.empty": "City is required.",
+        "any.required": "City is required.",
+        "any.invalid": "City must be a string.",
         "string.min": "City must be at least {#limit} characters long.",
         "string.max": "City cannot be more than {#limit} characters long.",
       }),
       postal_code: Joi.string().min(2).max(255).required().messages({
         "string.empty": "Postal code is required.",
+        "any.required": "Postal code is required.",
+        "any.invalid": "Postal code must be a string.",
         "string.min": "Postal code must be at least {#limit} characters long.",
         "string.max": "Postal code cannot be more than {#limit} characters long.",
       }),
@@ -62,11 +72,14 @@ export const postOnboarding = () => {
       billing_date: Joi.string().custom(billingDateOptionValidator).required().messages({
         "any.invalid": "Invalid billing date option.",
         "string.empty": "Billing date option is required.",
+        "any.required": "Billing date option is required.",
       }),
       allow_cancellation: Joi.number().integer().min(0).max(1).required().messages({
         "number.empty": "Cancellation option is required.",
+        "any.required": "Cancellation option is required.",
         "number.min": "Cancellation option must be boolean 0 or 1.",
         "number.max": "Cancellation option must be boolean 0 or 1.",
+        "any.invalid": "Cancellation option must be boolean 0 or 1.",
       }),
     }).required(),
   }).options({ abortEarly: false });
