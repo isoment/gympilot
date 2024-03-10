@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import * as userRepository from "../../../src/data-access/repositories/userRepository";
 
-const createUser = async (params = {}, password = "password123", roles: string[] = ["owner"]) => {
+const createUser = async (params = {}, password = "password123", roles = ["owner"]) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 

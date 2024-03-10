@@ -377,5 +377,44 @@ describe("POST /api/onboarding", () => {
     });
   });
 
-  describe("the onboarding process works as expected", () => {});
+  describe("the onboarding process works as expected", () => {
+    it("returns a forbidden response when the owner has already completed onboarding", async () => {
+      const body = validOnboardingRequest();
+      const user = await userHelper.createUser({ owner_onboarding_complete: true }, "password", ["owner"]);
+      const accessToken = await tokenHelper.createAccessToken(user!);
+
+      const response = await axiosAPIClient.post(endpoint, body, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+
+      expect(response.status).toBe(403);
+    });
+
+    it("creates an organization during onboarding", async () => {
+      const body = validOnboardingRequest();
+      const user = await userHelper.createUser();
+      const accessToken = await tokenHelper.createAccessToken(user!);
+
+      const response = await axiosAPIClient.post(endpoint, body, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+
+      const organization = await model.Organization.findOne({ where: { owner_id: user!.id } });
+
+      expect(response.status).toBe(200);
+      expect(organization).not.toBeNull();
+      expect(organization!.name).toBe(body.organization.organization_name);
+      expect(organization!.country).toBe(body.organization.country);
+      expect(organization!.timezone).toBe(body.timezone.timezone);
+      expect(organization!.date_format).toBe(body.timezone.date_format);
+      expect(organization!.time_format).toBe(body.timezone.time_format);
+      expect(organization!.currency).toBe(body.billing.currency);
+      expect(organization!.billing_date).toBe(body.billing.billing_date);
+      expect(organization!.allow_cancellation).toBe(true);
+    });
+  });
 });

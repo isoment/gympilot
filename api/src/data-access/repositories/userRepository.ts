@@ -59,6 +59,7 @@ export interface CreateUserWithRoleParams {
   last_name: string;
   email: string;
   password: string;
+  owner_onboarding_complete?: boolean;
 }
 
 /**
@@ -73,6 +74,7 @@ export async function createUserWithRole(params: CreateUserWithRoleParams, roles
     last_name: params.last_name,
     email: params.email,
     password: params.password,
+    owner_onboarding_complete: params.owner_onboarding_complete ?? null,
   });
 
   for (const role of roles) {
