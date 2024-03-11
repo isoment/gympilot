@@ -21,11 +21,8 @@ describe("mutations", () => {
     it("sets the user state to an object with user details", () => {
       const user = {
         id: 1,
-        first_name: "Test",
-        last_name: "User",
-        email: "test@test.com",
-        created_at: "Date",
-        updated_at: "Date",
+        name: "Test User",
+        onboarding_complete: true,
         roles: ["owner"],
       };
       const initialState = createState({ user: {} });

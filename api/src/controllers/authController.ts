@@ -80,6 +80,7 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
         last_name: req.body.last_name,
         email: req.body.email,
         password: hashedPassword,
+        owner_onboarding_complete: false,
       },
       ["owner"],
     );
