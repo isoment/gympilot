@@ -6,6 +6,8 @@ import model from "../../../src/data-access/models";
 import * as roleHelper from "../..//testing/helpers/role";
 import * as userHelper from "../../testing/helpers/user";
 import * as tokenHelper from "../../testing/helpers/token";
+import * as templateHelper from "../../testing/helpers/template";
+import { LocationFieldsWithTemplates } from "@base/data-access/models/location";
 
 const endpoint = "/api/onboarding";
 let axiosAPIClient: AxiosInstance;
@@ -18,9 +20,11 @@ beforeAll(async () => {
     validateStatus: () => true,
   };
   axiosAPIClient = axios.create(axiosConfig);
+  await templateHelper.createProgramTemplates();
 });
 
 afterAll(async () => {
+  await model.Template.destroy({ where: {} });
   await stopWebServer();
 });
 
@@ -415,6 +419,69 @@ describe("POST /api/onboarding", () => {
       expect(organization!.currency).toBe(body.billing.currency);
       expect(organization!.billing_date).toBe(body.billing.billing_date);
       expect(organization!.allow_cancellation).toBe(true);
+    });
+
+    it("creates a location during onboarding", async () => {
+      const body = validOnboardingRequest();
+      const user = await userHelper.createUser();
+      const accessToken = await tokenHelper.createAccessToken(user!);
+
+      const response = await axiosAPIClient.post(endpoint, body, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+
+      const organization = await model.Organization.findOne({ where: { owner_id: user!.id } });
+      const location = await model.Location.findOne({ where: { organization_id: organization!.id } });
+
+      expect(response.status).toBe(200);
+      expect(location).not.toBeNull();
+      expect(location!.name).toBe(body.organization.location_name);
+      expect(location!.street_address).toBe(body.organization.street_address);
+      expect(location!.city).toBe(body.organization.city);
+      expect(location!.postal_code).toBe(body.organization.postal_code);
+    });
+
+    it("links the selected programs to the new location", async () => {
+      const body = validOnboardingRequest();
+      const user = await userHelper.createUser();
+      const accessToken = await tokenHelper.createAccessToken(user!);
+
+      const response = await axiosAPIClient.post(endpoint, body, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+
+      const organization = await model.Organization.findOne({ where: { owner_id: user!.id } });
+
+      // Get the location with associated templates
+      const location = (await model.Location.findOne({
+        where: { organization_id: organization!.id },
+        include: [
+          {
+            model: model.Template,
+            as: "Templates",
+            attributes: ["name"],
+            through: { attributes: [] },
+          },
+        ],
+      })) as LocationFieldsWithTemplates | null;
+
+      const pivotRecords: string[] = [];
+
+      location!.Templates.forEach((template) => {
+        pivotRecords.push(template.name);
+      });
+
+      // There should be a Template associated with the location for each program
+      // selected in the request
+      body.programs.forEach((program: string) => {
+        if (!pivotRecords.includes(program)) {
+          fail(`No pivot record for ${program} program template`);
+        }
+      });
     });
   });
 });

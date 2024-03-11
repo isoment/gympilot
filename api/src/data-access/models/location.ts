@@ -1,6 +1,7 @@
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
 import { database } from "./database";
 import organizationModel from "./organization";
+import { TemplateFields } from "./template";
 
 export interface LocationFields extends Model<InferAttributes<LocationFields>, InferCreationAttributes<LocationFields>> {
   id: CreationOptional<number>;
@@ -11,6 +12,10 @@ export interface LocationFields extends Model<InferAttributes<LocationFields>, I
   postal_code: string;
   created_at: CreationOptional<Date>;
   updated_at: CreationOptional<Date>;
+}
+
+export interface LocationFieldsWithTemplates extends LocationFields {
+  Templates: TemplateFields[];
 }
 
 const Location = database.get().define<LocationFields>(
