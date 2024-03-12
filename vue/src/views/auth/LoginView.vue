@@ -2,7 +2,10 @@
   <div>
     <GuestTopNavbar />
     <div class="flex justify-center w-full">
-      <form class="w-full max-w-xl bg-white rounded-lg mt-36 md:w-1/2 lg:pt-8">
+      <form
+        class="w-full max-w-xl bg-white rounded-lg mt-36 md:w-1/2 lg:pt-8"
+        @keyup.enter="attemptLogin()"
+      >
         <div class="flex justify-center mb-3 font-bold lg:mb-4">
           <font-awesome-icon
             :icon="['fa', 'door-open']"

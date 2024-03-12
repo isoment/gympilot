@@ -20,7 +20,7 @@
           Please enter your email and we will send you a link to reset your
           password.
         </p>
-        <form class="mt-2">
+        <form class="mt-2" @submit.prevent="attemptRequestPasswordReset()">
           <div class="w-full mb-6">
             <TextInput
               v-model="form.email"
@@ -34,17 +34,17 @@
               class="mt-2 -mb-2 text-left"
             />
           </div>
+          <div class="mt-5 sm:mt-8">
+            <ButtonPrimary
+              data-test="submit-button"
+              color="bg-indigo-600"
+              hover="hover:bg-indigo-500"
+              @click.prevent="attemptRequestPasswordReset()"
+              >Send Password Reset</ButtonPrimary
+            >
+          </div>
         </form>
       </div>
-    </div>
-    <div class="mt-5 sm:mt-8">
-      <ButtonPrimary
-        data-test="submit-button"
-        color="bg-indigo-600"
-        hover="hover:bg-indigo-500"
-        @click="attemptRequestPasswordReset()"
-        >Send Password Reset</ButtonPrimary
-      >
     </div>
   </div>
 </template>
