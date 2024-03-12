@@ -71,7 +71,14 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, onMounted, PropType, watch } from "vue";
+import {
+  computed,
+  ref,
+  onMounted,
+  PropType,
+  watch,
+  defineComponent,
+} from "vue";
 import { refDebounced } from "@vueuse/core";
 import {
   Combobox,
@@ -89,7 +96,7 @@ interface Option {
   text: string;
 }
 
-export default {
+export default defineComponent({
   name: "CountrySelect",
 
   components: {
@@ -168,5 +175,5 @@ export default {
       prepareFlagClass,
     };
   },
-};
+});
 </script>

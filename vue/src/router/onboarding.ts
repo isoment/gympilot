@@ -1,8 +1,10 @@
+import ownerOnboarding from "./middleware/ownerOnboarding";
+
 export const onboarding = [
   {
     path: "/onboarding",
-    name: "Onboarding",
-    component: () => import("@/layouts/OnboardingLayout.vue"),
-    meta: { middleware: [] },
+    name: "onboarding",
+    component: () => import("@/views/owner/OwnerOnboarding.vue"),
+    meta: { middleware: [ownerOnboarding] },
   },
 ];
