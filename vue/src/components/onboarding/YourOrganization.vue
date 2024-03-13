@@ -57,6 +57,19 @@
         />
       </div>
       <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
+        <TextInput
+          v-model="form.state_province"
+          label="The state / province of the location."
+          placeholder="State / Province"
+          data-test="state_provence"
+        />
+        <ValidationErrors
+          :errors="validationErrors"
+          field="state_provence"
+          class="mt-2 ml-1 -mb-2 text-left"
+        />
+      </div>
+      <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
         <div class="flex flex-col sm:flex-row">
           <div class="w-full sm:w-1/2 sm:mr-1 mb-7">
             <TextInput
@@ -107,6 +120,7 @@ interface FormValidationErrors {
   organization_name?: string;
   location_name?: string;
   street_address?: string;
+  state_province?: string;
   city?: string;
   postal_code?: string;
   country?: string;
@@ -131,6 +145,7 @@ export default defineComponent({
       organization_name: "",
       location_name: "",
       street_address: "",
+      state_province: "",
       city: "",
       postal_code: "",
       country: "US",
@@ -185,6 +200,12 @@ export default defineComponent({
 
       if (!validStringInput(formData.street_address, 5, 255)) {
         validationErrors.value["street_address"] =
+          "Must be between 5 and 255 characters";
+        return false;
+      }
+
+      if (!validStringInput(formData.street_address, 5, 255)) {
+        validationErrors.value["state_province"] =
           "Must be between 5 and 255 characters";
         return false;
       }
