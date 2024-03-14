@@ -2,6 +2,10 @@
   <div class="text-left">
     <div class="w-full mt-8 mb-6 ml-1 md:w-2/3 lg:w-1/2">
       <h5 class="font-bold tracking-widest text-slate-800">Payments</h5>
+      <p class="mt-0 mb-4 text-xs">
+        Tell us what currency you want to use, when you want your members billed
+        and if you want them to be able to cancel memberships themselves.
+      </p>
     </div>
     <div class="w-full mb-6 md:w-2/3 lg:w-1/2">
       <SelectInput

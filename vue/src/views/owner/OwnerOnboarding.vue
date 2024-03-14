@@ -130,6 +130,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import { key } from "@/store";
 import { AxiosError } from "axios";
 import { StepperStatusProp } from "@/components/types";
@@ -138,7 +139,7 @@ import YourBilling from "@/components/onboarding/YourBilling.vue";
 import YourOrganization from "@/components/onboarding/YourOrganization.vue";
 import ProgramsOffered from "@/components/onboarding/ProgramsOffered.vue";
 import { ButtonGroupEventValue } from "@/components/types";
-import { ADD_TOAST } from "@/store/constants";
+import { ADD_TOAST, COMPLETE_OWNER_ONBOARDING } from "@/store/constants";
 import { APIOnboarding } from "@/api/onboarding";
 
 export default defineComponent({
@@ -148,6 +149,7 @@ export default defineComponent({
 
   setup() {
     const store = useStore(key);
+    const router = useRouter();
 
     /**
      *  Status can be current, complete or upcoming
@@ -226,10 +228,6 @@ export default defineComponent({
     };
 
     const submitOnboarding = async () => {
-      console.log("submitOnboarding");
-
-      // Check that the values from each stage are in local storage. Programs are optional so
-      // we don't need to check against that.
       const organization = localStorage.getItem("onboarding.organization");
       const programs = localStorage.getItem("onboarding.programs");
       const timezone = localStorage.getItem("onboarding.timezone");
@@ -244,7 +242,6 @@ export default defineComponent({
         return;
       }
 
-      // Prepare data and make API call
       const formData = {
         organization: JSON.parse(organization),
         programs: programs ? JSON.parse(programs) : [],
@@ -253,16 +250,20 @@ export default defineComponent({
       };
 
       try {
-        console.log("API CALL", formData);
         const response = await APIOnboarding(formData);
         if (response.status === 200) {
-          // Update the user object in store to mark onboarding as complete.
-          // Redirect to dashboard
+          store.dispatch(COMPLETE_OWNER_ONBOARDING);
+          clearLocalStorage();
+          router.push({ name: "dashboard-home" });
         }
       } catch (error: any) {
         if ((error as AxiosError)?.response?.status === 422) {
           if (error.response.data.errors) {
-            console.log(error.response.data.errors);
+            selectStep(0);
+            store.dispatch(ADD_TOAST, {
+              type: "error",
+              message: "Please check the form for errors",
+            });
           } else {
             store.dispatch(ADD_TOAST, {
               type: "error",
@@ -271,6 +272,13 @@ export default defineComponent({
           }
         }
       }
+    };
+
+    const clearLocalStorage = () => {
+      localStorage.removeItem("onboarding.organization");
+      localStorage.removeItem("onboarding.programs");
+      localStorage.removeItem("onboarding.timezone");
+      localStorage.removeItem("onboarding.billing");
     };
 
     return {
