@@ -4,6 +4,7 @@ export interface OnboardingRequestBody {
     country: string;
     location_name: string;
     street_address: string;
+    state_province: string;
     city: string;
     postal_code: string;
   };
