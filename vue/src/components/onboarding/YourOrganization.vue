@@ -183,7 +183,7 @@ export default defineComponent({
 
       if (!validStringInput(formData.organization_name, 2, 255)) {
         validationErrors.value["organization_name"] =
-          "Must be between 5 and 255 characters";
+          "Must be between 2 and 255 characters";
         return false;
       }
 
@@ -194,7 +194,7 @@ export default defineComponent({
 
       if (!validStringInput(formData.location_name, 2, 255)) {
         validationErrors.value["location_name"] =
-          "Must be between 5 and 255 characters";
+          "Must be between 2 and 255 characters";
         return false;
       }
 
@@ -204,9 +204,9 @@ export default defineComponent({
         return false;
       }
 
-      if (!validStringInput(formData.street_address, 5, 255)) {
+      if (!validStringInput(formData.state_province, 2, 255)) {
         validationErrors.value["state_province"] =
-          "Must be between 5 and 255 characters";
+          "Must be between 2 and 255 characters";
         return false;
       }
 

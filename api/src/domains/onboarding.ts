@@ -58,6 +58,7 @@ const _saveLocation = async (organizationId: number, organization: OnboardingReq
     organization_id: organizationId,
     name: organization.location_name,
     street_address: organization.street_address,
+    state_province: organization.state_province,
     city: organization.city,
     postal_code: organization.postal_code,
   });

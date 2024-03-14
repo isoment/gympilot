@@ -255,7 +255,10 @@ export default defineComponent({
       try {
         console.log("API CALL", formData);
         const response = await APIOnboarding(formData);
-        console.log(response);
+        if (response.status === 200) {
+          // Update the user object in store to mark onboarding as complete.
+          // Redirect to dashboard
+        }
       } catch (error: any) {
         if ((error as AxiosError)?.response?.status === 422) {
           if (error.response.data.errors) {

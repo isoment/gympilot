@@ -6,6 +6,7 @@ interface CreateLocationParams {
   organization_id: number;
   name: string;
   street_address: string;
+  state_province: string;
   city: string;
   postal_code: string;
 }

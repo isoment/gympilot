@@ -30,6 +30,13 @@ export const postOnboarding = () => {
         "string.min": "Address must be at least {#limit} characters long.",
         "string.max": "Address cannot be more than {#limit} characters long.",
       }),
+      state_province: Joi.string().min(2).max(255).required().messages({
+        "string.empty": "State province is required.",
+        "any.required": "State province is required.",
+        "any.invalid": "State province must be a string.",
+        "string.min": "State province must be at least {#limit} characters long.",
+        "string.max": "State province cannot be more than {#limit} characters long.",
+      }),
       city: Joi.string().min(2).max(255).required().messages({
         "string.empty": "City is required.",
         "any.required": "City is required.",

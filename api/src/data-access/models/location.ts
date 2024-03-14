@@ -8,6 +8,7 @@ export interface LocationFields extends Model<InferAttributes<LocationFields>, I
   organization_id: number;
   name: string;
   street_address: string;
+  state_province: string;
   city: string;
   postal_code: string;
   created_at: CreationOptional<Date>;
@@ -39,6 +40,10 @@ const Location = database.get().define<LocationFields>(
       allowNull: false,
     },
     street_address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    state_province: {
       type: DataTypes.STRING,
       allowNull: false,
     },
