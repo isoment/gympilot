@@ -167,9 +167,7 @@ describe("POST /api/auth/login", () => {
     expect(response.status).toBe(200);
     expect(decodedJWT).toBeTruthy();
     expect(decodedJWT.id).toBe(user!.id);
-    expect(decodedJWT.first_name).toBe(user!.first_name);
-    expect(decodedJWT.last_name).toBe(user!.last_name);
-    expect(decodedJWT.email).toBe(user!.email);
+    expect(decodedJWT.name).toBe(`${user!.first_name} ${user!.last_name}`);
     expect(decodedJWT.exp).toBeTruthy();
     expect(decodedJWT.roles.some((role: string) => role === "owner")).toBe(true);
   });
@@ -190,10 +188,6 @@ describe("POST /api/auth/login", () => {
     expect(response.status).toBe(200);
     expect(decodedJWT).toBeTruthy();
     expect(decodedJWT.id).toBe(user!.id);
-    expect(decodedJWT.first_name).toBe(user!.first_name);
-    expect(decodedJWT.last_name).toBe(user!.last_name);
-    expect(decodedJWT.email).toBe(user!.email);
     expect(decodedJWT.exp).toBeTruthy();
-    expect(decodedJWT.roles.some((role: string) => role === "owner")).toBe(true);
   });
 });

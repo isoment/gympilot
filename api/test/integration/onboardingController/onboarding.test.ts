@@ -55,6 +55,7 @@ const validOnboardingRequest = (params: object = {}): any => {
       organization_name: "Test Organization",
       location_name: "Test location",
       street_address: "123 Fake St",
+      state_province: "Test Province",
       city: "Faketown",
       postal_code: "61521",
       country: "US",
@@ -189,6 +190,24 @@ describe("POST /api/onboarding", () => {
         expect(response.status).toBe(422);
         const errors = response.data.errors;
         expect(errors.hasOwnProperty("organization.street_address")).toBeTruthy();
+      });
+
+      it("requires the state province to be less 255 characters or less", async () => {
+        const body = validOnboardingRequest();
+        body.organization.state_province = "a".repeat(256);
+        const response = await requestWithValidAccessToken(body);
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("organization.state_province")).toBeTruthy();
+      });
+
+      it("requires the state province to be a string", async () => {
+        const body = validOnboardingRequest();
+        body.organization.state_province = false;
+        const response = await requestWithValidAccessToken(body);
+        expect(response.status).toBe(422);
+        const errors = response.data.errors;
+        expect(errors.hasOwnProperty("organization.state_province")).toBeTruthy();
       });
 
       it("requires the city to be less 255 characters or less", async () => {
@@ -439,6 +458,7 @@ describe("POST /api/onboarding", () => {
       expect(location).not.toBeNull();
       expect(location!.name).toBe(body.organization.location_name);
       expect(location!.street_address).toBe(body.organization.street_address);
+      expect(location!.state_province).toBe(body.organization.state_province);
       expect(location!.city).toBe(body.organization.city);
       expect(location!.postal_code).toBe(body.organization.postal_code);
     });
@@ -448,7 +468,7 @@ describe("POST /api/onboarding", () => {
       const user = await userHelper.createUser();
       const accessToken = await tokenHelper.createAccessToken(user!);
 
-      const response = await axiosAPIClient.post(endpoint, body, {
+      await axiosAPIClient.post(endpoint, body, {
         headers: {
           Authorization: accessToken,
         },
