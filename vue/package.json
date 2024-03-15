@@ -1,7 +1,9 @@
 {
-  "name": "app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "gym-pilot-vue",
+  "version": "1.0.0-rc",
+  "description": "Frontend Vue.js application for GymPilot",
+  "author": "isoment",
+  "license": "CC BY-NC",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

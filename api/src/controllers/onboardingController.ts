@@ -21,10 +21,10 @@ onboardingController.post(
         return response.success(res, result.message);
       } else if (!result.success && result.response === "forbidden") {
         logger.error(result.message, { user: req.verifiedUser, request: req.body });
-        response.forbidden(res, result.message);
+        return response.forbidden(res, result.message);
       } else {
         logger.error(result.message, { user: req.verifiedUser, request: req.body });
-        response.internalError(res, result.message);
+        return response.internalError(res, result.message);
       }
     } catch (error) {
       response.internalError(res);
