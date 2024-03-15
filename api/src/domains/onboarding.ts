@@ -6,9 +6,9 @@ import * as templateRepository from "../data-access/repositories/templateReposit
 import * as locationTemplateRepository from "../data-access/repositories/locationTemplateRepository";
 import { OrganizationFields } from "../data-access/models/organization";
 import { LocationFields } from "../data-access/models/location";
-import { OnboardingReturn } from "./types";
+import { DomainResponse } from "./types";
 
-export const onboardOwner = async (userId: number, body: OnboardingRequestBody): Promise<OnboardingReturn> => {
+export const onboardOwner = async (userId: number, body: OnboardingRequestBody): Promise<DomainResponse> => {
   const user = await userRepository.getUser("id", userId);
   if (!user) {
     return { success: false, response: "internalError", message: "Onboarding failed, user not found" };

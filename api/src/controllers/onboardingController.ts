@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
+import { OnboardingRequestBody } from "gympilot-shared-resources";
 import * as response from "../services/http/responseHelper";
 import { logger } from "../logger/logger";
 import validateRequest from "../middleware/validateRequest";
@@ -12,7 +13,7 @@ const onboardingController = express.Router();
 onboardingController.post(
   "/",
   [verifyAccessToken, userHasRole("owner"), validateRequest(postOnboarding)],
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request<any, any, OnboardingRequestBody>, res: Response, next: NextFunction) => {
     try {
       const result = await onboardOwner(req.verifiedUser?.id, req.body);
 
