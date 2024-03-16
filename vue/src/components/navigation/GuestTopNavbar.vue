@@ -5,13 +5,12 @@
         class="flex items-center justify-between px-4 py-3 mx-auto md:py-5 max-w-7xl sm:px-6 md:justify-start md:space-x-10 lg:px-8"
       >
         <div class="flex justify-start lg:w-0 lg:flex-1">
-          <router-link to="/">
+          <router-link
+            to="/"
+            class="rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-500"
+          >
             <span class="sr-only">Logo</span>
-            <img
-              class="w-auto h-9 sm:h-11"
-              src="../../assets/dumbbell.png"
-              alt="logo"
-            />
+            <NavBrand />
           </router-link>
         </div>
         <div class="-my-2 -mr-2 md:hidden">
@@ -97,19 +96,19 @@
 
           <a
             href="#"
-            class="text-base font-medium text-gray-500 hover:text-gray-900"
+            class="text-base font-medium text-gray-500 rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-500"
           >
             Pricing
           </a>
           <a
             href="#"
-            class="text-base font-medium text-gray-500 hover:text-gray-900"
+            class="text-base font-medium text-gray-500 rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-500"
           >
             Partners
           </a>
           <a
             href="#"
-            class="text-base font-medium text-gray-500 hover:text-gray-900"
+            class="text-base font-medium text-gray-500 rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-500"
           >
             Company
           </a>
@@ -117,16 +116,22 @@
         <div class="items-center justify-end hidden md:flex md:flex-1 lg:w-0">
           <router-link
             to="/login"
-            class="text-base font-medium text-gray-500 whitespace-nowrap hover:text-gray-900"
+            class="text-base font-medium text-gray-500 rounded-md whitespace-nowrap hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-500"
           >
             Sign in
           </router-link>
-          <router-link
+          <!-- <router-link
             to="/register"
-            class="inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white border border-transparent rounded-md shadow-sm whitespace-nowrap bg-gradient-to-r from-emerald-300 to-green-500 bg-origin-border hover:from-green-500 hover:to-green-500"
+            class="inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white border border-transparent rounded-md shadow-sm whitespace-nowrap bg-gradient-to-r from-emerald-300 to-green-500 bg-origin-border hover:from-green-500 hover:to-green-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-500"
           >
             Sign up
-          </router-link>
+          </router-link> -->
+          <ButtonPrimary
+            class="w-24 ml-8"
+            color="bg-emerald-400"
+            @click="signUp()"
+            >Sign up</ButtonPrimary
+          >
         </div>
       </div>
 
@@ -150,7 +155,7 @@
                 <div>
                   <img
                     class="w-auto h-9 sm:h-11"
-                    src="../../assets/dumbbell.png"
+                    src="../../assets/kettlebell.png"
                     alt="logo"
                   />
                 </div>
@@ -238,12 +243,15 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRouter } from "vue-router";
 import {
   Popover,
   PopoverButton,
   PopoverGroup,
   PopoverPanel,
 } from "@headlessui/vue";
+import NavBrand from "@/components/brand/NavBrand.vue";
+import ButtonPrimary from "@/components/buttons/ButtonPrimary.vue";
 
 const solutions = [
   {
@@ -279,10 +287,19 @@ export default defineComponent({
     PopoverButton,
     PopoverGroup,
     PopoverPanel,
+    NavBrand,
+    ButtonPrimary,
   },
 
   setup() {
+    const router = useRouter();
+
+    const signUp = () => {
+      router.push({ name: "register" });
+    };
+
     return {
+      signUp,
       solutions,
     };
   },

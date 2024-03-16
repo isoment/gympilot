@@ -56,7 +56,7 @@ client.interceptors.response.use(
         } finally {
           store.dispatch(ADD_TOAST, {
             type: "error",
-            message: "Session Expired",
+            message: "Your session expired, please login",
           });
           router.push({ name: "login" });
         }
