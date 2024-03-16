@@ -8,16 +8,20 @@ export interface UserFields extends Model<InferAttributes<UserFields>, InferCrea
   last_name: string;
   email: string;
   password: string;
+  owner_onboarding_complete: boolean | null;
   created_at: CreationOptional<Date>;
   updated_at: CreationOptional<Date>;
-  Roles?: RoleFields[];
+}
+
+export interface UserFieldsWithRoles extends UserFields {
+  Roles: RoleFields[];
 }
 
 const User = database.get().define<UserFields>(
   "User",
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
     },
@@ -32,6 +36,9 @@ const User = database.get().define<UserFields>(
     },
     password: {
       type: DataTypes.STRING,
+    },
+    owner_onboarding_complete: {
+      type: DataTypes.BOOLEAN,
     },
     created_at: {
       type: DataTypes.DATE,

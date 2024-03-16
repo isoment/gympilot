@@ -1,10 +1,9 @@
-import model from "../../../src/data-access/models";
 import bcrypt from "bcrypt";
 import * as userRepository from "../../../src/data-access/repositories/userRepository";
 
-const createUser = async (params = {}, password = "password123", roles: string[] = ["employee", "owner"]) => {
+const createUser = async (params = {}, password = "password123", roles = ["owner"]) => {
   const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash("password123", salt);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
   const user = await userRepository.createUserWithRole(
     {
@@ -17,9 +16,9 @@ const createUser = async (params = {}, password = "password123", roles: string[]
     roles,
   );
 
-  return user;
+  const userWithRoles = await userRepository.getUser("id", user!.id, true);
+
+  return userWithRoles;
 };
 
-export default {
-  createUser,
-};
+export { createUser };

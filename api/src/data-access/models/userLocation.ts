@@ -1,37 +1,42 @@
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
 import { database } from "./database";
 import userModel from "./user";
-import roleModel from "./role";
+import locationModel from "./location";
 
-export interface UserRolesFields extends Model<InferAttributes<UserRolesFields>, InferCreationAttributes<UserRolesFields>> {
+export interface UserLocationFields extends Model<InferAttributes<UserLocationFields>, InferCreationAttributes<UserLocationFields>> {
   id: CreationOptional<number>;
   user_id: number;
-  role_id: number;
+  location_id: number;
+  type: string;
   created_at: CreationOptional<Date>;
   updated_at: CreationOptional<Date>;
 }
 
-const UserRole = database.get().define<UserRolesFields>(
-  "UserRoles",
+const UserLocation = database.get().define<UserLocationFields>(
+  "UserLocation",
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       references: {
         model: userModel,
         key: "id",
       },
     },
-    role_id: {
-      type: DataTypes.INTEGER,
+    location_id: {
+      type: DataTypes.BIGINT,
       references: {
-        model: roleModel,
+        model: locationModel,
         key: "id",
       },
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -46,7 +51,7 @@ const UserRole = database.get().define<UserRolesFields>(
       field: "updated_at",
     },
   },
-  { tableName: "user_roles", createdAt: "created_at", updatedAt: "updated_at" },
+  { tableName: "user_locations", createdAt: "created_at", updatedAt: "updated_at" },
 );
 
-export default UserRole;
+export default UserLocation;

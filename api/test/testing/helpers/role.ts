@@ -8,8 +8,10 @@ const createRoles = async () => {
   await model.Role.create({
     name: "employee",
   });
+
+  await model.Role.create({
+    name: "patron",
+  });
 };
 
-export default {
-  createRoles,
-};
+export { createRoles };

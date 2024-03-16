@@ -87,6 +87,13 @@ export default defineComponent({
       emit("update:modelValue", toggle.value);
     });
 
+    watch(
+      () => props.modelValue,
+      () => {
+        toggle.value = props.modelValue;
+      }
+    );
+
     const buttonTranslateClass = (): string => {
       if (toggle.value) {
         return props.size === "large" ? "translate-x-8" : "translate-x-5";

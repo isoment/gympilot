@@ -16,7 +16,7 @@
       <div class="relative mt-1">
         <ComboboxInput
           :class="disabledClasses"
-          class="w-full py-2 pl-3 pr-10 bg-white border border-gray-300 rounded shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500 sm:text-sm"
+          class="w-full py-2 pl-3 pr-10 text-sm bg-white border border-gray-300 rounded shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
           data-test="input"
           :display-value="displayValue"
           :placeholder="placeholder"
@@ -28,11 +28,10 @@
         >
           <font-awesome-icon
             :icon="['fa', 'chevron-down']"
-            class="z-10 text-xs fill-current input-icons text-slate-700"
+            class="text-xs fill-current input-icons text-slate-700"
           >
           </font-awesome-icon>
         </ComboboxButton>
-
         <transition
           leave-active-class="transition duration-100 ease-in"
           leave-from-class="opacity-100"
@@ -69,7 +68,7 @@
                 >
                   <font-awesome-icon
                     :icon="['fa', 'check']"
-                    class="z-10 text-xs fill-current input-icons text-slate-700"
+                    class="text-xs fill-current input-icons text-slate-700"
                   >
                   </font-awesome-icon>
                 </span>
@@ -156,6 +155,17 @@ export default defineComponent({
       setSelectedItem();
     });
 
+    watch(selectedItem, () => {
+      emit("update:modelValue", selectedItem.value.value);
+    });
+
+    watch(
+      () => props.modelValue,
+      () => {
+        setSelectedItem();
+      }
+    );
+
     const filteredItems = computed(() =>
       query.value === ""
         ? props.items
@@ -181,10 +191,6 @@ export default defineComponent({
     const onInputChange = (event: ComboboxInputChangeEvent): void => {
       query.value = event.target.value;
     };
-
-    watch(selectedItem, () => {
-      emit("update:modelValue", selectedItem.value.value);
-    });
 
     return {
       query,

@@ -51,7 +51,7 @@
           >
             <font-awesome-icon
               :icon="['fa', 'chevron-down']"
-              class="z-10 text-xs fill-current input-icons text-slate-700"
+              class="text-xs fill-current input-icons text-slate-700"
             >
             </font-awesome-icon>
           </span>
@@ -190,6 +190,18 @@ export default defineComponent({
       setSelectedItems();
     });
 
+    watch(
+      selectedItem,
+      () => {
+        const arr = [];
+        for (const i of selectedItem.value) {
+          arr.push(i.value);
+        }
+        emit("update:modelValue", arr);
+      },
+      { deep: true }
+    );
+
     const setBackgroundColor = computed(() => {
       return props.disabled ? "bg-slate-400" : props.backgroundColor;
     });
@@ -239,18 +251,6 @@ export default defineComponent({
     const resetSearch = (): void => {
       search.value = "";
     };
-
-    watch(
-      selectedItem,
-      () => {
-        const arr = [];
-        for (const i of selectedItem.value) {
-          arr.push(i.value);
-        }
-        emit("update:modelValue", arr);
-      },
-      { deep: true }
-    );
 
     return {
       selectedItem,

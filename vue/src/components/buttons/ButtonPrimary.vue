@@ -6,17 +6,26 @@
     :disabled="disabled"
     data-test="button"
   >
-    <font-awesome-icon
-      v-if="icon"
-      :icon="icon"
-      :class="iconClasses()"
-      class="fill-current"
-      data-test="icon"
-    >
-    </font-awesome-icon>
-    <span :class="textClasses()" data-test="text">
-      <slot>{{ text }}</slot>
-    </span>
+    <div v-if="loading" :class="spinnerWrapperClasses()">
+      <font-awesome-icon
+        :icon="['fa', 'spinner']"
+        class="mr-1 animate-spin"
+        :class="spinnerClasses()"
+      ></font-awesome-icon>
+    </div>
+    <div v-else>
+      <font-awesome-icon
+        v-if="icon"
+        :icon="icon"
+        :class="iconClasses()"
+        class="fill-current"
+        data-test="icon"
+      >
+      </font-awesome-icon>
+      <span :class="textClasses()" data-test="text">
+        <slot>{{ text }}</slot>
+      </span>
+    </div>
   </button>
 </template>
 
@@ -32,6 +41,10 @@ export default defineComponent({
       default: "Button",
     },
     disabled: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
+    loading: {
       type: Boolean as PropType<boolean>,
       default: false,
     },
@@ -96,10 +109,23 @@ export default defineComponent({
       return classes.join(" ");
     };
 
+    const spinnerClasses = (): string => {
+      if (props.size === "small") return "text-base";
+      if (props.size === "large") return "text-2xl";
+      return "text-2xl";
+    };
+
+    const spinnerWrapperClasses = (): string => {
+      if (props.size === "large") return "py-0.5";
+      return "";
+    };
+
     return {
       iconClasses,
       buttonClasses,
       textClasses,
+      spinnerClasses,
+      spinnerWrapperClasses,
     };
   },
 });
@@ -127,7 +153,7 @@ export default defineComponent({
 }
 
 .padding-large {
-  @apply px-3 py-3;
+  @apply px-3 py-2.5;
 }
 
 .icon-small {

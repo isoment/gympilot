@@ -2,7 +2,10 @@
   <div>
     <GuestTopNavbar />
     <div class="flex justify-center w-full">
-      <form class="w-full max-w-xl mt-20 bg-white rounded-lg md:w-1/2 lg:pt-8">
+      <form
+        class="w-full max-w-xl mt-20 bg-white rounded-lg md:w-1/2 lg:pt-8"
+        @keyup.enter="attemptRegister()"
+      >
         <div class="flex justify-center mb-3 font-bold lg:mb-4 lg:mt-12">
           <font-awesome-icon
             :icon="['fa', 'user']"
@@ -87,28 +90,22 @@
           </div>
           <!-- Button -->
           <div class="mt-4">
-            <button
-              class="w-full px-4 py-2 font-bold text-white transition-all duration-200 bg-emerald-500 hover:bg-emerald-400 focus:outline-slate-500"
-              :disabled="loadingRegisterApi"
+            <ButtonPrimary
+              color="bg-emerald-400"
+              hover="hover:bg-emerald-300"
               data-test="submit-button"
+              :disabled="loadingRegisterApi"
+              :loading="loadingRegisterApi"
               @click.prevent="attemptRegister()"
+              >Sign Up</ButtonPrimary
             >
-              <span v-if="!loadingRegisterApi">Sign up</span>
-              <span v-if="loadingRegisterApi"
-                ><font-awesome-icon
-                  :icon="['fa', 'spinner']"
-                  class="mr-1 animate-spin"
-                ></font-awesome-icon>
-                Sign up...
-              </span>
-            </button>
           </div>
           <!-- Register -->
           <div class="mt-6 text-center text-gray-500">
             Already have an account?
             <router-link
               :to="{ name: 'login' }"
-              class="font-bold transition-all duration-200 text-emerald-500 hover:text-emerald-400 focus:outline-slate-500"
+              class="font-bold transition-all duration-200 rounded text-emerald-500 hover:text-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
               data-test="login-link"
             >
               Login
@@ -131,6 +128,7 @@ import ValidationErrors from "@/components/shared/ValidationErrors.vue";
 import { LOGIN_USER, ADD_TOAST } from "@/store/constants";
 import GuestTopNavbar from "@/components/navigation/GuestTopNavbar.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
+import ButtonPrimary from "@/components/buttons/ButtonPrimary.vue";
 
 interface RegisterValidationErrors {
   first_name?: string;
@@ -147,6 +145,7 @@ export default defineComponent({
     ValidationErrors,
     GuestTopNavbar,
     TextInput,
+    ButtonPrimary,
   },
 
   setup() {

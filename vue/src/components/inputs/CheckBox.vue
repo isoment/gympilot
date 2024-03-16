@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, ref } from "vue";
+import { PropType, defineComponent, ref, watch } from "vue";
 
 export default defineComponent({
   name: "CheckBox",
@@ -39,7 +39,7 @@ export default defineComponent({
     },
     color: {
       type: String as PropType<string>,
-      default: "text-emerald-500",
+      default: "text-emerald-400",
     },
     size: {
       type: String as PropType<string>,
@@ -59,6 +59,13 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const isChecked = ref(props.modelValue);
+
+    watch(
+      () => props.modelValue,
+      (newValue) => {
+        isChecked.value = newValue;
+      }
+    );
 
     const onChange = (): void => {
       emit("update:modelValue", isChecked.value);

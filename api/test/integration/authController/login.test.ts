@@ -3,20 +3,18 @@ import _ from "lodash";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
-import roleHelper from "../..//testing/helpers/roles";
-import userHelper from "../..//testing/helpers/users";
+import * as roleHelper from "../../testing/helpers/role";
+import * as userHelper from "../../testing/helpers/user";
 import * as userRepository from "../../../src/data-access/repositories/userRepository";
 import authToken from "../../../src/services/authToken";
 import { memoryStore } from "../../../src/data-access/memory-store/memoryStore";
 import * as refreshTokenStore from "../../../src/data-access/memory-store/refreshTokenStore";
-import databaseSetup from "../../../test/testing/databaseSetup";
 
 const endpoint = "/api/auth/login";
 let axiosAPIClient: AxiosInstance;
 
 beforeAll(async () => {
   const apiConnection = await startWebServer();
-  // await databaseSetup.migrate();
   const axiosConfig = {
     baseURL: `http://127.0.0.1:${apiConnection.port}`,
     validateStatus: () => true,
@@ -35,7 +33,7 @@ beforeEach(async () => {
 afterEach(async () => {
   await model.User.destroy({ where: {} });
   await model.Role.destroy({ where: {} });
-  await model.UserRoles.destroy({ where: {} });
+  await model.UserRole.destroy({ where: {} });
   const store = await memoryStore.get();
   store.flushdb();
 });
@@ -53,7 +51,7 @@ describe("POST /api/auth/login", () => {
     const body = _.omit(createRequestBody(), "email");
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("email");
+    expect(response.data.errors).toHaveProperty("email");
   });
 
   it("requires email field to be a valid email", async () => {
@@ -62,14 +60,14 @@ describe("POST /api/auth/login", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("email");
+    expect(response.data.errors).toHaveProperty("email");
   });
 
   it("requires a password field", async () => {
     const body = _.omit(createRequestBody(), "password");
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("requires the password to be a string", async () => {
@@ -78,7 +76,7 @@ describe("POST /api/auth/login", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("requires the password to be at least 8 characters", async () => {
@@ -87,7 +85,7 @@ describe("POST /api/auth/login", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("requires the password to be less than 256 characters", async () => {
@@ -96,7 +94,7 @@ describe("POST /api/auth/login", () => {
     });
     const response = await axiosAPIClient.post(endpoint, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("returns a 422 response status code if the user is not found", async () => {
@@ -169,12 +167,9 @@ describe("POST /api/auth/login", () => {
     expect(response.status).toBe(200);
     expect(decodedJWT).toBeTruthy();
     expect(decodedJWT.id).toBe(user!.id);
-    expect(decodedJWT.first_name).toBe(user!.first_name);
-    expect(decodedJWT.last_name).toBe(user!.last_name);
-    expect(decodedJWT.email).toBe(user!.email);
+    expect(decodedJWT.name).toBe(`${user!.first_name} ${user!.last_name}`);
     expect(decodedJWT.exp).toBeTruthy();
-    expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
-    expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
+    expect(decodedJWT.roles.some((role: string) => role === "owner")).toBe(true);
   });
 
   it("sets an http only cookie with the refresh token", async () => {
@@ -193,11 +188,6 @@ describe("POST /api/auth/login", () => {
     expect(response.status).toBe(200);
     expect(decodedJWT).toBeTruthy();
     expect(decodedJWT.id).toBe(user!.id);
-    expect(decodedJWT.first_name).toBe(user!.first_name);
-    expect(decodedJWT.last_name).toBe(user!.last_name);
-    expect(decodedJWT.email).toBe(user!.email);
     expect(decodedJWT.exp).toBeTruthy();
-    expect(decodedJWT.Roles.some((role: any) => role.name === "owner")).toBe(true);
-    expect(decodedJWT.Roles.some((role: any) => role.name === "employee")).toBe(true);
   });
 });

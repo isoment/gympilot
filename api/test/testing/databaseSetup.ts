@@ -13,13 +13,10 @@ async function migrate() {
 
 async function rollback() {
   try {
-    const { stdout, stderr } = await execAsync("npm run db:migrate:rollback");
+    const { stdout, stderr } = await execAsync("npm run db:migrate:rollback:all");
   } catch (error) {
     console.error("Error rolling back migrations for tests:", error);
   }
 }
 
-export default {
-  migrate,
-  rollback,
-};
+export { migrate, rollback };

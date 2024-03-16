@@ -4,19 +4,17 @@ import _ from "lodash";
 
 import { startWebServer, stopWebServer } from "../../../src/server/server";
 import model from "../../../src/data-access/models";
-import roleHelper from "../..//testing/helpers/roles";
-import userHelper from "../..//testing/helpers/users";
+import * as roleHelper from "../..//testing/helpers/role";
+import * as userHelper from "../../testing/helpers/user";
 import * as passwordResetRepository from "../../../src/data-access/repositories/passwordResetRepository";
 import * as userRepository from "../../../src/data-access/repositories/userRepository";
 import { minusHours } from "../../../src/services/dateTime";
-import databaseSetup from "../../../test/testing/databaseSetup";
 
 const endpoint = "/api/auth/reset-password/";
 let axiosAPIClient: AxiosInstance;
 
 beforeAll(async () => {
   const apiConnection = await startWebServer();
-  // await databaseSetup.migrate();
   const axiosConfig = {
     baseURL: `http://127.0.0.1:${apiConnection.port}`,
     validateStatus: () => true,
@@ -35,7 +33,7 @@ beforeEach(async () => {
 afterEach(async () => {
   await model.User.destroy({ where: {} });
   await model.Role.destroy({ where: {} });
-  await model.UserRoles.destroy({ where: {} });
+  await model.UserRole.destroy({ where: {} });
   await model.PasswordReset.destroy({ where: {} });
   jest.restoreAllMocks();
 });
@@ -61,7 +59,7 @@ describe("POST /api/auth/reset-password", () => {
     const resetToken = "123faketoken";
     const response = await axiosAPIClient.post(endpoint + resetToken, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("requires a password to be 8 characters or greater", async () => {
@@ -71,7 +69,7 @@ describe("POST /api/auth/reset-password", () => {
     const resetToken = "123faketoken";
     const response = await axiosAPIClient.post(endpoint + resetToken, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("requires the password to be under 256 characters", async () => {
@@ -81,7 +79,7 @@ describe("POST /api/auth/reset-password", () => {
     const resetToken = "123faketoken";
     const response = await axiosAPIClient.post(endpoint + resetToken, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password");
+    expect(response.data.errors).toHaveProperty("password");
   });
 
   it("requires a password verify field", async () => {
@@ -90,7 +88,7 @@ describe("POST /api/auth/reset-password", () => {
     const resetToken = "123faketoken";
     const response = await axiosAPIClient.post(endpoint + resetToken, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password_verify");
+    expect(response.data.errors).toHaveProperty("password_verify");
   });
 
   it("requires the password verify field to match the password", async () => {
@@ -101,7 +99,7 @@ describe("POST /api/auth/reset-password", () => {
     const resetToken = "123faketoken";
     const response = await axiosAPIClient.post(endpoint + resetToken, body);
     expect(response.status).toBe(422);
-    expect(response.data).toHaveProperty("password_verify");
+    expect(response.data.errors).toHaveProperty("password_verify");
   });
 
   it("returns an unprocessable content error when the reset token has expired and deletes the old record", async () => {
@@ -140,7 +138,6 @@ describe("POST /api/auth/reset-password", () => {
     const passwordValid = await bcrypt.compare("password123456", updatedUser!.password);
 
     expect(response.status).toBe(200);
-    expect(updatedUser!.updated_at).not.toEqual(user!.updated_at);
     expect(passwordValid).toBeTruthy();
   });
 

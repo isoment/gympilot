@@ -4,6 +4,7 @@ import { authRoutes } from "./auth";
 import { dashboard } from "./dashboard";
 import { MiddlewareFunction } from "./types";
 import middlewarePipeline from "./middlewarePipeline";
+import { onboarding } from "./onboarding";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,6 +19,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   ...authRoutes,
   ...dashboard,
+  ...onboarding,
 ];
 
 const router = createRouter({
@@ -38,6 +40,10 @@ router.beforeEach((to, from, next) => {
   }
 
   const middleware = to.meta.middleware as MiddlewareFunction[];
+
+  if (middleware.length === 0) {
+    return next();
+  }
 
   const context = {
     to,

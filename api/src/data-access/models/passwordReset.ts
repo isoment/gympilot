@@ -12,7 +12,7 @@ const PasswordReset = database.get().define<PasswordResetFields>(
   "PasswordReset",
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
     },

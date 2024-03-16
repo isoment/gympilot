@@ -21,6 +21,15 @@ export const storageSetUser = (user: Partial<UserState>): void => {
   localStorage.setItem("user", JSON.stringify(user));
 };
 
+export const storageCompleteOnboarding = (): void => {
+  const user = localStorage.getItem("user");
+  if (user) {
+    const parsedUserObject: UserState = JSON.parse(user);
+    parsedUserObject.onboarding_complete = true;
+    storageSetUser(parsedUserObject);
+  }
+};
+
 export const storageSetLastRoute = (route: string): void => {
   localStorage.setItem("lastRoute", route);
 };

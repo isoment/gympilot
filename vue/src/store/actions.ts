@@ -15,6 +15,8 @@ import {
   REFRESH_TOKEN,
   ADD_SESSION_EXPIRED_LAST_ROUTE,
   SET_SESSION_EXPIRED_LAST_ROUTE,
+  SET_OWNER_ONBOARDING_COMPLETE,
+  COMPLETE_OWNER_ONBOARDING,
 } from "./constants";
 import {
   storageGetIsLoggedIn,
@@ -23,6 +25,7 @@ import {
   storageSetUser,
   storageSetLastRoute,
   storageGetLastRoute,
+  storageCompleteOnboarding,
 } from "../utils/localStorageHelpers";
 import { APIAuthLogout, APIAuthRefreshToken } from "../api/auth";
 import { UserState } from "@/api/types";
@@ -69,6 +72,11 @@ const actions = {
     context.commit(SET_USER, {});
     storageSetLogin("false");
     storageSetUser({});
+  },
+
+  [COMPLETE_OWNER_ONBOARDING](context: Context): void {
+    context.commit(SET_OWNER_ONBOARDING_COMPLETE);
+    storageCompleteOnboarding();
   },
 
   /**

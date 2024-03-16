@@ -39,7 +39,7 @@ authController.post("/login", [validateRequest(postLogin)], async (req: Request,
 
     const payload = tokenPayload.prepare(user);
     const accessToken = await authToken.create(payload, { expiresIn: appConfig.accessTokenExp });
-    const refreshToken = await authToken.create(payload, { expiresIn: appConfig.refreshTokenExp });
+    const refreshToken = await authToken.create({ id: user.id }, { expiresIn: appConfig.refreshTokenExp });
 
     // Check to see if there is a refresh token in memory store, if there is remove it.
     const existingToken = await refreshTokenStore.get(user.id);
@@ -80,8 +80,9 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
         last_name: req.body.last_name,
         email: req.body.email,
         password: hashedPassword,
+        owner_onboarding_complete: false,
       },
-      ["owner", "employee"],
+      ["owner"],
     );
 
     if (!createdUser) {
@@ -101,7 +102,7 @@ authController.post("/register", [validateRequest(postRegister)], async (req: Re
 
     const payload = tokenPayload.prepare(user);
     const accessToken = await authToken.create(payload, { expiresIn: appConfig.accessTokenExp });
-    const refreshToken = await authToken.create(payload, { expiresIn: appConfig.refreshTokenExp });
+    const refreshToken = await authToken.create({ id: user.id }, { expiresIn: appConfig.refreshTokenExp });
 
     await refreshTokenStore.set(user.id, refreshToken, appConfig.refreshTokenExp);
 
@@ -197,23 +198,27 @@ authController.post("/refresh-token", async (req: Request, res: Response, next: 
 
     const refreshToken = cookies.refresh_token;
 
-    let payload: any;
+    let refreshTokenPayload: any;
     try {
-      payload = await authToken.verify(refreshToken);
+      refreshTokenPayload = await authToken.verify(refreshToken);
     } catch (error) {
       return response.unauthorized(res, "The refresh token is invalid");
     }
 
-    // If there are no issues we will generate a new access token
-    const removeExpIat = _.omit(payload, ["exp", "iat"]);
-
-    // Check to see if the refresh token exists in in memory store
-    const tokenFromStore = await refreshTokenStore.get(removeExpIat.id);
+    // Check to see if the refresh token exists in the memory store
+    const tokenFromStore = await refreshTokenStore.get(refreshTokenPayload.id);
     if (!tokenFromStore || refreshToken !== tokenFromStore) {
       return response.unauthorized(res, "The refresh token is invalid");
     }
 
-    const accessToken = await authToken.create(removeExpIat, { expiresIn: appConfig.accessTokenExp });
+    // Perform a new query to check if any of the users data has changed.
+    const user = await userRepository.getUser("id", refreshTokenPayload.id);
+    if (!user) {
+      return response.unauthorized(res, "The refresh token is invalid");
+    }
+
+    const newAccessPayload = tokenPayload.prepare(user);
+    const accessToken = await authToken.create(newAccessPayload, { expiresIn: appConfig.accessTokenExp });
 
     return response.success(res, "Access token generated successfully", { Authorization: `Bearer ${accessToken}` });
   } catch (error) {

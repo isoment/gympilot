@@ -8,6 +8,7 @@ import {
   UNSET_ACCESS_TOKEN,
   SET_SESSION_EXPIRED_LAST_ROUTE,
   UNSET_SESSION_EXPIRED_LAST_ROUTE,
+  SET_OWNER_ONBOARDING_COMPLETE,
 } from "./constants";
 import { GlobalState, Toast } from "./types";
 
@@ -18,6 +19,10 @@ const mutations = {
 
   [SET_USER](state: GlobalState, user: UserState) {
     state.user = user;
+  },
+
+  [SET_OWNER_ONBOARDING_COMPLETE](state: GlobalState) {
+    state.user.onboarding_complete = true;
   },
 
   [SET_ACCESS_TOKEN](state: GlobalState, token: string) {
