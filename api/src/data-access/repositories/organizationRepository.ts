@@ -4,6 +4,7 @@ import { logger } from "../../logger/logger";
 
 interface CreateOrganizationParams {
   owner_id: number;
+  product_tier_id: number;
   name: string;
   country: string;
   timezone: string;
