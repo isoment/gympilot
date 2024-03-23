@@ -23,7 +23,7 @@ module.exports = {
         max_locations: 5,
       },
       {
-        name: "Performance",
+        name: "Pro",
         price_usd_cents: 10000,
         max_active_members: 500,
         max_locations: 10,

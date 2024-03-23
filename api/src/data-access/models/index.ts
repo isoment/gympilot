@@ -40,4 +40,5 @@ export default {
   UserLocation,
   Template,
   LocationTemplate,
+  ProductTier,
 };

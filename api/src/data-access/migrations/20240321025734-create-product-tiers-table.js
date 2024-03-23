@@ -37,6 +37,12 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
+
+    await queryInterface.addConstraint("product_tiers", {
+      fields: ["name"],
+      type: "unique",
+      name: "product_tiers_name_unique_constraint",
+    });
   },
 
   async down(queryInterface, Sequelize) {

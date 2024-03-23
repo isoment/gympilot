@@ -1,7 +1,7 @@
 import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
 import { database } from "./database";
 
-export interface ProductTier extends Model<InferAttributes<ProductTier>, InferCreationAttributes<ProductTier>> {
+export interface ProductTierFields extends Model<InferAttributes<ProductTierFields>, InferCreationAttributes<ProductTierFields>> {
   id: CreationOptional<number>;
   name: string;
   price_usd_cents: number;
@@ -11,7 +11,7 @@ export interface ProductTier extends Model<InferAttributes<ProductTier>, InferCr
   updated_at: CreationOptional<Date>;
 }
 
-const ProductTier = database.get().define<ProductTier>(
+const ProductTier = database.get().define<ProductTierFields>(
   "ProductTier",
   {
     id: {
