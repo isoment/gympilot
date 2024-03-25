@@ -6,7 +6,6 @@ import productTier from "./productTier";
 export interface OrganizationFields extends Model<InferAttributes<OrganizationFields>, InferCreationAttributes<OrganizationFields>> {
   id: CreationOptional<number>;
   owner_id: number;
-  product_tier_id: number;
   name: string;
   country: string;
   timezone: string;
@@ -33,14 +32,6 @@ const Organization = database.get().define<OrganizationFields>(
       unique: true,
       references: {
         model: userModel,
-        key: "id",
-      },
-    },
-    product_tier_id: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      references: {
-        model: productTier,
         key: "id",
       },
     },

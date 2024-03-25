@@ -27,9 +27,6 @@ User.belongsToMany(Location, { through: UserLocation, foreignKey: "user_id" });
 Location.belongsToMany(Template, { through: LocationTemplate, foreignKey: "location_id" });
 Template.belongsToMany(Location, { through: LocationTemplate, foreignKey: "template_id" });
 
-ProductTier.hasMany(Organization, { foreignKey: "product_tier_id" });
-Organization.belongsTo(ProductTier, { foreignKey: "product_tier_id" });
-
 export default {
   User,
   Role,

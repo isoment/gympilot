@@ -49,7 +49,6 @@ export const onboardOwner = async (userId: number, body: OnboardingRequestBody):
 const _saveOrganization = async (userId: number, productId: number, body: OnboardingRequestBody): Promise<OrganizationFields | null> => {
   return await organizationRepository.createOrganization({
     owner_id: userId,
-    product_tier_id: productId,
     name: body.organization.organization_name,
     country: body.organization.country,
     timezone: body.timezone.timezone,
