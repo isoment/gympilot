@@ -35,12 +35,10 @@ module.exports = {
       start_date: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       end_date: {
         allowNull: true,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       status: {
         allowNull: false,
