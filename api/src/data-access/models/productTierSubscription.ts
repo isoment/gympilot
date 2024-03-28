@@ -9,7 +9,7 @@ export interface ProductTierSubscriptionFields
   organization_id: number;
   product_tier_id: number;
   start_date: Date;
-  end_date: Date;
+  end_date: Date | null;
   status: string;
   created_at: CreationOptional<Date>;
   updated_at: CreationOptional<Date>;

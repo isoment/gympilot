@@ -5,6 +5,7 @@ import * as locationRepository from "../data-access/repositories/locationReposit
 import * as templateRepository from "../data-access/repositories/templateRepository";
 import * as locationTemplateRepository from "../data-access/repositories/locationTemplateRepository";
 import * as productTierRepository from "../data-access/repositories/productTierRepository";
+import * as productTierSubscriptionRepository from "../data-access/repositories/productTierSubscriptionRepository";
 import { OrganizationFields } from "../data-access/models/organization";
 import { LocationFields } from "../data-access/models/location";
 import { DomainResponse } from "./types";
@@ -15,17 +16,16 @@ export const onboardOwner = async (userId: number, body: OnboardingRequestBody):
     return { success: false, response: "internalError", message: "Onboarding failed, user not found" };
   }
 
-  // Set to free tier
+  if (user.owner_onboarding_complete) {
+    return { success: false, response: "forbidden", message: "Onboarding was already complete" };
+  }
+
   const productTier = await productTierRepository.getProductTier("name", "Free");
   if (!productTier) {
     return { success: false, response: "internalError", message: "Onboarding failed, product tier not found" };
   }
 
-  if (user.owner_onboarding_complete) {
-    return { success: false, response: "forbidden", message: "Onboarding was already complete" };
-  }
-
-  const organization = await _saveOrganization(user.id, productTier.id, body);
+  const organization = await _saveOrganization(user.id, body);
   if (!organization) {
     return { success: false, response: "internalError", message: "Failed to create organization" };
   }
@@ -33,6 +33,18 @@ export const onboardOwner = async (userId: number, body: OnboardingRequestBody):
   const location = await _saveLocation(organization.id, body.organization);
   if (!location) {
     return { success: false, response: "internalError", message: "Failed to create location" };
+  }
+
+  const subscription = await productTierSubscriptionRepository.createSubscription({
+    organization_id: organization.id,
+    product_tier_id: productTier.id,
+    start_date: new Date(),
+    end_date: null,
+    status: "active",
+  });
+
+  if (!subscription) {
+    return { success: false, response: "internalError", message: "Failed to create subscription" };
   }
 
   if (body.programs.length !== 0) {
@@ -46,7 +58,7 @@ export const onboardOwner = async (userId: number, body: OnboardingRequestBody):
   return { success: true, response: "success", message: "Onboarding Successful" };
 };
 
-const _saveOrganization = async (userId: number, productId: number, body: OnboardingRequestBody): Promise<OrganizationFields | null> => {
+const _saveOrganization = async (userId: number, body: OnboardingRequestBody): Promise<OrganizationFields | null> => {
   return await organizationRepository.createOrganization({
     owner_id: userId,
     name: body.organization.organization_name,

@@ -45,4 +45,5 @@ export default {
   Template,
   LocationTemplate,
   ProductTier,
+  ProductTierSubscription,
 };
